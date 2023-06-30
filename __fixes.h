@@ -15,6 +15,7 @@
 #define __R47_IGNORE(what) _Pragma(__R47_STR(clang diagnostic ignored #what))
 #define __R47_WARN_POP() _Pragma(__R47_STR(clang diagnostic pop))
 
+// Never going to fix this.
 __R47_IGNORE(-Wparentheses)
 
 // TODO: fix these
@@ -58,8 +59,8 @@ struct st_table;
 #define Regexp struct Regexp
 
 // these need #define and then #undef later because you cant predeclare them.
-#define UINT unsigned int
-#define VALUE unsigned int
+#define UINT intptr_t
+#define VALUE intptr_t
 #define ID UINT
 #define USHORT unsigned short
 

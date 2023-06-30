@@ -27,8 +27,8 @@
 #include <alloca.h>
 //#endif
 
-typedef unsigned int UINT;
-typedef unsigned int VALUE;
+typedef intptr_t UINT;
+typedef intptr_t VALUE;
 typedef UINT ID;
 typedef unsigned short USHORT;
 
