@@ -21,6 +21,7 @@ static ID eq;
 
 VALUE
 ary_new2(len)
+    __r49_implicit_arg(int, len)
 {
     NEWOBJ(ary, struct RArray);
     OBJSETUP(ary, C_Array, T_ARRAY);
@@ -36,7 +37,7 @@ ary_new2(len)
 }
 
 VALUE
-ary_new()
+ary_new(__r49_noargs)
 {
     return ary_new2(ARY_DEFAULT_SIZE);
 }
@@ -191,7 +192,7 @@ Fary_shift(ary)
 VALUE
 Fary_unshift(ary, item)
     struct RArray *ary;
-    __r49_unchecked(VALUE item;)
+    __r49_implicit_arg(VALUE, item)
 {
     VALUE top;
 
@@ -426,7 +427,7 @@ Fary_each(ary)
     else {
 	return (VALUE)ary;
     }
-    printf("%s:%d: return qnil", __FILE__, __LINE__);
+    __r49_ncleanup(printf("%s:%d: return qnil", __FILE__, __LINE__);)
     return Qnil;
 }
 

@@ -1,3 +1,7 @@
+do [1,2,3].each() using i
+  print(i)
+end
+__END__
 def doit(*kwargs)
   print(kwargs.assoc(\a1)[1])
 end

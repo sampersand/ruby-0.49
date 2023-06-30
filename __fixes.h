@@ -2,6 +2,60 @@
 #define __FIXES_H
 
 #define __r49
+
+/* Required changes are things that are required to get it to even run on 64. Stuff like
+ * making sure that `sizeof(VALUE) == sizeof(void *)` and stuff. If you disable this, it'll only
+ * compile on 32 bit machines.
+ */
+#ifdef __r49_required_change
+# undef  __r49_required_change
+# define __r49_required_change(...) __VA_ARGS__
+#else
+# define __r49_required_change(...)
+#endif
+
+/* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
+ * but preclude normal usage of it (eg segfaulting whenever an unknown function is called).
+ */
+#ifdef __r49_critical_bugfix
+# undef  __r49_critical_bugfix
+# define __r49_critical_bugfix(...) __VA_ARGS__
+#else
+# define __r49_critical_bugfix(...)
+#endif
+
+/* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, 
+ * even though it's references in a lot of places internally), but won't preclude normal operation.
+ */
+#ifdef __r49_bugfix
+# undef  __r49_bugfix
+# define __r49_bugfix(...) __VA_ARGS__
+#else
+# define __r49_bugfix(...)
+#endif
+
+/* Cleanup is cleaning up code which probably wasn't intended to be kept around (eg printing debug
+ * code after `array.each()` ends), but won't preclude normal operation.
+ */
+#ifdef __r49_cleanup
+# undef  __r49_cleanup
+# define __r49_ncleanup(...)
+#else
+# define __r49_ncleanup(...) __VA_ARGS__
+#endif
+
+#define __r49_validated(x) x
+
+#ifdef __r49_required_change
+# define __r49_implicit_arg(type, arg) type arg;
+# define __r49_noargs void
+#else
+# define __r49_implicit_arg(type, arg)
+# define __r49_noargs
+#endif
+
+
+
 #include <sys/_types/_time_t.h>
 #include <sys/_types/_uid_t.h>
 #include <sys/_types/_pid_t.h>
@@ -16,11 +70,18 @@
 #define __R49_IGNORE(what) _Pragma(__R49_STR(clang diagnostic ignored #what))
 #define __R49_WARN_POP() _Pragma(__R49_STR(clang diagnostic pop))
 
+
+// this is a thing
+#ifdef __R49_NOCLEANUP
+#endif
+
 #ifdef __R49_BUGFIX
 # undef __R49_BUGFIX
 # define __R49_BUGFIX(x) x
+# define __R49_BUGFIX_REPLACE(old, new) new
 #else
-#define __R49_BUGFIX(x)
+# define __R49_BUGFIX(x)
+# define __R49_BUGFIX_REPLACE(old, new) old
 #endif
 
 // Never going to fix this.
@@ -33,7 +94,6 @@ __R49_IGNORE(-Wtautological-constant-out-of-range-compare)
 __R49_IGNORE(-Wint-conversion)
 __R49_IGNORE(-Wvarargs)
 
-#define __r49_noargs __r49_validated(void)
 #define __r49_validated(new) new
 #define __r49_unchecked(new) new
 #define __r49_implicit_int int

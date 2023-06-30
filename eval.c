@@ -1349,13 +1349,7 @@ rb_undefined(obj, id)
 	desc = Fkrn_to_s(obj);
     }
     Fail("undefined method `%s' for \"%s\"(%s)",
-	 rb_id2name(
-#ifdef __R49_BUGFIX
-		id
-#else
-		NUM2INT(id)
-#endif
-	),
+	 rb_id2name(__R49_BUGFIX_REPLACE(NUM2INT(id), id)),
 	 RSTRING(desc)->ptr,
 	 rb_class2name(CLASS_OF(obj)));
 }
