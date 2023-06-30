@@ -1695,6 +1695,7 @@ retry:
 	  case '&':		/* $&: last match */
 	  case '~':		/* $~: match-data */
 	  case '=':		/* $=: ignorecase */
+	  __R47_BUGFIX(case ';': /* $;: field separator */)
 	    tokadd(c);
 	    tokadd('\0');
 	    goto id_fetch;

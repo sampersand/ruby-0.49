@@ -1,5 +1,6 @@
 #ifndef __FIXES_H
 #define __FIXES_H
+
 #define __r47
 #include <sys/_types/_time_t.h>
 #include <sys/_types/_uid_t.h>
@@ -14,6 +15,13 @@
 #define __R47_WARN_PUSH() _Pragma(__R47_STR(clang diagnostic push))
 #define __R47_IGNORE(what) _Pragma(__R47_STR(clang diagnostic ignored #what))
 #define __R47_WARN_POP() _Pragma(__R47_STR(clang diagnostic pop))
+
+#ifdef __R47_BUGFIX
+# undef __R47_BUGFIX
+# define __R47_BUGFIX(x) x
+#else
+#define __R47_BUGFIX(x)
+#endif
 
 // Never going to fix this.
 __R47_IGNORE(-Wparentheses)
@@ -63,6 +71,7 @@ struct st_table;
 #define VALUE intptr_t
 #define ID UINT
 #define USHORT unsigned short
+#define __R47_PrVALUE "z" // TODO: configure this with intptr_t
 
 #ifndef sprintf
 int sprintf(char *, const char *, ...);
@@ -201,7 +210,7 @@ VALUE regexp_new(char *s, int len);
 int str_cicmp(struct RString *str1, struct RString *str2);
 int research(struct RRegexp *reg, struct RString *str, int start, int ignorecase);
 VALUE re_last_match(ID id);
-
+char *rb_id2name(ID id);
 
 
 

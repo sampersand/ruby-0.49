@@ -116,7 +116,7 @@ Fkrn_to_s(obj)
 {
     char buf[256];
 
-    sprintf(buf, "#<%s: 0x%x>", rb_class2name(CLASS_OF(obj)), obj);
+    sprintf(buf, "#<%s: 0x%" __R47_PrVALUE  "x>", rb_class2name(CLASS_OF(obj)), obj);
     return str_new2(buf);
 }
 
