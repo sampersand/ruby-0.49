@@ -2,10 +2,10 @@ program := compexpr ;
 compexpr := exprs [endline] ;
 exprs := [[exprs endline] expr] ;
 expr
-  := 'class' IDENTIFIER superclass compexpr 'end' end_mark
-    | 'module' IDENTIFIER compexpr 'end' end_mark
-    | 'def' ['func'] fname f_arglist compexpr 'end' end_mark
-    | 'def' singleton '.' fname f_arglist compexpr 'end' end_mark
+  := 'class' IDENTIFIER superclass compexpr 'end' ['class']
+    | 'module' IDENTIFIER compexpr 'end' ['module']
+    | 'def' ['func'] fname f_arglist compexpr 'end' ['def']
+    | 'def' singleton '.' fname f_arglist compexpr 'end' ['def']
     | 'undef' fname
     | 'def' fname fname
     | 'include' inc_list
@@ -39,14 +39,14 @@ rest_arg := '*' IDENTIFIER ;
 singleton := variable | '(' compexpr ')' ;
 
 expr2
- := 'if' expr2 then compexpr if_tail 'end' end_mark
-  | 'unless' expr2 then compexpr opt_else 'end' end_mark
-  | 'case' expr2 [endline] cases 'end' end_mark
-  | 'while' expr2 endline compexpr 'end' end_mark
-  | 'until' expr2 endline compexpr 'end' end_mark
-  | 'for' lhs 'in' expr2 endline compexpr 'end' end_mark
-  | 'do' expr2 opt_using compexpr 'end' end_mark
-  | 'protect' compexpr resque ensure 'end' end_mark
+ := 'if' expr2 then compexpr if_tail 'end' ['if']
+  | 'unless' expr2 then compexpr opt_else 'end' ['unless']
+  | 'case' expr2 [endline] cases 'end' ['case']
+  | 'while' expr2 endline compexpr 'end' ['while']
+  | 'until' expr2 endline compexpr 'end' ['until']
+  | 'for' lhs 'in' expr2 endline compexpr 'end' ['for']
+  | 'do' expr2 opt_using compexpr 'end' ['do']
+  | 'protect' compexpr resque ensure 'end' ['protect']
   | 'redo' | 'break' | 'continue' | 'retry'
   | 'return' [expr2]
   | variable ('=' | SELF_ASGN) expr2
@@ -98,9 +98,4 @@ variable := IDENTIFIER | IVAR | GVAR | CONSTANT | 'nil' | 'self' ;
 assoc_list := [assocs] ;
 assocs := [assocs ','] assoc ;
 assoc := expr2 '=>' expr2 ;
-
-end_mark
-  := ['class' | 'module' | 'def' | 'func' | 'if' | 'unless' | 'case' |
-   | 'while' | 'until' | 'for' | 'do' | 'protect'] ;
-
 endline := ';' | '\n' ;
