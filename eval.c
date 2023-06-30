@@ -601,6 +601,12 @@ rb_eval(node)
 	JUMP_TAG(TAG_RETRY);
 	break;
 
+#ifdef __r49_critical_bugfix /* provide support for `redo` */
+      case NODE_REDO:
+	JUMP_TAG(TAG_REDO);
+	break;
+#endif
+
       case NODE_RETURN:
 	if (node->nd_stts) last_val = rb_eval(node->nd_stts);
 	JUMP_TAG(TAG_RETURN);
@@ -1135,6 +1141,13 @@ rb_yield(val)
     switch (state = EXEC_TAG()) {
       retry:
       case 0:
+
+#ifdef __r49_critical_bugfix
+      	// if nothing is given in the body of a `do` block, it segfaults.
+	if (!block->body) {
+	    result = Qnil;
+	} else
+#endif
 	if (block->body->type == NODE_CFUNC) {
 	    the_env->flags |= DURING_ITERATE;
 	    result = (*block->body->nd_cfnc)(val, block->body->nd_argc);
@@ -1349,7 +1362,7 @@ rb_undefined(obj, id)
 	desc = Fkrn_to_s(obj);
     }
     Fail("undefined method `%s' for \"%s\"(%s)",
-	 rb_id2name(__R49_BUGFIX_REPLACE(NUM2INT(id), id)),
+	 rb_id2name(__r49_critical_replacement(NUM2INT(id), id)),
 	 RSTRING(desc)->ptr,
 	 rb_class2name(CLASS_OF(obj)));
 }

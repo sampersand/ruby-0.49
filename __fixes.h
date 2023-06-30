@@ -2,6 +2,10 @@
 #define __FIXES_H
 
 #define __r49
+#define __r49_required_change
+#define __r49_critical_bugfix
+#define __r49_bugfix
+#define __r49_cleanup
 
 /* Required changes are things that are required to get it to even run on 64. Stuff like
  * making sure that `sizeof(VALUE) == sizeof(void *)` and stuff. If you disable this, it'll only
@@ -10,18 +14,23 @@
 #ifdef __r49_required_change
 # undef  __r49_required_change
 # define __r49_required_change(...) __VA_ARGS__
+# define __r49_required_replacement(old, new) new
 #else
 # define __r49_required_change(...)
+# define __r49_required_replacement(old, new) old
 #endif
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
- * but preclude normal usage of it (eg segfaulting whenever an unknown function is called).
+ * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
+ * consider the intended value.
  */
 #ifdef __r49_critical_bugfix
 # undef  __r49_critical_bugfix
 # define __r49_critical_bugfix(...) __VA_ARGS__
+# define __r49_critical_replacement(old, new) new
 #else
 # define __r49_critical_bugfix(...)
+# define __r49_critical_replacement(old, new) old
 #endif
 
 /* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, 
@@ -46,15 +55,12 @@
 
 #define __r49_validated(x) x
 
-#ifdef __r49_required_change
-# define __r49_implicit_arg(type, arg) type arg;
-# define __r49_noargs void
-#else
-# define __r49_implicit_arg(type, arg)
-# define __r49_noargs
-#endif
-
-
+#define __r49_implicit_arg(type, arg) __r49_required_change(type arg;)
+#define __r49_implicit_var(type) __r49_required_change(type)
+#define __r49_implicit_return(type) __r49_required_change(type)
+#define __r49_void_return __r49_implicit_return(void)
+#define __r49_noargs __r49_required_change(void)
+#define __r49_anyargs __r49_required_change(...)
 
 #include <sys/_types/_time_t.h>
 #include <sys/_types/_uid_t.h>
@@ -104,7 +110,6 @@ __R49_IGNORE(-Wvarargs)
 #define __r49_unchecked_cast(to, val) ((to) (val))
 #define __r49_unchecked_cast2(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #define __r49_unchecked_cast_to_iter(ptr) __r49_unchecked_cast(VALUE (*)(), ptr)
-#define __r49_void_return void
 #define __r49_unused_unchecked(expr) __r49_unchecked((void) (expr))
 #define __r49_implicit_int_but(what) what
 

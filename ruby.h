@@ -116,7 +116,7 @@ void *memmove(void *, const void *, unsigned long);
 #define FIX2INT(x) RSHIFT((int)x,1)
 
 #define FIX2UINT(f) ((unsigned int)(f)>>1)
-#define FIXNUM_P(f) (((int)(f))&FIXNUM_FLAG)
+#define FIXNUM_P(f) (((__r49_required_replacement(int, VALUE))(f))&FIXNUM_FLAG)
 #define POSFIXABLE(f) ((f) <= FIXNUM_MAX)
 #define NEGFIXABLE(f) ((f) >= FIXNUM_MIN)
 #define FIXABLE(f) (POSFIXABLE(f) && NEGFIXABLE(f))

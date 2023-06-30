@@ -36,7 +36,7 @@ err_print(fmt, args)
     char *fmt;
     va_list args;
 {
-    extern __r49_implicit_int errstr;
+    extern __r49_implicit_var(VALUE) errstr;
     char buf[BUFSIZ];
 
     err_sprintf(buf, fmt, args);
@@ -151,6 +151,7 @@ static char *builtin_types[] = {
     "Fixnum",
     "Dictionary",
     "Data",
+    __r49_critical_bugfix("Method", "Struct", "Bignum",)
 };
 
 __r49_noreturn

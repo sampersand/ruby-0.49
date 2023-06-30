@@ -1,3 +1,5 @@
+class array
+  def 
 do [1,2,3].each() using i
   print(i)
 end

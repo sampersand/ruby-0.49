@@ -892,6 +892,9 @@ args 		: expr2
 primary		: var_ref
 		| '(' compexpr rparen
 		    {
+#ifdef __r49_critical_bugfix /* make `()` in expression context not segfault */
+			if (!$2) $$ = NEW_NIL(); else
+#endif
 			$$ = $2;
 		    }
 

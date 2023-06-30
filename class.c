@@ -70,7 +70,9 @@ rb_define_class_id(id, super)
     ID id;
     struct RBasic *super;
 {
-    struct RClass *cls = (struct RClass*)class_new(__r49_unchecked_cast(struct RClass *, super));
+    struct RClass *cls = (struct RClass*)class_new(
+    	__r49_unchecked_cast2(struct RClass *, struct RBasic *, super)
+    );
 
     rb_name_class(cls, id);
 
@@ -90,7 +92,7 @@ rb_define_class(name, super)
 }
 
 VALUE
-module_new()
+module_new(__r49_noargs)
 {
     NEWOBJ(mdl, struct RClass);
     OBJSETUP(mdl, C_Module, T_MODULE);
