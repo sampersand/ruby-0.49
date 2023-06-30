@@ -7,7 +7,7 @@ srcdir = .
 VPATH = .
 
 CC = gcc
-# __r47: removed this
+# __r49: removed this
 DBM = #-fpcc-struct-return
 YACC = bison -y
 INSTALL = /usr/bin/install -c

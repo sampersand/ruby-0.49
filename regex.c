@@ -57,7 +57,7 @@
 #define const
 #endif
 
-/* #define	NO_ALLOCA	/ * try it out for now */  // __r47: uncommented it
+/* #define	NO_ALLOCA	/ * try it out for now */  // __r49: uncommented it
 #ifndef NO_ALLOCA
 /* Make alloca work the best possible way.  */
 #ifdef __GNUC__
@@ -1244,7 +1244,7 @@ re_compile_pattern (pattern, size, bufp)
                           preceding jump_n's n to upper_bound - 1.  */
                        BUFPUSH (set_number_at);
 		       GET_BUFFER_SPACE (2);
-                       __R47_UNCHECKED_IGNORE(-Wconstant-conversion, STORE_NUMBER_AND_INCR (b, -5));
+                       __R49_UNCHECKED_IGNORE(-Wconstant-conversion, STORE_NUMBER_AND_INCR (b, -5));
                        STORE_NUMBER_AND_INCR (b, upper_bound - 1);
                      }
 		   /* When hit this when matching, set the succeed_n's n.  */
@@ -1830,7 +1830,7 @@ re_compile_fastmap (bufp)
 
 	    p += p[-1] + 2;
 	    size = EXTRACT_UNSIGNED (&p[-2]);
-	    __R47_UNCHECKED_IGNORE(-Wconstant-conversion, c = 0x8000);
+	    __R49_UNCHECKED_IGNORE(-Wconstant-conversion, c = 0x8000);
 	    for (j = 0; j < size; j++) {
 	      for (beg = (unsigned char) p[j*4 + 0]; c < beg; c++)
 		if (ismbchar (c))

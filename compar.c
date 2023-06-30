@@ -85,7 +85,7 @@ Fcmp_between(this, min, max)
     return TRUE;
 }
 
-__r47_void_return
+__r49_void_return
 Init_Comparable()
 {
     M_Comparable = rb_define_module("Comparable");

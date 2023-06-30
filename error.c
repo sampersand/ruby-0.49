@@ -36,7 +36,7 @@ err_print(fmt, args)
     char *fmt;
     va_list args;
 {
-    extern __r47_implicit_int errstr;
+    extern __r49_implicit_int errstr;
     char buf[BUFSIZ];
 
     err_sprintf(buf, fmt, args);
@@ -53,14 +53,14 @@ err_print(fmt, args)
     }
 }
 
-__r47_void_return
+__r49_void_return
 yyerror(msg)
     char *msg;
 {
     Error("%s", msg);
 }
 
-__r47_void_return
+__r49_void_return
 Error(char *fmt, ...)
 {
     va_list args;
@@ -71,7 +71,7 @@ Error(char *fmt, ...)
     nerrs++;
 }
 
-__r47_void_return
+__r49_void_return
 Warning(char *fmt, ...)
 {
     char buf[BUFSIZ]; 
@@ -84,7 +84,7 @@ Warning(char *fmt, ...)
     va_end(args);
 }
 
-__r47_noreturn
+__r49_noreturn
 Fatal(char *fmt, ...)
 {
     va_list args;
@@ -95,7 +95,7 @@ Fatal(char *fmt, ...)
     rb_exit(1);
 }
 
-__r47_noreturn
+__r49_noreturn
 Bug(char *fmt, ...)
 {
     char buf[BUFSIZ]; 
@@ -109,8 +109,8 @@ Bug(char *fmt, ...)
     abort();
 }
 
-__r47_noreturn
-Fail(__r47_validated(const) char *fmt, ...)
+__r49_noreturn
+Fail(__r49_validated(const) char *fmt, ...)
 {
     va_list args;
     char buf[BUFSIZ]; 
@@ -122,7 +122,7 @@ Fail(__r47_validated(const) char *fmt, ...)
     rb_fail(str_new2(buf));
 }
     
-__r47_noreturn
+__r49_noreturn
 rb_sys_fail(mesg)
     char *mesg;
 {
@@ -153,7 +153,7 @@ static char *builtin_types[] = {
     "Data",
 };
 
-__r47_noreturn
+__r49_noreturn
 WrongType(x, t)
     VALUE x;
     int t;

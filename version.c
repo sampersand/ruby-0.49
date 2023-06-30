@@ -19,15 +19,15 @@ static VALUE rb_version;
 
 VALUE rb_readonly_hook();
 
-__r47_void_return
-Init_version(__r47_noargs)
+__r49_void_return
+Init_version(__r49_noargs)
 {
     rb_version = str_new2(RUBY_VERSION);
     rb_define_variable("$VERSION", &rb_version, Qnil, rb_readonly_hook);
 }
 
-__r47_void_return
-show_version(__r47_noargs)
+__r49_void_return
+show_version(__r49_noargs)
 {
     printf("ruby - version %s (%s)\n", RUBY_VERSION, VERSION_DATE);
 }

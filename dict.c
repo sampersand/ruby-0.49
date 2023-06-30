@@ -76,7 +76,7 @@ Fdic_aref(dic, key)
 {
     VALUE val = Qnil;
 
-    if (!st_lookup(dic->tbl, key, __r47_unchecked_cast2(char **, VALUE *, &val))) {
+    if (!st_lookup(dic->tbl, key, __r49_unchecked_cast2(char **, VALUE *, &val))) {
 	return Qnil;
     }
     return val;
@@ -112,7 +112,7 @@ Fdic_delete_if(dic)
     return (VALUE)dic;
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_clear(key, value)
     VALUE key, value;
 {
@@ -148,7 +148,7 @@ Fdic_length(dic)
     return INT2FIX(dic->tbl->num_entries);
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_each(key, value)
     VALUE key, value;
 {
@@ -164,7 +164,7 @@ Fdic_each(dic)
     return (VALUE)dic;
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_each_key(key, value)
     VALUE key, value;
 {
@@ -180,7 +180,7 @@ Fdic_each_key(dic)
     return (VALUE)dic;
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_each_pair(key, value)
     VALUE key, value;
 {
@@ -196,7 +196,7 @@ Fdic_each_pair(dic)
     return (VALUE)dic;
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_to_a(key, value, ary)
     VALUE key, value, ary;
 {
@@ -218,7 +218,7 @@ Fdic_to_a(dic)
     return ary;
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_inspect(key, value, str)
     VALUE key, value;
     struct RString *str;
@@ -270,7 +270,7 @@ Fdic_to_s(dic)
     return str;
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_keys(key, value, ary)
     VALUE key, value, ary;
 {
@@ -291,7 +291,7 @@ Fdic_keys(dic)
     return ary;
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_values(key, value, ary)
     VALUE key, value, ary;
 {
@@ -319,14 +319,14 @@ Fdic_has_key(dic, key)
 {
     VALUE val;
 
-    if (st_lookup(dic->tbl, key, __r47_unchecked_cast2(char **, VALUE *, &val)))
+    if (st_lookup(dic->tbl, key, __r49_unchecked_cast2(char **, VALUE *, &val)))
 	return TRUE;
     return FALSE;
 }
 
 static VALUE value_found;
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 dic_search_value(key, value, arg)
     VALUE key, value, arg;
 {
@@ -379,7 +379,7 @@ Fenv_delete(obj, name)
     struct RString *name;
 {
     int i, len;
-    char *nam, *val = __r47_Qnil_to_NULL;
+    char *nam, *val = __r49_Qnil_to_NULL;
 
     Check_Type(name, T_STRING);
     nam = name->ptr;
@@ -459,7 +459,7 @@ Fsetenv(obj, name, value)
     return FALSE;		/* not reached */
 }
 
-__r47_void_return
+__r49_void_return
 Init_Dict()
 {
     extern VALUE C_Kernel;

@@ -14,8 +14,8 @@
 
 #define YYDEBUG 1
 #include "__fixes.h"
-__R47_IGNORE(-Wincompatible-pointer-types)
-__R47_IGNORE(-Wnon-literal-null-conversion)
+__R49_IGNORE(-Wincompatible-pointer-types)
+__R49_IGNORE(-Wnon-literal-null-conversion)
 #include "ruby.h"
 #include "env.h"
 #include "node.h"
@@ -1086,7 +1086,7 @@ int   sourceline;		/* current line no. */
 static char *lex_p;
 static int lex_len;
 
-__r47_void_return
+__r49_void_return
 lex_setsrc(src, ptr, len)
     char *src;
     char *ptr;
@@ -1174,8 +1174,8 @@ static struct kwtable {
     "yield",	YIELD,		EXPR_BEG,
 };
 
-__r47_implicit_int
-yylex(__r47_noargs)
+__r49_implicit_int
+yylex(__r49_noargs)
 {
     register int c;
     struct kwtable *low = kwtable, *mid, *high = LAST(kwtable);
@@ -1695,7 +1695,7 @@ retry:
 	  case '&':		/* $&: last match */
 	  case '~':		/* $~: match-data */
 	  case '=':		/* $=: ignorecase */
-	  __R47_BUGFIX(case ';': /* $;: field separator */)
+	  __R49_BUGFIX(case ';': /* $;: field separator */)
 	    tokadd(c);
 	    tokadd('\0');
 	    goto id_fetch;
@@ -2146,7 +2146,7 @@ call_op(recv, id, narg, arg1)
 	arg_data.id = id;
 	arg_data.narg = narg;
 	if (narg == 1) arg_data.arg = arg1->nd_lit;
-	result = NEW_LIT(rb_resque(call_lit, __r47_unchecked_cast2(char *, struct call_arg *, &arg_data), except_lit, Qnil));
+	result = NEW_LIT(rb_resque(call_lit, __r49_unchecked_cast2(char *, struct call_arg *, &arg_data), except_lit, Qnil));
 	freenode(recv);
 	if (narg == 1) freenode(arg1);
 	return result;
@@ -2515,7 +2515,7 @@ rb_intern(name)
 
 static char *find_ok;
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 id_find(name, id1, id2)
     char *name;
     ID id1, id2;

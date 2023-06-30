@@ -12,7 +12,7 @@
 
 #include "ruby.h"
 
-__r47_void_return
+__r49_void_return
 rb_call_inits()
 {
     Init_sym();

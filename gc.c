@@ -19,11 +19,11 @@ void *malloc();
 void *calloc();
 void *realloc();
 
-struct gc_list *GC_List = __r47_Qnil_to_NULL;
-static struct gc_list *Global_List = __r47_Qnil_to_NULL;
+struct gc_list *GC_List = __r49_Qnil_to_NULL;
+static struct gc_list *Global_List = __r49_Qnil_to_NULL;
 static unsigned long bytes_alloc = 0, gc_threshold = 1000000;
 
-static __r47_void_return mark_tbl();
+static __r49_void_return mark_tbl();
 
 void gc();
 void mark(struct RBasic *);
@@ -93,8 +93,8 @@ rb_global_variable(var)
     Global_List = tmp;
 }
 
-static struct RBasic *object_list = __r47_Qnil_to_NULL;
-static struct RBasic *literal_list = __r47_Qnil_to_NULL;
+static struct RBasic *object_list = __r49_Qnil_to_NULL;
+static struct RBasic *literal_list = __r49_Qnil_to_NULL;
 static unsigned long fl_current = FL_MARK;
 static unsigned long fl_old = 0L;
 
@@ -138,12 +138,12 @@ Fgc_set_threshold(obj, val)
 #include <sys/types.h>
 #include <sys/times.h>
 
-static __r47_implicit_int Fgc_begin()
+static __r49_implicit_int Fgc_begin()
 {
     return Qnil;
 }
 
-static __r47_implicit_int Fgc_end()
+static __r49_implicit_int Fgc_end()
 {
     return Qnil;
 }
@@ -156,7 +156,7 @@ struct RBasic *
 newobj(size)
     unsigned long size;
 {
-    struct RBasic *obj = __r47_Qnil_to_NULL;
+    struct RBasic *obj = __r49_Qnil_to_NULL;
 
     if (bytes_alloc + size > gc_threshold) {
 	gc();
@@ -165,7 +165,7 @@ newobj(size)
     obj->next = object_list;
     object_list = obj;
     obj->flags = fl_current;
-    obj->iv_tbl = __r47_Qnil_to_NULL;
+    obj->iv_tbl = __r49_Qnil_to_NULL;
 
     return obj;
 }
@@ -287,7 +287,7 @@ void gc()
     rb_funcall(M_GC, end_hook, 0, Qnil);
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 mark_entry(key, value)
     ID key;
     VALUE value;
@@ -296,14 +296,14 @@ mark_entry(key, value)
     return ST_CONTINUE;
 }
 
-static __r47_void_return
+static __r49_void_return
 mark_tbl(tbl)
     st_table *tbl;
 {
     st_foreach(tbl, mark_entry, 0);
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 mark_dicentry(key, value)
     ID key;
     VALUE value;
@@ -313,7 +313,7 @@ mark_dicentry(key, value)
     return ST_CONTINUE;
 }
 
-static __r47_void_return
+static __r49_void_return
 mark_dict(tbl)
     st_table *tbl;
 {
@@ -343,12 +343,12 @@ void mark(obj)
 	mark(obj->class);
 	break;
       case T_ICLASS:
-	mark(__r47_cast_to_RBasic(RCLASS(obj)->super));
+	mark(__r49_cast_to_RBasic(RCLASS(obj)->super));
 	if (RCLASS(obj)->c_tbl) mark_tbl(RCLASS(obj)->c_tbl);
 	mark_tbl(RCLASS(obj)->m_tbl);
 	break;
       case T_CLASS:
-	mark(__r47_cast_to_RBasic(RCLASS(obj)->super));
+	mark(__r49_cast_to_RBasic(RCLASS(obj)->super));
       case T_MODULE:
 	if (RCLASS(obj)->c_tbl) mark_tbl(RCLASS(obj)->c_tbl);
 	mark_tbl(RCLASS(obj)->m_tbl);
@@ -367,7 +367,7 @@ void mark(obj)
 	mark_dict(RDICT(obj)->tbl);
 	break;
       case T_STRING:
-	if (RSTRING(obj)->orig) mark(__r47_cast_to_RBasic(RSTRING(obj)->orig));
+	if (RSTRING(obj)->orig) mark(__r49_cast_to_RBasic(RSTRING(obj)->orig));
 	break;
       case T_DATA:
 	if (RDATA(obj)->dmark) (*RDATA(obj)->dmark)(DATA_PTR(obj));
@@ -391,8 +391,8 @@ void mark(obj)
     }
 }
 
-__r47_void_return
-sweep(__r47_noargs)
+__r49_void_return
+sweep(__r49_noargs)
 {
     register struct RBasic *link = object_list;
     register struct RBasic *next;
@@ -414,12 +414,12 @@ sweep(__r47_noargs)
     }
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 freemethod(key, body)
     ID key;
     char *body;
 {
-    freenode(__r47_unchecked_cast(struct node *, body));
+    freenode(__r49_unchecked_cast(struct node *, body));
     return ST_CONTINUE;
 }
 
@@ -480,7 +480,7 @@ void obj_free(obj)
     free(obj);
 }
 
-__r47_void_return
+__r49_void_return
 Init_GC()
 {
     M_GC = rb_define_module("GC");

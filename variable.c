@@ -39,7 +39,7 @@ rb_name_class(class, id)
 {
     VALUE body;
 
-    if (st_lookup(class_tbl, id, __r47_unchecked_cast2(char **, VALUE *, &body))) {
+    if (st_lookup(class_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &body))) {
 	Bug("%s %s already exists",
 	    TYPE(body)==T_CLASS?"class":"module", rb_id2name(id));
     }
@@ -57,7 +57,7 @@ struct global_entry {
     VALUE (*set_hook)();
 };
 
-static __r47_validated(enum st_retval) mark_global_entry(key, entry)
+static __r49_validated(enum st_retval) mark_global_entry(key, entry)
     ID key;
     struct global_entry *entry;
 {
@@ -75,8 +75,8 @@ static __r47_validated(enum st_retval) mark_global_entry(key, entry)
     return ST_CONTINUE;
 }
 
-__r47_void_return
-mark_global_tbl(__r47_noargs)
+__r49_void_return
+mark_global_tbl(__r49_noargs)
 {
     st_foreach(global_tbl, mark_global_entry, 0);
 }
@@ -87,13 +87,13 @@ rb_global_entry(id)
 {
     struct global_entry *entry;
 
-    if (!st_lookup(global_tbl, id, __r47_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
 	entry = ALLOC(struct global_entry);
-	st_insert(global_tbl, id, __r47_unchecked_cast2(char *, struct global_entry *, entry));
+	st_insert(global_tbl, id, __r49_unchecked_cast2(char *, struct global_entry *, entry));
 	entry->id = id;
 	entry->mode = GLOBAL_UNDEF;
-	entry->v.var = __r47_Qnil_to_NULL;
-	entry->get_hook = entry->set_hook = __r47_Qnil_to_NULL;
+	entry->v.var = __r49_Qnil_to_NULL;
+	entry->get_hook = entry->set_hook = __r49_Qnil_to_NULL;
     }
     return entry;
 }
@@ -116,7 +116,7 @@ rb_define_variable(name, var, get_hook, set_hook)
 	id = rb_intern(buf);
     }
 
-    if (!st_lookup(global_tbl, id, __r47_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
 	entry = rb_global_entry(id);
     }
     entry->mode = GLOBAL_VAR;
@@ -142,11 +142,11 @@ rb_define_varhook(name, get_hook, set_hook)
 	id = rb_intern(buf);
     }
 
-    if (!st_lookup(global_tbl, id, __r47_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
 	entry = ALLOC(struct global_entry);
 	entry->id = id;
 	entry->mode = GLOBAL_VAL;
-	st_insert(global_tbl, id, __r47_unchecked_cast2(char *, struct global_entry *, entry));
+	st_insert(global_tbl, id, __r49_unchecked_cast2(char *, struct global_entry *, entry));
     }
     else if (entry->mode == GLOBAL_UNDEF) {
 	entry->mode = GLOBAL_VAL;
@@ -171,7 +171,7 @@ rb_id2class(id)
 {
     VALUE class;
 
-    if (st_lookup(class_tbl, id, __r47_unchecked_cast2(char **, VALUE *, &class)))
+    if (st_lookup(class_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &class)))
 	return class;
     return Qnil;
 }
@@ -198,7 +198,7 @@ rb_gvar_get(entry)
     return Qnil;
 }
 
-__r47_implicit_int_but(VALUE)
+__r49_implicit_int_but(VALUE)
 rb_ivar_get_1(obj, id)
     struct RBasic *obj;
     ID id;
@@ -207,7 +207,7 @@ rb_ivar_get_1(obj, id)
 
     if (obj->iv_tbl == Qnil)
 	return Qnil;
-    if (st_lookup(obj->iv_tbl, id, __r47_unchecked_cast2(char **, VALUE *, &val)))
+    if (st_lookup(obj->iv_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &val)))
 	return val;
     return Qnil;
 }
@@ -225,7 +225,7 @@ rb_mvar_get(id)
 {
     VALUE val;
 
-    if (st_lookup(class_tbl, id, __r47_unchecked_cast2(char **, VALUE *, &val))) return val;
+    if (st_lookup(class_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &val))) return val;
     return Qnil;
 }
 
@@ -237,7 +237,7 @@ rb_const_get(id)
     VALUE value;
 
     while (class) {
-	if (class->c_tbl && st_lookup(class->c_tbl, id, __r47_unchecked_cast2(char **, VALUE *, &value))) {
+	if (class->c_tbl && st_lookup(class->c_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &value))) {
 	    return value;
 	}
 	class = class->super;
@@ -272,7 +272,7 @@ rb_gvar_set2(name, val)
     ID id;
 
     id = rb_intern(name);
-    if (!st_lookup(global_tbl, id, __r47_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
 	entry = rb_global_entry(id);
     }
     rb_gvar_set(entry, val);
@@ -280,7 +280,7 @@ rb_gvar_set2(name, val)
     return val;
 }
 
-__r47_implicit_int_but(VALUE)
+__r49_implicit_int_but(VALUE)
 rb_ivar_set_1(obj, id, val)
     struct RBasic *obj;
     ID id;
@@ -306,7 +306,7 @@ const_bound(id)
     struct RClass *class = (struct RClass*)CLASS_OF(Qself);
 
     while (class) {
-	if (class->c_tbl && st_lookup(class->c_tbl, id, __r47_Qnil_to_NULL)) {
+	if (class->c_tbl && st_lookup(class->c_tbl, id, __r49_Qnil_to_NULL)) {
 	    return TRUE;
 	}
 	class = class->super;
@@ -388,13 +388,13 @@ Fdefined(obj, name)
 
     switch (id & ID_SCOPE_MASK) {
       case ID_GLOBAL:
-	if (st_lookup(global_tbl, id, __r47_unchecked_cast2(char **, struct global_entry **, &entry)) && entry->mode != GLOBAL_UNDEF)
+	if (st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry)) && entry->mode != GLOBAL_UNDEF)
 	    return TRUE;
 	break;
 
       case ID_INSTANCE:
 	if (TYPE(Qself) != T_OBJECT || instance_tbl == Qnil) break;
-	if (st_lookup(instance_tbl, id, __r47_Qnil_to_NULL)) return TRUE;
+	if (st_lookup(instance_tbl, id, __r49_Qnil_to_NULL)) return TRUE;
 	break;
 
       case ID_CONST:
@@ -411,7 +411,7 @@ Fdefined(obj, name)
 		}
 	    }
 	}
-	if (st_lookup(class_tbl, id, __r47_Qnil_to_NULL)) return TRUE;
+	if (st_lookup(class_tbl, id, __r49_Qnil_to_NULL)) return TRUE;
 	break;
     }
     return FALSE;

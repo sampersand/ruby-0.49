@@ -67,7 +67,7 @@ Fbsock_shutdown(sock, args)
     }
     GetOpenFile(sock, fptr);
     if (shutdown(fileno(fptr->f), how) == -1)
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     return sock;
 }
 
@@ -260,7 +260,7 @@ sock_accept(class, fd, sockaddr, len)
     fd2 = accept(fd, sockaddr, len);
     if (fd2 < 0) {
 	if (errno == EINTR) goto retry;
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     }
     return sock_new(class, fd2);
 }
@@ -401,7 +401,7 @@ Funix_path(sock)
 	struct sockaddr_un addr;
 	int len = sizeof(addr);
 	if (getsockname(fileno(fptr->f), (struct sockaddr*)&addr, &len) < 0)
-	    rb_sys_fail(__r47_Qnil_to_NULL);
+	    rb_sys_fail(__r49_Qnil_to_NULL);
 	fptr->path = strdup(addr.sun_path);
     }
     return str_new2(fptr->path);

@@ -25,14 +25,14 @@ struct_alloc(class, name)
     OBJSETUP(st, class, T_STRUCT);
 
     if (name) st->name = strdup(name);
-    else st->name = __r47_Qnil_to_NULL;
+    else st->name = __r49_Qnil_to_NULL;
     st->len = 0;
-    st->tbl = __r47_Qnil_to_NULL;
+    st->tbl = __r49_Qnil_to_NULL;
 
     return (VALUE)st;
 }
 
-// __r47: added `s`, which was undoubtably missing. 
+// __r49: added `s`, which was undoubtably missing. 
 static VALUE
 struct_find(s, id)
     struct RStruct *s;
@@ -52,12 +52,12 @@ struct_find(s, id)
 static VALUE
 Fstruct_access(s)
     struct RStruct *s;
-    // __r47: added `s`, which was undoubtably missing. 
+    // __r49: added `s`, which was undoubtably missing. 
 {
     return struct_find(s, the_env->last_func);
 }
 
-static __r47_replace(VALUE, __r47_void_return)
+static __r49_replace(VALUE, __r49_void_return)
 struct_add(s, mem, val)
     struct RStruct *s;
     char *mem;
@@ -136,7 +136,7 @@ Fstruct_new(class, args)
     return st;
 }
 
-static __r47_replace(VALUE, __r47_void_return)
+static __r49_replace(VALUE, __r49_void_return)
 Fstruct_each(s)
     struct RStruct *s;
 {
@@ -177,7 +177,7 @@ Fstruct_aref(s, idx)
     struct RArray *ary;
     int i;
 
-	// __r47: added `s`, which was undoubtably missing. 
+	// __r49: added `s`, which was undoubtably missing. 
     if (TYPE(idx) == T_STRING)
 	return struct_find(s, rb_intern(RSTRING(idx)->ptr));
 	
@@ -248,8 +248,8 @@ static VALUE
 Fstruct_clone(s)
     struct RStruct *s;
 {
-	// __r47: added `s`, idk if that's good
-    struct RStruct *st = (struct RStruct*)struct_alloc(__r47_unchecked(s), s->name);
+	// __r49: added `s`, idk if that's good
+    struct RStruct *st = (struct RStruct*)struct_alloc(__r49_unchecked(s), s->name);
 
     CLONESETUP(st, s);
     st->len = s->len;
@@ -259,8 +259,8 @@ Fstruct_clone(s)
     return (VALUE)st;
 }
 
-__r47_void_return
-Init_Struct(__r47_noargs)
+__r49_void_return
+Init_Struct(__r49_noargs)
 {
     C_Struct = rb_define_class("Struct", C_Object);
     rb_include_module(C_Struct, M_Enumerable);

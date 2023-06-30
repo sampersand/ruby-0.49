@@ -251,7 +251,7 @@ Ftime_coerce(time1, time2)
     VALUE time1, time2;
 {
     return time_new(CLASS_OF(time1), NUM2INT(time2));
-    // __r47: the original one had an extra argument:. return time_new(CLASS_OF(time1), NUM2INT(time2), 0);
+    // __r49: the original one had an extra argument:. return time_new(CLASS_OF(time1), NUM2INT(time2), 0);
 }
 
 static VALUE
@@ -503,7 +503,7 @@ Ftime_times(obj)
     struct tms buf;
     VALUE t1, t2, t3, t4, tm;
 
-    if (times(&buf) == -1) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (times(&buf) == -1) rb_sys_fail(__r49_Qnil_to_NULL);
     GC_LINK;
     GC_PRO3(t1, float_new((double)buf.tms_utime / 60.0));
     GC_PRO3(t2, float_new((double)buf.tms_stime / 60.0));
@@ -519,8 +519,8 @@ Ftime_times(obj)
     return tm;
 }
 
-__r47_void_return
-Init_Time(__r47_noargs)
+__r49_void_return
+Init_Time(__r49_noargs)
 {
     C_Time = rb_define_class("Time", C_Object);
     rb_include_module(C_Time, M_Comparable);

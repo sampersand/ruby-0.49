@@ -46,7 +46,7 @@ Fsrand(obj, args)
 
     return int2inum(old);
 #else
-    __r47_replace(old = srand(seed), (srand(seed), old=0));
+    __r49_replace(old = srand(seed), (srand(seed), old=0));
     return int2inum(old);
 #endif
 }
@@ -71,8 +71,8 @@ Frand(obj, max)
     return int2inum(val);
 }
 
-__r47_void_return
-Init_Random(__r47_noargs)
+__r49_void_return
+Init_Random(__r49_noargs)
 {
     extern VALUE C_Kernel;
 

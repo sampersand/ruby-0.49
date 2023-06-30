@@ -53,7 +53,7 @@ Fsprintf(argc, argv)
 }
 
 #define GETARG() \
-    ((argc == 1)?Fail("too few argument.") ,__r47_validated(0):(argc--, argv++, argv[0]))
+    ((argc == 1)?Fail("too few argument.") ,__r49_validated(0):(argc--, argv++, argv[0]))
 
     fmt = (struct RString*)GETARG();
     Check_Type(fmt, T_STRING);
@@ -66,7 +66,7 @@ Fsprintf(argc, argv)
     for (p = fmt->ptr; p < end; p++) {
 	char *t;
 
-	for (t = p; t < end && *t != '%'; t++) __r47_replace(;, {})
+	for (t = p; t < end && *t != '%'; t++) __r49_replace(;, {})
 	CHECK(t - p);
 	PUSH(p, t - p);
 	if (t >= end) {
@@ -112,7 +112,7 @@ Fsprintf(argc, argv)
 	  case '5': case '6': case '7': case '8': case '9':
 	    flags |= FWIDTH;
 	    width = 0;
-	    for (__r47_replace(p, ); p < end && isdigit(*p); p++) {
+	    for (__r49_replace(p, ); p < end && isdigit(*p); p++) {
 		width = 10 * width + (*p - '0');
 	    }
 	    if (p >= end) {
@@ -152,7 +152,7 @@ Fsprintf(argc, argv)
 		goto retry;
 	    }
 
-	    for (__r47_replace(p,); p < end && isdigit(*p); p++) {
+	    for (__r49_replace(p,); p < end && isdigit(*p); p++) {
 		prec = 10 * prec + (*p - '0');
 	    }
 	    if (p >= end) {

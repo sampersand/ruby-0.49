@@ -36,15 +36,15 @@ void bzero(void *s, unsigned long n);
 struct RClass;
 void rb_include_module(struct RClass *, struct RClass *);
 
-__r47_replace(int, __r47_void_return) Error(char *, ...);
-__r47_replace(int, __r47_noreturn) Fail(__r47_validated(const) char *, ...);
-__r47_replace(int, __r47_void_return) Warning(char *, ...);
-__r47_replace(int, __r47_noreturn) Fatal(char *, ...);
-__r47_replace(int, __r47_noreturn) Bug(char *, ...);
+__r49_replace(int, __r49_void_return) Error(char *, ...);
+__r49_replace(int, __r49_noreturn) Fail(__r49_validated(const) char *, ...);
+__r49_replace(int, __r49_void_return) Warning(char *, ...);
+__r49_replace(int, __r49_noreturn) Fatal(char *, ...);
+__r49_replace(int, __r49_noreturn) Bug(char *, ...);
 
 VALUE rb_iv_get(VALUE obj, char *name);
 VALUE obj_is_kind_of(VALUE obj, VALUE c);
-__r47_replace(int, __r47_noreturn) WrongType(VALUE x, int t);
+__r49_replace(int, __r49_noreturn) WrongType(VALUE x, int t);
 int iterator_p(void);
 
 struct RString;
@@ -102,7 +102,7 @@ void *memmove(void *, const void *, unsigned long);
 # define FIXNUM_MIN RSHIFT((long)LONG_MIN,1)
 
 #define FIXNUM_FLAG 0x01
-#ifdef __r47
+#ifdef __r49
 # define INT2FIX(i) (VALUE)(((unsigned)(i))<<1 | FIXNUM_FLAG)
 #else
 # define INT2FIX(i) (VALUE)(((int)(i))<<1 | FIXNUM_FLAG)
@@ -317,7 +317,7 @@ void *alloca(unsigned long size);
     _tmp->n = 1;\
     GC_List = _tmp;\
 }
-#define GC_PRO2(var) GC_PRO3((var),__r47_Qnil_to_NULL)
+#define GC_PRO2(var) GC_PRO3((var),__r49_Qnil_to_NULL)
 #define GC_PRO3(var,init) {\
     (var) = (init);\
     GC_PRO(var);\

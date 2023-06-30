@@ -20,8 +20,8 @@
 			+(((x)&0x0000FF00)<<8)	\
 			+(((x)&0x00FF0000)>>8)	)
 
-__r47_unchecked(__R47_WARN_PUSH())
-__r47_unchecked(__R47_IGNORE(-Wmacro-redefined))
+__r49_unchecked(__R49_WARN_PUSH())
+__r49_unchecked(__R49_IGNORE(-Wmacro-redefined))
 
 #ifdef WORDS_BIGENDIAN
 #define ntohs(x) (x)
@@ -43,7 +43,7 @@ __r47_unchecked(__R47_IGNORE(-Wmacro-redefined))
 #define vtohl(x) (x)
 #endif
 
-__r47_unchecked(__R47_WARN_POP())
+__r49_unchecked(__R49_WARN_POP())
 
 extern VALUE C_String, C_Array;
 double atof();
@@ -77,7 +77,7 @@ Fpck_pack(ary, fmt)
     items = ary->len;
     idx = 0;
 
-#define NEXTFROM (items-- > 0 ? ary->ptr[idx++] : Fail(toofew), __r47_validated(0))
+#define NEXTFROM (items-- > 0 ? ary->ptr[idx++] : Fail(toofew), __r49_validated(0))
 
     while (p < pend) {
 	type = *p++;		/* get data type */
@@ -99,7 +99,7 @@ Fpck_pack(ary, fmt)
 	  case 'H': case 'h':
 	    from = NEXTFROM;
 	    if (from == Qnil) {
-		ptr = __r47_Qnil_to_NULL;
+		ptr = __r49_Qnil_to_NULL;
 		plen = 0;
 	    }
 	    else {
@@ -117,7 +117,7 @@ Fpck_pack(ary, fmt)
 		    str_cat(res, ptr, len);
 		else {
 		    str_cat(res, ptr, plen);
-		    __r47_unused_unchecked(len == plen);
+		    __r49_unused_unchecked(len == plen);
 		    while (len >= 10) {
 			str_cat(res, nul10, 10);
 			len -= 10;
@@ -131,7 +131,7 @@ Fpck_pack(ary, fmt)
 		    str_cat(res, ptr, len);
 		else {
 		    str_cat(res, ptr, plen);
-		    __r47_unused_unchecked(len == plen);
+		    __r49_unused_unchecked(len == plen);
 		    while (len >= 10) {
 			str_cat(res, spc10, 10);
 			len -= 10;
@@ -269,7 +269,7 @@ Fpck_pack(ary, fmt)
 		else {
 		    s = NUM2INT(from);
 		}
-		str_cat(res, __r47_unchecked_cast2(char *, short *, &s), sizeof(short));
+		str_cat(res, __r49_unchecked_cast2(char *, short *, &s), sizeof(short));
 	    }
 	    break;
 
@@ -283,7 +283,7 @@ Fpck_pack(ary, fmt)
 		else {
 		    i = NUM2INT(from);
 		}
-		str_cat(res, __r47_unchecked_cast2(char *, int *, &i), sizeof(int));
+		str_cat(res, __r49_unchecked_cast2(char *, int *, &i), sizeof(int));
 	    }
 	    break;
 
@@ -297,7 +297,7 @@ Fpck_pack(ary, fmt)
 		else {
 		    l = NUM2INT(from);
 		}
-		str_cat(res, __r47_unchecked_cast2(char *, long *, &l), sizeof(long));
+		str_cat(res, __r49_unchecked_cast2(char *, long *, &l), sizeof(long));
 	    }
 	    break;
 
@@ -311,7 +311,7 @@ Fpck_pack(ary, fmt)
 		    s = NUM2INT(from);
 		}
 		s = htons(s);
-		str_cat(res, __r47_unchecked_cast2(char *, short *, &s), sizeof(short));
+		str_cat(res, __r49_unchecked_cast2(char *, short *, &s), sizeof(short));
 	    }
 	    break;
 
@@ -325,7 +325,7 @@ Fpck_pack(ary, fmt)
 		    l = NUM2INT(from);
 		}
 		l = htonl(l);
-		str_cat(res, __r47_unchecked_cast2(char *, long *, &l), sizeof(long));
+		str_cat(res, __r49_unchecked_cast2(char *, long *, &l), sizeof(long));
 	    }
 	    break;
 
@@ -345,7 +345,7 @@ Fpck_pack(ary, fmt)
 		    f = (float)NUM2INT(from);
 		    break;
 		}
-		str_cat(res, __r47_unchecked_cast2(char *, float *, &f), sizeof(float));
+		str_cat(res, __r49_unchecked_cast2(char *, float *, &f), sizeof(float));
 	    }
 	    break;
 
@@ -365,7 +365,7 @@ Fpck_pack(ary, fmt)
 		    d = (double)NUM2INT(from);
 		    break;
 		}
-		str_cat(res, __r47_unchecked_cast2(char *, double *, &d), sizeof(double));
+		str_cat(res, __r49_unchecked_cast2(char *, double *, &d), sizeof(double));
 	    }
 	    break;
 
@@ -379,7 +379,7 @@ Fpck_pack(ary, fmt)
 		    s = NUM2INT(from);
 		}
 		s = htovs(s);
-		str_cat(res, __r47_unchecked_cast2(char *, short *, &s), sizeof(short));
+		str_cat(res, __r49_unchecked_cast2(char *, short *, &s), sizeof(short));
 	    }
 	    break;
 
@@ -393,7 +393,7 @@ Fpck_pack(ary, fmt)
 		    l = NUM2INT(from);
 		}
 		l = htovl(l);
-		str_cat(res, __r47_unchecked_cast2(char *, long *, &l), sizeof(long));
+		str_cat(res, __r49_unchecked_cast2(char *, long *, &l), sizeof(long));
 	    }
 	    break;
 
@@ -847,8 +847,8 @@ Fpck_unpack(str, fmt)
     return ary;
 }
 
-__r47_void_return
-Init_pack(__r47_noargs)
+__r49_void_return
+Init_pack(__r49_noargs)
 {
     rb_define_method(C_Array, "pack", Fpck_pack, 1);
     rb_define_method(C_String, "unpack", Fpck_unpack, 1);

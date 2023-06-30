@@ -68,7 +68,7 @@ Fdbm_open(class, args)
     }
     Check_Type(file, T_STRING);
 
-    dbm = __r47_Qnil_to_NULL;
+    dbm = __r49_Qnil_to_NULL;
     if (mode >= 0)
 	dbm = dbm_open(RSTRING(file)->ptr, O_RDWR|O_CREAT, mode);
     if (!dbm)
@@ -98,7 +98,7 @@ Fdbm_close(obj)
     Get_Data_Struct(obj, "dbm", DBM*, dbmp);
     if (*dbmp == Qnil) Fail("already closed DBM file");
     dbm_close(*dbmp);
-    *dbmp = __r47_Qnil_to_NULL;
+    *dbmp = __r49_Qnil_to_NULL;
 
     return Qnil;
 }
@@ -202,7 +202,7 @@ Fdbm_store(obj, keystr, valstr)
     GetDBM(obj, dbm);
     if (dbm_store(dbm, key, val, DBM_REPLACE)) {
 	dbm_clearerr(dbm);
-	if (errno == EPERM) rb_sys_fail(__r47_Qnil_to_NULL);
+	if (errno == EPERM) rb_sys_fail(__r49_Qnil_to_NULL);
 	Fail("DBM store failed");
     }
     return valstr;
@@ -373,8 +373,8 @@ Fdbm_to_a(obj)
     return ary;
 }
 
-__r47_void_return
-Init_DBM(__r47_noargs)
+__r49_void_return
+Init_DBM(__r49_noargs)
 {
     C_DBM = rb_define_class("DBM", C_Object);
     rb_include_module(C_DBM, M_Enumerable);

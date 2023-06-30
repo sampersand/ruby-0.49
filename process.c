@@ -53,7 +53,7 @@ rb_waitpid(pid, flags)
 #ifdef HAVE_WAIT4
     result = wait4(pid, &st, flags, NULL);
 #else
-    if (pid_tbl && st_lookup(pid_tbl, pid, __r47_unchecked_cast2(char **, int *, &st))) {
+    if (pid_tbl && st_lookup(pid_tbl, pid, __r49_unchecked_cast2(char **, int *, &st))) {
 	status = INT2FIX(st);
 	st_delete(pid_tbl, &pid, NULL);
 	return pid;
@@ -82,7 +82,7 @@ rb_waitpid(pid, flags)
 static int wait_pid;
 static int wait_status;
 
-static __r47_validated(enum st_retval) wait_each(key, value)
+static __r49_validated(enum st_retval) wait_each(key, value)
     int key, value;
 {
     wait_pid = key;
@@ -107,7 +107,7 @@ Fwait(obj)
 
     if ((pid = wait(&state)) < 0) {
 	if (errno == ECHILD) return Qnil;
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     }
     status = INT2FIX(state);
     return INT2FIX(pid);
@@ -123,13 +123,13 @@ Fwaitpid(obj, vpid, vflags)
     else flags = FIX2UINT(vflags);
 
     if ((pid = rb_waitpid(FIX2UINT(vpid), flags)) < 0)
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     return INT2FIX(pid);
 }
 
 char *strtok();
 
-__r47_implicit_int
+__r49_implicit_int
 rb_proc_exec(str)
     char *str;
 {
@@ -178,7 +178,7 @@ Ffork(obj)
 	return Qnil;
 
       case -1:
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
 	break;
 
       default:
@@ -206,8 +206,8 @@ void
 rb_syswait(pid)
     int pid;
 {
-	__R47_WARN_PUSH()
-	__R47_IGNORE(-Wincompatible-function-pointer-types)
+	__R49_WARN_PUSH()
+	__R49_IGNORE(-Wincompatible-function-pointer-types)
 
     RETSIGTYPE (*hfunc)(), (*ifunc)(), (*qfunc)();
 
@@ -221,7 +221,7 @@ rb_syswait(pid)
     signal(SIGINT, ifunc);
     signal(SIGQUIT, qfunc);
 
-    __R47_WARN_POP()
+    __R49_WARN_POP()
 }
 
 static VALUE
@@ -457,14 +457,14 @@ Fkill(argc, argv)
 #else
 	    if (kill(-pid, sig) < 0)
 #endif
-		rb_sys_fail(__r47_Qnil_to_NULL);
+		rb_sys_fail(__r49_Qnil_to_NULL);
 	}
     }
     else {
 	for (i=2; i<argc; i++) {
 	    Check_Type(argv[i], T_FIXNUM);
 	    if (kill(FIX2UINT(argv[i]), sig) < 0)
-		rb_sys_fail(__r47_Qnil_to_NULL);
+		rb_sys_fail(__r49_Qnil_to_NULL);
 	}
     }
     return INT2FIX(i-2);
@@ -478,7 +478,7 @@ static int trap_immediate;
 #endif
 
 void
-mark_trap_list(__r47_noargs)
+mark_trap_list(__r49_noargs)
 {
     int i;
 
@@ -496,7 +496,7 @@ sighandle(sig)
 	Fail("trap_handler: Bad signal %d", sig);
 
 #ifndef HAVE_BSD_SIGNALS
-    signal(sig, __r47_unchecked_cast2(void(*)(int), int(*)(), sighandle));
+    signal(sig, __r49_unchecked_cast2(void(*)(int), int(*)(), sighandle));
 #endif
 
 #ifdef SAFE_SIGHANDLE
@@ -510,7 +510,7 @@ sighandle(sig)
     rb_trap_eval(trap_list[sig]);
 #endif
 
-    __r47_unchecked(return 0;)
+    __r49_unchecked(return 0;)
 }
 
 void
@@ -621,33 +621,33 @@ Ftrap(argc, argv)
     func = sighandle;
 
     if (argv[1] == Qnil) {
-	func = __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
+	func = __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
 	command = Qnil;
     }
     else {
 	Check_Type(argv[1], T_STRING);
 	command = argv[1];
 	if (RSTRING(argv[1])->len == 0) {
-	    func = __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
+	    func = __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
 	}
 	else if (RSTRING(argv[1])->len == 7) {
 	    if (strncmp(RSTRING(argv[1])->ptr, "SIG_IGN", 7) == 0) {
-		func = __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
+		func = __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
 	    }
 	    else if (strncmp(RSTRING(argv[1])->ptr, "SIG_DFL", 7) == 0) {
-		func = __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_DFL);
+		func = __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_DFL);
 	    }
 	    else if (strncmp(RSTRING(argv[1])->ptr, "DEFAULT", 7) == 0) {
-		func = __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_DFL);
+		func = __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_DFL);
 	    }
 	}
 	else if (RSTRING(argv[1])->len == 6) {
 	    if (strncmp(RSTRING(argv[1])->ptr, "IGNORE", 6) == 0) {
-		func = __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
+		func = __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN);
 	    }
 	}
     }
-    if (func == __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN) || func == __r47_unchecked_cast2(int(*)(), void(*)(int), SIG_DFL))
+    if (func == __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_IGN) || func == __r49_unchecked_cast2(int(*)(), void(*)(int), SIG_DFL))
 	command = Qnil;
 
     for (i=2; i<argc; i++) {
@@ -666,7 +666,7 @@ Ftrap(argc, argv)
 	if (i < 0 || i > NSIG)
 	    Fail("Invalid signal no %d", sig);
 
-	signal(sig, __r47_unchecked_cast2(void(*)(int), int(*)(), sighandle));
+	signal(sig, __r49_unchecked_cast2(void(*)(int), int(*)(), sighandle));
 	trap_list[sig] = command;
 	/* enable at least specified signal. */
 	mask &= ~sigmask(sig);
@@ -675,7 +675,7 @@ Ftrap(argc, argv)
     return Qnil;
 }
 
-__r47_implicit_int_but(VALUE)
+__r49_implicit_int_but(VALUE)
 Fsleep(argc, argv)
     int argc;
     VALUE *argv;
@@ -713,7 +713,7 @@ Fproc_getpgrp(obj, args)
 	pid = NUM2INT(vpid);
     }
 
-    pgrp = __r47_replace(getpgrp(pid), getpgrp());
+    pgrp = __r49_replace(getpgrp(pid), getpgrp());
     return INT2FIX(pgrp);
 }
 
@@ -726,7 +726,7 @@ Fproc_setpgrp(obj, pid, pgrp)
     ipid = NUM2INT(pid);
     ipgrp = NUM2INT(pgrp);
 
-    if (__r47_replace(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (__r49_replace(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(__r49_Qnil_to_NULL);
 
     return Qnil;
 }
@@ -741,7 +741,7 @@ Fproc_getpriority(obj, which, who)
     iwho   = NUM2INT(who);
 
     prio = getpriority(iwhich, iwho);
-    if (prio == -1) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (prio == -1) rb_sys_fail(__r49_Qnil_to_NULL);
     return INT2FIX(prio);
 }
 
@@ -756,7 +756,7 @@ Fproc_setpriority(obj, which, who, prio)
     iprio  = NUM2INT(prio);
 
     if (setpriority(iwhich, iwho, iprio) == -1)
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     return Qnil;
 }
 
@@ -805,14 +805,14 @@ Fproc_seteuid(obj, euid)
     VALUE obj, euid;
 {
     if (seteuid(NUM2INT(euid)) == -1)
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     return euid;
 }
 
 VALUE M_Process;
 
-__r47_void_return
-Init_process(__r47_noargs)
+__r49_void_return
+Init_process(__r49_noargs)
 {
     extern VALUE C_Kernel;
 

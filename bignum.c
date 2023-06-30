@@ -197,7 +197,7 @@ str2inum(str, base)
     }
 
     if (len <= (sizeof(VALUE)*CHAR_BIT)) {
-	int result = strtoul(str, __r47_Qnil_to_NULL, base);
+	int result = strtoul(str, __r49_Qnil_to_NULL, base);
 
 	if (!sign) result = -result;
 	if (FIXABLE(result)) return INT2FIX(result);
@@ -696,7 +696,7 @@ Fbig_div(x, y)
     else {
 	Check_Type(y, T_BIGNUM);
     }
-    bigdivmod(x, y, &z, __r47_Qnil_to_NULL);
+    bigdivmod(x, y, &z, __r49_Qnil_to_NULL);
     GC_UNLINK;
     return z;
 }
@@ -713,7 +713,7 @@ Fbig_mod(x, y)
     else {
 	Check_Type(y, T_BIGNUM);
     }
-    bigdivmod(x, y, __r47_Qnil_to_NULL, &z);
+    bigdivmod(x, y, __r49_Qnil_to_NULL, &z);
     GC_UNLINK;
     return z;
 }
@@ -1090,7 +1090,7 @@ Fbig_abs(x)
     return (VALUE)x;
 }
 
-__r47_void_return
+__r49_void_return
 Init_Bignum()
 {
     C_Bignum = rb_define_class("Bignum", C_Integer);

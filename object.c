@@ -116,7 +116,7 @@ Fkrn_to_s(obj)
 {
     char buf[256];
 
-    sprintf(buf, "#<%s: 0x%" __R47_PrVALUE  "x>", rb_class2name(CLASS_OF(obj)), obj);
+    sprintf(buf, "#<%s: 0x%" __R49_PrVALUE  "x>", rb_class2name(CLASS_OF(obj)), obj);
     return str_new2(buf);
 }
 
@@ -127,7 +127,7 @@ Fkrn_inspect(obj)
     return rb_funcall(obj, rb_intern("to_s"), 0, Qnil);
 }
 
-static __r47_validated(enum st_retval)
+static __r49_validated(enum st_retval)
 obj_inspect(id, value, str)
     ID id;
     VALUE value;
@@ -342,8 +342,8 @@ static VALUE boot_defclass(name, super)
 
 VALUE TopSelf;
 
-__r47_void_return
-Init_Object(__r47_noargs)
+__r49_void_return
+Init_Object(__r49_noargs)
 {
     VALUE metaclass;
 

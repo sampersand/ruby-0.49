@@ -109,8 +109,8 @@ Fmath_sqrt(obj, x)
     return float_new(sqrt(x->value));
 }
 
-__r47_void_return
-Init_Math(__r47_noargs)
+__r49_void_return
+Init_Math(__r49_noargs)
 {
     M_Math = rb_define_module("Math");
 

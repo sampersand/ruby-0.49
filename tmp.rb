@@ -1,3 +1,7 @@
+x = "abc"
+print($; = "")
+print(x.split._inspect)
+__END__
 def one_upto(max)
   for x in 1..max
     yield(x)
@@ -7,6 +11,7 @@ end def
 do one_upto(10) using i
   print("in here: ", i, "\n")
 end do
+  
 __END__
 $\="\n"
 protect

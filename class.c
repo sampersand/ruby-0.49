@@ -30,7 +30,7 @@ class_new(super)
 
     cls->super = super;
     cls->m_tbl = new_idhash();
-    cls->c_tbl = __r47_Qnil_to_NULL;
+    cls->c_tbl = __r49_Qnil_to_NULL;
 
     return (VALUE)cls;
 }
@@ -59,7 +59,7 @@ single_class_clone(class)
 
 	cls->super = class->super;
 	cls->m_tbl = st_copy(class->m_tbl);
-	cls->c_tbl = __r47_Qnil_to_NULL;
+	cls->c_tbl = __r49_Qnil_to_NULL;
 	FL_SET(cls, FL_SINGLE);
 	return (VALUE)cls;
     }
@@ -70,7 +70,7 @@ rb_define_class_id(id, super)
     ID id;
     struct RBasic *super;
 {
-    struct RClass *cls = (struct RClass*)class_new(__r47_unchecked_cast(struct RClass *, super));
+    struct RClass *cls = (struct RClass*)class_new(__r49_unchecked_cast(struct RClass *, super));
 
     rb_name_class(cls, id);
 
@@ -95,9 +95,9 @@ module_new()
     NEWOBJ(mdl, struct RClass);
     OBJSETUP(mdl, C_Module, T_MODULE);
 
-    mdl->super = __r47_Qnil_to_NULL;
+    mdl->super = __r49_Qnil_to_NULL;
     mdl->m_tbl = new_idhash();
-    mdl->c_tbl = __r47_Qnil_to_NULL;
+    mdl->c_tbl = __r49_Qnil_to_NULL;
 
     return (VALUE)mdl;
 }
@@ -170,22 +170,22 @@ rb_add_method(class, mid, node, scope)
     OBJSETUP(mth, C_Method, T_METHOD);
 
     if (class == Qnil) class = (struct RClass*)C_Object;
-    if (st_lookup(class->m_tbl, mid, __r47_unchecked_cast2(char **, struct RMethod **, &body))) {
+    if (st_lookup(class->m_tbl, mid, __r49_unchecked_cast2(char **, struct RMethod **, &body))) {
 	if (verbose) {
 	    Warning("redefine %s", rb_id2name(mid));
 	}
-	unliteralize(__r47_cast_to_RBasic(body));
+	unliteralize(__r49_cast_to_RBasic(body));
 	rb_clear_cache(body);
     }
     mth->node = node;
     if (BUILTIN_TYPE(class) == T_MODULE)
-	mth->origin = __r47_Qnil_to_NULL;
+	mth->origin = __r49_Qnil_to_NULL;
     else
 	mth->origin = class;
     mth->id = mid;
     mth->scope = scope;
-    literalize(__r47_cast_to_RBasic(mth));
-    st_insert(class->m_tbl, mid, __r47_unchecked_cast2(char *, struct RMethod *, mth));
+    literalize(__r49_cast_to_RBasic(mth));
+    st_insert(class->m_tbl, mid, __r49_unchecked_cast2(char *, struct RMethod *, mth));
 }
 
 void
@@ -217,7 +217,7 @@ rb_undef_method(class, name)
     struct RClass *class;
     char *name;
 {
-    rb_add_method(class, rb_intern(name), __r47_Qnil_to_NULL, MTH_UNDEF);
+    rb_add_method(class, rb_intern(name), __r49_Qnil_to_NULL, MTH_UNDEF);
 }
 
 VALUE
@@ -248,7 +248,7 @@ rb_define_single_method(obj, name, func, argc)
     VALUE (*func)();
     int argc;
 {
-    // __r47_orig: rb_define_method(rb_single_class(obj), name, func, argc, MTH_METHOD);
+    // __r49_orig: rb_define_method(rb_single_class(obj), name, func, argc, MTH_METHOD);
     rb_define_method(rb_single_class(obj), name, func, argc);
 }
 

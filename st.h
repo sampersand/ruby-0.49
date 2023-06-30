@@ -54,4 +54,4 @@ st_table *st_copy();
 
 int st_strhash();
 
-#endif // __r47_FIXED: ST_INCLUDED
+#endif // __r49_FIXED: ST_INCLUDED

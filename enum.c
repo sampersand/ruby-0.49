@@ -45,7 +45,7 @@ Fenum_grep(obj, pat)
     VALUE obj;
 {
     if (iterator_p()) {
-	rb_iterate(__r47_unchecked_cast_to_iter(rb_each), obj, __r47_unchecked_cast_to_iter(enum_grep2), pat);
+	rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_grep2), pat);
 	return obj;
     }
     else {
@@ -56,10 +56,10 @@ Fenum_grep(obj, pat)
 	GC_PRO(tmp);
 
 	rb_iterate(
-		__r47_unchecked_cast_to_iter(rb_each),
+		__r49_unchecked_cast_to_iter(rb_each),
 		obj,
-		__r47_unchecked_cast_to_iter(enum_grep),
-		__r47_unchecked_cast(char *, &arg[0])
+		__r49_unchecked_cast_to_iter(enum_grep),
+		__r49_unchecked_cast(char *, &arg[0])
 	);
 
 	GC_UNLINK;
@@ -86,10 +86,10 @@ Fenum_find(obj)
 
     enum_found = FALSE;
     rb_iterate(
-    	__r47_unchecked_cast_to_iter(rb_each),
+    	__r49_unchecked_cast_to_iter(rb_each),
     	obj,
-    	__r47_unchecked_cast_to_iter(enum_find),
-    	__r47_unchecked_cast(char *, &enum_found)
+    	__r49_unchecked_cast_to_iter(enum_find),
+    	__r49_unchecked_cast(char *, &enum_found)
     );
     return enum_found;
 }
@@ -113,10 +113,10 @@ Fenum_find_all(obj)
     GC_PRO3(tmp, ary_new());
 
     rb_iterate(
-    	__r47_unchecked_cast_to_iter(rb_each),
+    	__r49_unchecked_cast_to_iter(rb_each),
     	obj,
-    	__r47_unchecked_cast_to_iter(enum_find_all),
-    	__r47_Qnil_to_NULL
+    	__r49_unchecked_cast_to_iter(enum_find_all),
+    	__r49_Qnil_to_NULL
     );
 
     GC_UNLINK;
@@ -148,7 +148,7 @@ Fenum_collect(obj)
     GC_LINK;
     GC_PRO3(tmp, ary_new());
 
-    rb_iterate(__r47_unchecked_cast_to_iter(rb_each), obj, __r47_unchecked_cast_to_iter(enum_collect), tmp);
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_collect), tmp);
 
     GC_UNLINK;
     return tmp;
@@ -170,7 +170,7 @@ Fenum_reverse(obj)
     GC_LINK;
     GC_PRO3(tmp, ary_new());
 
-    rb_iterate(__r47_unchecked_cast_to_iter(rb_each), obj, __r47_unchecked_cast_to_iter(enum_reverse), tmp);
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_reverse), tmp);
 
     GC_UNLINK;
     return tmp;
@@ -191,7 +191,7 @@ Fenum_to_a(obj)
 
     GC_LINK;
     GC_PRO3(ary, ary_new());
-    rb_iterate(__r47_unchecked_cast_to_iter(rb_each), obj, __r47_unchecked_cast_to_iter(enum_all), ary);
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_all), ary);
     GC_UNLINK;
 
     return ary;
@@ -234,10 +234,10 @@ Fenum_min(obj)
     GC_LINK;
     GC_PRO2(min);
     rb_iterate(
-    	__r47_unchecked_cast_to_iter(rb_each),
+    	__r49_unchecked_cast_to_iter(rb_each),
     	obj,
-    	__r47_unchecked_cast_to_iter(enum_min),
-    	__r47_unchecked_cast(char *, &min)
+    	__r49_unchecked_cast_to_iter(enum_min),
+    	__r49_unchecked_cast(char *, &min)
     );
     GC_UNLINK;
     return min;
@@ -267,10 +267,10 @@ Fenum_max(obj)
     GC_LINK;
     GC_PRO2(max);
     rb_iterate(
-    	__r47_unchecked_cast_to_iter(rb_each),
+    	__r49_unchecked_cast_to_iter(rb_each),
     	obj,
-    	__r47_unchecked_cast_to_iter(enum_max),
-    	__r47_unchecked_cast(char *, &max)
+    	__r49_unchecked_cast_to_iter(enum_max),
+    	__r49_unchecked_cast(char *, &max)
     );
     GC_UNLINK;
     return max;
@@ -306,10 +306,10 @@ Fenum_index(obj, val)
     iv.v = val;
     iv.found = 0;
     rb_iterate(
-    	__r47_unchecked_cast_to_iter(rb_each),
+    	__r49_unchecked_cast_to_iter(rb_each),
     	obj,
-    	__r47_unchecked_cast_to_iter(enum_index),
-    	__r47_unchecked_cast(char *, &iv)
+    	__r49_unchecked_cast_to_iter(enum_index),
+    	__r49_unchecked_cast(char *, &iv)
     );
     if (iv.found) return INT2FIX(iv.i);
     return Qnil;		/* not found */
@@ -335,16 +335,16 @@ Fenum_includes(obj, val)
     iv.i = 0;
     iv.v = val;
     rb_iterate(
-    	__r47_unchecked_cast_to_iter(rb_each),
+    	__r49_unchecked_cast_to_iter(rb_each),
     	obj,
-    	__r47_unchecked_cast_to_iter(enum_includes),
-    	__r47_unchecked_cast(char *, &iv)
+    	__r49_unchecked_cast_to_iter(enum_includes),
+    	__r49_unchecked_cast(char *, &iv)
     );
     if (iv.i) return TRUE;
     return FALSE;
 }
 
-__r47_void_return
+__r49_void_return
 Init_Enumerable()
 {
     M_Enumerable = rb_define_module("Enumerable");

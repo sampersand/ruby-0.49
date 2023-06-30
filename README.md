@@ -1,6 +1,6 @@
-# ruby-0.47
+# ruby-0.49
 
-Ruby 0.47 is the oldest known version of Ruby. The problem is that it was written exclusively for 32 bit computers.
+Ruby 0.49 is the oldest known version of Ruby. The problem is that it was written exclusively for 32 bit computers.
 
 Until now.
 
@@ -12,7 +12,7 @@ Clone this on your computer, then run `./configure`. The old configure file does
 1. Change `DBM = -fpcc-struct-return` to `DBM = `
 2. Add to the end of `DEFS =` the following: `-DHAVE_MEMMOVE -DHAVE_STRERROR -DHAVE_STRTOUL -DHAVE_STRFTIME -DHAVE_STRSTR -DHAVE_GETOPT_LONG -DHAVE_MKDIR -DHAVE_STRDUP`
 
-Then you can run `make` and start playing with ruby 0.47!
+Then you can run `make` and start playing with ruby 0.49!
 
 ## Caveats
 I haven't fixed all the 32bit <-> 64 bit compatibility issues, so random segfaults may occur. (If you call an unknown function, it'll segfault on you and give no indication as to why it failed.) I plan on fixing them in the future.

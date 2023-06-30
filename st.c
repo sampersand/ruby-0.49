@@ -10,7 +10,7 @@ static char *rcsid = "$Header: /work/cvsroot/ruby/st.c,v 1.2 1994/06/27 15:48:41
 #include "st.h"
 
 extern void *xmalloc();
-static __r47_void_return rehash();
+static __r49_void_return rehash();
 
 #define max(a,b) ((a) > (b) ? (a) : (b))
 #define nil(type) ((type *) 0)
@@ -73,7 +73,7 @@ int (*hash)();
 				     ST_DEFAULT_REORDER_FLAG);
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_free_table(table)
 st_table *table;
 {
@@ -90,7 +90,7 @@ st_table *table;
     }
     free((char *) table->bins);
     free((char *) table);
-    __r47_validated(return 0;)
+    __r49_validated(return 0;)
 }
 
 #define PTR_NOT_EQUAL(table, ptr, key)\
@@ -113,7 +113,7 @@ if (PTR_NOT_EQUAL(table, ptr, key)) {\
     }\
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_lookup(table, key, value)
 st_table *table;
 register char *key;
@@ -150,7 +150,7 @@ char **value;
     table->num_entries++;\
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_insert(table, key, value)
 register st_table *table;
 register char *key;
@@ -173,7 +173,7 @@ char *value;
     }
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_add_direct(table, key, value)
 st_table *table;
 char *key;
@@ -184,10 +184,10 @@ char *value;
     
     hash_val = do_hash(key, table);
     ADD_DIRECT(table, key, value, hash_val, tbl);
-    __r47_validated(return 0;)
+    __r49_validated(return 0;)
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_find_or_add(table, key, slot)
 st_table *table;
 char *key;
@@ -210,7 +210,7 @@ char ***slot;
     }
 }
 
-static __r47_void_return rehash(table)
+static __r49_void_return rehash(table)
 register st_table *table;
 {
     register st_table_entry *ptr, *next, **old_bins = table->bins;
@@ -282,7 +282,7 @@ st_table *old_table;
     return new_table;
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_delete(table, key, value)
 register st_table *table;
 register char **key;
@@ -325,7 +325,7 @@ char **value;
     return 0;
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_foreach(table, func, arg)
 st_table *table;
 enum st_retval (*func)();
@@ -359,10 +359,10 @@ char *arg;
 	}
     }
 
-    __r47_validated(return 0;)
+    __r49_validated(return 0;)
 }
 
-__r47_implicit_int
+__r49_implicit_int
 st_strhash(string, modulus)
 register char *string;
 int modulus;
@@ -375,5 +375,5 @@ int modulus;
     }
 
     return ((val < 0) ? -val : val)%modulus;
-    __r47_validated(return 0;)
+    __r49_validated(return 0;)
 }

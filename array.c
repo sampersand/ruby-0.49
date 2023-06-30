@@ -191,7 +191,7 @@ Fary_shift(ary)
 VALUE
 Fary_unshift(ary, item)
     struct RArray *ary;
-    __r47_unchecked(VALUE item;)
+    __r49_unchecked(VALUE item;)
 {
     VALUE top;
 

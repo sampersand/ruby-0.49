@@ -67,7 +67,7 @@ Ffile_tell(obj)
     GetOpenFile(obj, fptr);
 
     pos = ftell(fptr->f);
-    if (ferror(fptr->f) != 0) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (ferror(fptr->f) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
 
     return int2inum(pos);
 }
@@ -84,7 +84,7 @@ Ffile_seek(obj, offset, ptrname)
     GetOpenFile(obj, fptr);
 
     pos = fseek(fptr->f, NUM2INT(offset), NUM2INT(ptrname));
-    if (pos != 0) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (pos != 0) rb_sys_fail(__r49_Qnil_to_NULL);
 
     return obj;
 }
@@ -96,7 +96,7 @@ Ffile_rewind(obj)
     OpenFile *fptr;
 
     GetOpenFile(obj, fptr);
-    if (fseek(fptr->f, 0L, 0) != 0) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (fseek(fptr->f, 0L, 0) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
 
     return obj;
 }
@@ -181,7 +181,7 @@ stat_new(st)
 static char lastpath[MAXPATHLEN];
 static struct stat laststat;
 
-__r47_implicit_int
+__r49_implicit_int
 cache_stat(path, st)
     char *path;
     struct stat *st;
@@ -273,7 +273,7 @@ group_member(gid)
 	GETGROUPS_T gary[NGROUPS];
 	int anum;
 
-	anum = getgroups(NGROUPS, __r47_unchecked_cast(gid_t *, gary));
+	anum = getgroups(NGROUPS, __r49_unchecked_cast(gid_t *, gary));
 	while (--anum >= 0)
 	    if (gary[anum] == gid)
 		return TRUE;
@@ -389,7 +389,7 @@ Ffile_l(obj, fname)
     return FALSE;
 }
 
-__r47_implicit_int
+__r49_implicit_int
 Ffile_S(obj, fname)
     VALUE obj;
     struct RString *fname;
@@ -801,7 +801,7 @@ Ffile_chown(obj, args)
     return INT2FIX(i);
 }
 
-__r47_implicit_int_but(VALUE)
+__r49_implicit_int_but(VALUE)
 Ffile_chown2(obj, owner, group)
     VALUE obj, owner, group;
 {
@@ -869,7 +869,7 @@ Ffile_symlink(obj, from, to)
     return TRUE;
 }
 
-__r47_implicit_int_but(VALUE)
+__r49_implicit_int_but(VALUE)
 Ffile_readlink(obj, path)
     VALUE obj;
     struct RString *path;
@@ -976,7 +976,7 @@ Ffile_fcntl(obj, req, arg)
     return obj;
 }
 
-__r47_void_return
+__r49_void_return
 Init_File()
 {
     C_File = rb_define_class("File", C_IO);

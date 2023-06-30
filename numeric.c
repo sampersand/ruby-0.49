@@ -25,7 +25,7 @@ VALUE C_Fixnum;
 extern VALUE C_Range;
 double big2dbl();
 
-static __r47_implicit_int
+static __r49_implicit_int
 num_coerce_bin(this, other)
     VALUE this, other;
 {
@@ -216,7 +216,7 @@ Fflo_plus(x, y)
       case T_FLOAT:
 	return float_new(x->value + y->value);
       case T_STRING:
-	return Fstr_plus(obj_as_string(x), __r47_unchecked_cast(struct RString *, y));
+	return Fstr_plus(obj_as_string(x), __r49_unchecked_cast(struct RString *, y));
       default:
 	return num_coerce_bin(x, y);
     }
@@ -250,7 +250,7 @@ Fflo_mul(x, y)
       case T_FLOAT:
 	return float_new(x->value * y->value);
       case T_STRING:
-	return Fstr_times(__r47_unchecked_cast(struct RString *, y), INT2FIX((int)x->value));
+	return Fstr_times(__r49_unchecked_cast(struct RString *, y), INT2FIX((int)x->value));
       default:
 	return num_coerce_bin(x, y);
     }
@@ -316,7 +316,7 @@ Fflo_mod(x, y)
     return float_new(value);
 }
 
-__r47_implicit_int_but(VALUE)
+__r49_implicit_int_but(VALUE)
 Fflo_pow(x, y)
     struct RFloat *x, *y;
 {
@@ -583,7 +583,7 @@ Ffix_plus(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_plus(__r47_unchecked_cast2(struct RBignum *, VALUE, big1), __r47_unchecked_cast2(struct RBignum *, VALUE, big2));
+		r = Fbig_plus(__r49_unchecked_cast2(struct RBignum *, VALUE, big1), __r49_unchecked_cast2(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;
@@ -616,7 +616,7 @@ Ffix_minus(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_minus(__r47_unchecked_cast2(struct RBignum *, VALUE, big1), __r47_unchecked_cast2(struct RBignum *, VALUE, big2));
+		r = Fbig_minus(__r49_unchecked_cast2(struct RBignum *, VALUE, big1), __r49_unchecked_cast2(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;
@@ -645,7 +645,7 @@ Ffix_mul(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_mul(__r47_unchecked_cast2(struct RBignum *, VALUE, big1), __r47_unchecked_cast2(struct RBignum *, VALUE, big2));
+		r = Fbig_mul(__r49_unchecked_cast2(struct RBignum *, VALUE, big1), __r49_unchecked_cast2(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;
@@ -865,7 +865,7 @@ Ffix_class(fix)
     return C_Fixnum;
 }
 
-static __r47_implicit_int_but(VALUE) Ffix_abs(fix)
+static __r49_implicit_int_but(VALUE) Ffix_abs(fix)
     VALUE fix;
 {
     int i = FIX2INT(fix);
@@ -885,10 +885,10 @@ Ffix_id2name(fix)
 }
 
 extern VALUE M_Comparable;
-extern __r47_implicit_int_but(VALUE) Fkrn_inspect(__r47_validated(VALUE));
+extern __r49_implicit_int_but(VALUE) Fkrn_inspect(__r49_validated(VALUE));
 
-__r47_void_return
-Init_Numeric(__r47_noargs)
+__r49_void_return
+Init_Numeric(__r49_noargs)
 {
     coerce = rb_intern("coerce");
     to_i = rb_intern("to_i");

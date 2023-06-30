@@ -90,7 +90,7 @@ Fio_flush(obj)
     f = (fptr->f2) ? fptr->f2 : fptr->f;
     if (f == NULL) Fail("closed stream");
 
-    if (fflush(f) == EOF) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (fflush(f) == EOF) rb_sys_fail(__r49_Qnil_to_NULL);
 
     return obj;
 }
@@ -181,7 +181,7 @@ read_all(port)
 	n = fread(buf, 1, BUFSIZ, fptr->f);
 	if (n == 0) {
 	    if (feof(fptr->f)) break;
-	    rb_sys_fail(__r47_Qnil_to_NULL);
+	    rb_sys_fail(__r49_Qnil_to_NULL);
 	}
 	str_cat(str, buf, n);
     }
@@ -214,7 +214,7 @@ Fio_read(obj, args)
     n = fread(RSTRING(str)->ptr, 1, RSTRING(str)->len, fptr->f);
     if (n == 0) {
 	if (feof(fptr->f)) return Qnil;
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     }
 
     RSTRING(str)->len = n;
@@ -291,7 +291,7 @@ Fio_gets(obj)
 	    ;
 
 	if (c == EOF && !append && bp == buf) {
-	    str = __r47_Qnil_to_NULL;
+	    str = __r49_Qnil_to_NULL;
 	    goto return_gets;
 	}
 
@@ -370,7 +370,7 @@ Fio_each_byte(obj)
     while ((c = getc(f)) != EOF) {
 	rb_yield(INT2FIX(c & 0xff));
     }
-    if (ferror(f) != 0) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (ferror(f) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
     return obj;
 }
 
@@ -391,7 +391,7 @@ Fio_getc(obj)
 
     c = getc(f);
     if (c == EOF) {
-	if (ferror(f) != 0) rb_sys_fail(__r47_Qnil_to_NULL);
+	if (ferror(f) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
 	return Qnil;
     }
     return INT2FIX(c & 0xff);
@@ -453,7 +453,7 @@ Fio_syswrite(obj, str)
 
     n = write(fileno(f), RSTRING(str)->ptr, RSTRING(str)->len);
 
-    if (n == -1) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (n == -1) rb_sys_fail(__r49_Qnil_to_NULL);
 
     return INT2FIX(n);
 }
@@ -477,7 +477,7 @@ Fio_sysread(obj, len)
 
     n = read(fileno(fptr->f), RSTRING(str)->ptr, RSTRING(str)->len);
 
-    if (n == -1) rb_sys_fail(__r47_Qnil_to_NULL);
+    if (n == -1) rb_sys_fail(__r49_Qnil_to_NULL);
     if (n == 0) return Qnil;	/* EOF */
 
     RSTRING(str)->len = n;
@@ -512,14 +512,14 @@ Fio_binmode(obj)
 
     GetOpenFile(obj, fptr);
     if (setmode(fileno(fptr), O_BINARY) == -1)
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
 #endif
     return obj;
 }
 
 VALUE obj_alloc();
 
-__r47_implicit_int
+__r49_implicit_int
 io_mode_flags(mode)
     char *mode;
 {
@@ -559,7 +559,7 @@ rb_fdopen(fd, mode)
 	    f = fdopen(fd, mode);
 	}
 	if (f == NULL) {
-	    rb_sys_fail(__r47_Qnil_to_NULL);
+	    rb_sys_fail(__r49_Qnil_to_NULL);
 	}
     }
     return f;
@@ -583,7 +583,7 @@ pipe_open(pname, mode)
 
     if ((fptr->mode & FMODE_READABLE) && pipe(pr) == -1 ||
 	(fptr->mode & FMODE_WRITABLE) && pipe(pw) == -1)
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
 
     doexec = (strcmp("-", pname) != 0);
     if (!doexec) {
@@ -625,7 +625,7 @@ pipe_open(pname, mode)
     }
     if (pid == -1) {
 	close(pr[0]); close(pw[1]);
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     }
 
     fptr->pid = pid;
@@ -1023,7 +1023,7 @@ Fselect(obj, args)
 	    if (tp == NULL) goto retry;
 	    interrupt = 1;
 	}
-	rb_sys_fail(__r47_Qnil_to_NULL);
+	rb_sys_fail(__r49_Qnil_to_NULL);
     }
     if (n == 0) return Qnil;
 
@@ -1145,8 +1145,8 @@ Fio_defset(obj, val)
 extern VALUE M_Enumerable;
 VALUE rb_readonly_hook();
 
-__r47_void_return
-Init_IO(__r47_noargs)
+__r49_void_return
+Init_IO(__r49_noargs)
 {
     extern VALUE C_Kernel;
 

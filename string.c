@@ -34,7 +34,7 @@ str_new(ptr, len)
 	memmove(str->ptr, ptr, len);
     }
     str->ptr[len] = '\0';
-    str->orig = __r47_Qnil_to_NULL;
+    str->orig = __r49_Qnil_to_NULL;
     return (VALUE)str;
 }
 
@@ -108,7 +108,7 @@ Fstr_new(class, str)
 	    memmove(str2->ptr, str->ptr, str->len);
 	}
 	str2->ptr[str->len] = '\0';
-	str2->orig = __r47_Qnil_to_NULL;
+	str2->orig = __r49_Qnil_to_NULL;
 	return (VALUE)str2;
     }
 }
@@ -243,7 +243,7 @@ str_modify(str)
     if (str->ptr) {
 	memcpy(str->ptr, str->orig->ptr, str->len+1);
     }
-    str->orig = __r47_Qnil_to_NULL;
+    str->orig = __r49_Qnil_to_NULL;
 }
 
 VALUE
@@ -336,7 +336,7 @@ Fstr_next(orig)
 	GC_PRO3(str2, (struct RString*)str_new(0, str->len+1));
 	str2->ptr[0] = c;
 	memmove(str2->ptr+1, str->ptr, str->len);
-	obj_free(__r47_cast_to_RBasic(str));
+	obj_free(__r49_cast_to_RBasic(str));
 	str = str2;
     }
     GC_UNLINK;
@@ -344,7 +344,7 @@ Fstr_next(orig)
     return (VALUE)str;
 }
 
-static __r47_implicit_int
+static __r49_implicit_int
 str_hash(str)
     struct RString *str;
 {
@@ -504,7 +504,7 @@ Fstr_index(str, args)
 
     switch (TYPE(sub)) {
       case T_REGEXP:
-	pos = research(__r47_unchecked_cast2(struct RRegexp *, struct RString *, sub), str, pos, ignorecase);
+	pos = research(__r49_unchecked_cast2(struct RRegexp *, struct RString *, sub), str, pos, ignorecase);
 	break;
 
       case T_STRING:
@@ -960,7 +960,7 @@ Fstr_toupper(str)
 	if (islower(*s)) {
 	    *s = toupper(*s);
 	}
-	__r47_unused_unchecked(*s++);
+	__r49_unused_unchecked(*s++);
     }
 
     return (VALUE)str;
@@ -979,7 +979,7 @@ Fstr_tolower(str)
 	if (isupper(*s)) {
 	    *s = tolower(*s);
 	}
-	__r47_unused_unchecked(*s++);
+	__r49_unused_unchecked(*s++);
     }
 
     return (VALUE)str;
@@ -1018,7 +1018,7 @@ struct tr {
     char *p, *pend;
 } trsrc, trrepl;
 
-static __r47_implicit_int_but(char)
+static __r49_implicit_int_but(char)
 trnext(t)
     struct tr *t;
 {
@@ -1491,8 +1491,8 @@ extern VALUE C_Kernel;
 extern VALUE M_Comparable;
 extern VALUE M_Enumerable;
 
-__r47_void_return
-Init_String(__r47_noargs)
+__r49_void_return
+Init_String(__r49_noargs)
 {
     C_String  = rb_define_class("String", C_Object);
     rb_include_module(C_String, M_Comparable);

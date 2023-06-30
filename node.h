@@ -183,7 +183,7 @@ typedef struct node {
 #define NEW_AND(a,b) newnode(NODE_AND,a,b,Qnil)
 #define NEW_OR(a,b)  newnode(NODE_OR,a,b,Qnil)
 #define NEW_MASGN(l,val) newnode(NODE_MASGN,l,val,Qnil)
-#define NEW_GASGN(v,val) newnode(NODE_GASGN,v,val,__r47_unchecked_cast(NODE*, rb_global_entry(v)))
+#define NEW_GASGN(v,val) newnode(NODE_GASGN,v,val,__r49_unchecked_cast(NODE*, rb_global_entry(v)))
 #define NEW_LASGN(v,val) newnode(NODE_LASGN,v,val,local_cnt(v))
 #define NEW_IASGN(v,val) newnode(NODE_IASGN,v,val,Qnil)
 #define NEW_CASGN(v,val) newnode(NODE_CASGN,v,val,Qnil)

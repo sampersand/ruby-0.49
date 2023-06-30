@@ -204,7 +204,7 @@ Fetc_group(obj)
 
 VALUE M_Etc;
 
-__r47_void_return
+__r49_void_return
 Init_Etc()
 {
     M_Etc = rb_define_module("Etc");
