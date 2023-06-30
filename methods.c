@@ -44,7 +44,7 @@ search_method(class, id, origin)
 
     while (!st_lookup(class->m_tbl, id, __r49_unchecked_cast(char **, &body))) {
 	class = class->super;
-	if (class == Qnil) return __r49_Qnil_to_NULL;
+	if (class == Qnil) return Qnil;
     }
 
     if (body->origin)
@@ -73,7 +73,7 @@ rb_get_method_body(class, id, envset, scope)
 	struct RClass *origin;
 
 	if ((body = search_method(class, id, &origin)) == Qnil) {
-	    return __r49_Qnil_to_NULL;
+	    return Qnil;
 	}
 	/* store in cache */
 	cache[pos].mid = id;
@@ -85,8 +85,8 @@ rb_get_method_body(class, id, envset, scope)
 
     cscope = cache[pos].scope;
     method = cache[pos].method;
-    if (cscope == MTH_UNDEF) return __r49_Qnil_to_NULL;
-    if (cscope == MTH_FUNC && scope == MTH_METHOD) return __r49_Qnil_to_NULL;
+    if (cscope == MTH_UNDEF) return Qnil;
+    if (cscope == MTH_FUNC && scope == MTH_METHOD) return Qnil;
     if (envset) {
 	the_env->last_func = method->id;
 	the_env->last_class = cache[pos].origin;
@@ -119,7 +119,7 @@ rb_clear_cache(body)
 
     for (i = 0; i< CACHE_SIZE; i++ ) {
 	if (cache[i].method == body) {
-	    cache[i].class = __r49_Qnil_to_NULL;
+	    cache[i].class = Qnil;
 	    cache[i].mid = Qnil;
 	}
     }
@@ -136,7 +136,7 @@ rb_clear_cache2(class)
 
 	for (i = 0; i< CACHE_SIZE; i++ ) {
 	    if (cache[i].origin == class) {
-		cache[i].class = __r49_Qnil_to_NULL;
+		cache[i].class = Qnil;
 		cache[i].mid = Qnil;
 	    }
 	}

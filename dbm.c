@@ -68,7 +68,7 @@ Fdbm_open(class, args)
     }
     Check_Type(file, T_STRING);
 
-    dbm = __r49_Qnil_to_NULL;
+    dbm = Qnil;
     if (mode >= 0)
 	dbm = dbm_open(RSTRING(file)->ptr, O_RDWR|O_CREAT, mode);
     if (!dbm)
@@ -98,7 +98,7 @@ Fdbm_close(obj)
     Get_Data_Struct(obj, "dbm", DBM*, dbmp);
     if (*dbmp == Qnil) Fail("already closed DBM file");
     dbm_close(*dbmp);
-    *dbmp = __r49_Qnil_to_NULL;
+    *dbmp = Qnil;
 
     return Qnil;
 }
@@ -202,7 +202,7 @@ Fdbm_store(obj, keystr, valstr)
     GetDBM(obj, dbm);
     if (dbm_store(dbm, key, val, DBM_REPLACE)) {
 	dbm_clearerr(dbm);
-	if (errno == EPERM) rb_sys_fail(__r49_Qnil_to_NULL);
+	if (errno == EPERM) rb_sys_fail(Qnil);
 	Fail("DBM store failed");
     }
     return valstr;

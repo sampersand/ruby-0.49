@@ -379,7 +379,7 @@ Fenv_delete(obj, name)
     struct RString *name;
 {
     int i, len;
-    char *nam, *val = __r49_Qnil_to_NULL;
+    char *nam, *val = Qnil;
 
     Check_Type(name, T_STRING);
     nam = name->ptr;

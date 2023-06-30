@@ -107,7 +107,7 @@ Fwait(obj)
 
     if ((pid = wait(&state)) < 0) {
 	if (errno == ECHILD) return Qnil;
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
     }
     status = INT2FIX(state);
     return INT2FIX(pid);
@@ -123,7 +123,7 @@ Fwaitpid(obj, vpid, vflags)
     else flags = FIX2UINT(vflags);
 
     if ((pid = rb_waitpid(FIX2UINT(vpid), flags)) < 0)
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
     return INT2FIX(pid);
 }
 
@@ -178,7 +178,7 @@ Ffork(obj)
 	return Qnil;
 
       case -1:
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
 	break;
 
       default:
@@ -457,14 +457,14 @@ Fkill(argc, argv)
 #else
 	    if (kill(-pid, sig) < 0)
 #endif
-		rb_sys_fail(__r49_Qnil_to_NULL);
+		rb_sys_fail(Qnil);
 	}
     }
     else {
 	for (i=2; i<argc; i++) {
 	    Check_Type(argv[i], T_FIXNUM);
 	    if (kill(FIX2UINT(argv[i]), sig) < 0)
-		rb_sys_fail(__r49_Qnil_to_NULL);
+		rb_sys_fail(Qnil);
 	}
     }
     return INT2FIX(i-2);
@@ -726,7 +726,7 @@ Fproc_setpgrp(obj, pid, pgrp)
     ipid = NUM2INT(pid);
     ipgrp = NUM2INT(pgrp);
 
-    if (__r49_replace(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (__r49_replace(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(Qnil);
 
     return Qnil;
 }
@@ -741,7 +741,7 @@ Fproc_getpriority(obj, which, who)
     iwho   = NUM2INT(who);
 
     prio = getpriority(iwhich, iwho);
-    if (prio == -1) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (prio == -1) rb_sys_fail(Qnil);
     return INT2FIX(prio);
 }
 
@@ -756,7 +756,7 @@ Fproc_setpriority(obj, which, who, prio)
     iprio  = NUM2INT(prio);
 
     if (setpriority(iwhich, iwho, iprio) == -1)
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
     return Qnil;
 }
 
@@ -805,7 +805,7 @@ Fproc_seteuid(obj, euid)
     VALUE obj, euid;
 {
     if (seteuid(NUM2INT(euid)) == -1)
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
     return euid;
 }
 

@@ -86,6 +86,7 @@
 
 // Never going to fix this.
 __R49_IGNORE(-Wparentheses)
+__R49_IGNORE(-Wnon-literal-null-conversion)
 
 // TODO: fix these
 __R49_IGNORE(-Wint-to-pointer-cast)
@@ -94,12 +95,10 @@ __R49_IGNORE(-Wtautological-constant-out-of-range-compare)
 __R49_IGNORE(-Wint-conversion)
 __R49_IGNORE(-Wvarargs)
 
-#define __r49_validated(new) new
 #define __r49_unchecked(new) new
 #define __r49_implicit_int int
 #define __r49_noreturn _Noreturn void
 #define __r49_null 0
-#define __r49_Qnil_to_NULL __r49_replace(Qnil, __r49_null)
 #define __r49_replace(old, new) new
 #define __r49_cast_to_RBasic(ptr) ((struct RBasic *) (ptr))
 #define __r49_unchecked_cast(to, val) ((to) (val))

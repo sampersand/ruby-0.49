@@ -37,7 +37,7 @@ int debug = 0;
 int verbose = 0;
 static int sflag = FALSE;
 
-char *inplace = __r49_Qnil_to_NULL;
+char *inplace = Qnil;
 char *strdup();
 char *strstr();
 char *index();
@@ -76,7 +76,7 @@ proc_options(argcp, argvp)
 
     version = FALSE;
     script_given = FALSE;
-    script = __r49_Qnil_to_NULL;
+    script = Qnil;
 
     optind = 0;
     while ((c = getopt_long(argc, argv, "+acde:F:i:I:lnpR:svxX:yNES",
@@ -156,7 +156,7 @@ proc_options(argcp, argvp)
 		    RS = str_new2(optarg);
 		}
 		else {
-		    int i = strtoul(optarg, __r49_Qnil_to_NULL, 8);
+		    int i = strtoul(optarg, Qnil, 8);
 
 		    if (i == 0) RS = str_new(0, 0);
 		    else if (i > 0xff) RS = Qnil;
@@ -200,7 +200,7 @@ proc_options(argcp, argvp)
 	}
     }
 
-    if (argv[0] == Qnil) return __r49_Qnil_to_NULL;
+    if (argv[0] == Qnil) return Qnil;
 
     if (script_given == 0) {
 	if (argc == optind) {	/* no more args */
@@ -277,7 +277,7 @@ readin(fd, fname)
 	    if (p[0] == '#' && p[1] == '!' && strstr(p, "ruby")) {
 		if (p = strstr(p, "ruby -")) {
 		    int argc; char *argv[2]; char **argvp = argv;
-		    argc = 2; argv[0] = __r49_Qnil_to_NULL; argv[1] = p + 5;
+		    argc = 2; argv[0] = Qnil; argv[1] = p + 5;
 		    proc_options(&argc, &argvp);
 		}
 		xflag = TRUE;

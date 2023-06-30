@@ -99,7 +99,7 @@ Fpck_pack(ary, fmt)
 	  case 'H': case 'h':
 	    from = NEXTFROM;
 	    if (from == Qnil) {
-		ptr = __r49_Qnil_to_NULL;
+		ptr = Qnil;
 		plen = 0;
 	    }
 	    else {

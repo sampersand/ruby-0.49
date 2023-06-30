@@ -30,7 +30,7 @@ class_new(super)
 
     cls->super = super;
     cls->m_tbl = new_idhash();
-    cls->c_tbl = __r49_Qnil_to_NULL;
+    cls->c_tbl = Qnil;
 
     return (VALUE)cls;
 }
@@ -59,7 +59,7 @@ single_class_clone(class)
 
 	cls->super = class->super;
 	cls->m_tbl = st_copy(class->m_tbl);
-	cls->c_tbl = __r49_Qnil_to_NULL;
+	cls->c_tbl = Qnil;
 	FL_SET(cls, FL_SINGLE);
 	return (VALUE)cls;
     }
@@ -95,9 +95,9 @@ module_new()
     NEWOBJ(mdl, struct RClass);
     OBJSETUP(mdl, C_Module, T_MODULE);
 
-    mdl->super = __r49_Qnil_to_NULL;
+    mdl->super = Qnil;
     mdl->m_tbl = new_idhash();
-    mdl->c_tbl = __r49_Qnil_to_NULL;
+    mdl->c_tbl = Qnil;
 
     return (VALUE)mdl;
 }
@@ -179,7 +179,7 @@ rb_add_method(class, mid, node, scope)
     }
     mth->node = node;
     if (BUILTIN_TYPE(class) == T_MODULE)
-	mth->origin = __r49_Qnil_to_NULL;
+	mth->origin = Qnil;
     else
 	mth->origin = class;
     mth->id = mid;
@@ -217,7 +217,7 @@ rb_undef_method(class, name)
     struct RClass *class;
     char *name;
 {
-    rb_add_method(class, rb_intern(name), __r49_Qnil_to_NULL, MTH_UNDEF);
+    rb_add_method(class, rb_intern(name), Qnil, MTH_UNDEF);
 }
 
 VALUE

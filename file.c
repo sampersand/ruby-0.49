@@ -67,7 +67,7 @@ Ffile_tell(obj)
     GetOpenFile(obj, fptr);
 
     pos = ftell(fptr->f);
-    if (ferror(fptr->f) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (ferror(fptr->f) != 0) rb_sys_fail(Qnil);
 
     return int2inum(pos);
 }
@@ -84,7 +84,7 @@ Ffile_seek(obj, offset, ptrname)
     GetOpenFile(obj, fptr);
 
     pos = fseek(fptr->f, NUM2INT(offset), NUM2INT(ptrname));
-    if (pos != 0) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (pos != 0) rb_sys_fail(Qnil);
 
     return obj;
 }
@@ -96,7 +96,7 @@ Ffile_rewind(obj)
     OpenFile *fptr;
 
     GetOpenFile(obj, fptr);
-    if (fseek(fptr->f, 0L, 0) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (fseek(fptr->f, 0L, 0) != 0) rb_sys_fail(Qnil);
 
     return obj;
 }

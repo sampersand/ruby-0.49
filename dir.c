@@ -167,7 +167,7 @@ Fdir_chdir(obj, args)
     }
 
     if (chdir(dist) < 0)
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
 
     return Qnil;
 }
@@ -191,7 +191,7 @@ Fdir_chroot(dir, path)
     Check_Type(path, T_STRING);
 
     if (chroot(RSTRING(path)->ptr) == -1)
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
 
     return Qnil;
 }

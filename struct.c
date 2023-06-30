@@ -25,9 +25,9 @@ struct_alloc(class, name)
     OBJSETUP(st, class, T_STRUCT);
 
     if (name) st->name = strdup(name);
-    else st->name = __r49_Qnil_to_NULL;
+    else st->name = Qnil;
     st->len = 0;
-    st->tbl = __r49_Qnil_to_NULL;
+    st->tbl = Qnil;
 
     return (VALUE)st;
 }

@@ -92,8 +92,8 @@ rb_global_entry(id)
 	st_insert(global_tbl, id, __r49_unchecked_cast2(char *, struct global_entry *, entry));
 	entry->id = id;
 	entry->mode = GLOBAL_UNDEF;
-	entry->v.var = __r49_Qnil_to_NULL;
-	entry->get_hook = entry->set_hook = __r49_Qnil_to_NULL;
+	entry->v.var = Qnil;
+	entry->get_hook = entry->set_hook = Qnil;
     }
     return entry;
 }
@@ -306,7 +306,7 @@ const_bound(id)
     struct RClass *class = (struct RClass*)CLASS_OF(Qself);
 
     while (class) {
-	if (class->c_tbl && st_lookup(class->c_tbl, id, __r49_Qnil_to_NULL)) {
+	if (class->c_tbl && st_lookup(class->c_tbl, id, Qnil)) {
 	    return TRUE;
 	}
 	class = class->super;
@@ -394,7 +394,7 @@ Fdefined(obj, name)
 
       case ID_INSTANCE:
 	if (TYPE(Qself) != T_OBJECT || instance_tbl == Qnil) break;
-	if (st_lookup(instance_tbl, id, __r49_Qnil_to_NULL)) return TRUE;
+	if (st_lookup(instance_tbl, id, Qnil)) return TRUE;
 	break;
 
       case ID_CONST:
@@ -411,7 +411,7 @@ Fdefined(obj, name)
 		}
 	    }
 	}
-	if (st_lookup(class_tbl, id, __r49_Qnil_to_NULL)) return TRUE;
+	if (st_lookup(class_tbl, id, Qnil)) return TRUE;
 	break;
     }
     return FALSE;

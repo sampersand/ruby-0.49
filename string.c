@@ -34,7 +34,7 @@ str_new(ptr, len)
 	memmove(str->ptr, ptr, len);
     }
     str->ptr[len] = '\0';
-    str->orig = __r49_Qnil_to_NULL;
+    str->orig = Qnil;
     return (VALUE)str;
 }
 
@@ -108,7 +108,7 @@ Fstr_new(class, str)
 	    memmove(str2->ptr, str->ptr, str->len);
 	}
 	str2->ptr[str->len] = '\0';
-	str2->orig = __r49_Qnil_to_NULL;
+	str2->orig = Qnil;
 	return (VALUE)str2;
     }
 }
@@ -243,7 +243,7 @@ str_modify(str)
     if (str->ptr) {
 	memcpy(str->ptr, str->orig->ptr, str->len+1);
     }
-    str->orig = __r49_Qnil_to_NULL;
+    str->orig = Qnil;
 }
 
 VALUE

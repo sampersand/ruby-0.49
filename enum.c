@@ -116,7 +116,7 @@ Fenum_find_all(obj)
     	__r49_unchecked_cast_to_iter(rb_each),
     	obj,
     	__r49_unchecked_cast_to_iter(enum_find_all),
-    	__r49_Qnil_to_NULL
+    	Qnil
     );
 
     GC_UNLINK;

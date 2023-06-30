@@ -503,7 +503,7 @@ Ftime_times(obj)
     struct tms buf;
     VALUE t1, t2, t3, t4, tm;
 
-    if (times(&buf) == -1) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (times(&buf) == -1) rb_sys_fail(Qnil);
     GC_LINK;
     GC_PRO3(t1, float_new((double)buf.tms_utime / 60.0));
     GC_PRO3(t2, float_new((double)buf.tms_stime / 60.0));

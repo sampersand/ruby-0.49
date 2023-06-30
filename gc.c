@@ -19,8 +19,8 @@ void *malloc();
 void *calloc();
 void *realloc();
 
-struct gc_list *GC_List = __r49_Qnil_to_NULL;
-static struct gc_list *Global_List = __r49_Qnil_to_NULL;
+struct gc_list *GC_List = Qnil;
+static struct gc_list *Global_List = Qnil;
 static unsigned long bytes_alloc = 0, gc_threshold = 1000000;
 
 static __r49_void_return mark_tbl();
@@ -93,8 +93,8 @@ rb_global_variable(var)
     Global_List = tmp;
 }
 
-static struct RBasic *object_list = __r49_Qnil_to_NULL;
-static struct RBasic *literal_list = __r49_Qnil_to_NULL;
+static struct RBasic *object_list = Qnil;
+static struct RBasic *literal_list = Qnil;
 static unsigned long fl_current = FL_MARK;
 static unsigned long fl_old = 0L;
 
@@ -156,7 +156,7 @@ struct RBasic *
 newobj(size)
     unsigned long size;
 {
-    struct RBasic *obj = __r49_Qnil_to_NULL;
+    struct RBasic *obj = Qnil;
 
     if (bytes_alloc + size > gc_threshold) {
 	gc();
@@ -165,7 +165,7 @@ newobj(size)
     obj->next = object_list;
     object_list = obj;
     obj->flags = fl_current;
-    obj->iv_tbl = __r49_Qnil_to_NULL;
+    obj->iv_tbl = Qnil;
 
     return obj;
 }

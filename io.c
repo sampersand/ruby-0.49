@@ -90,7 +90,7 @@ Fio_flush(obj)
     f = (fptr->f2) ? fptr->f2 : fptr->f;
     if (f == NULL) Fail("closed stream");
 
-    if (fflush(f) == EOF) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (fflush(f) == EOF) rb_sys_fail(Qnil);
 
     return obj;
 }
@@ -181,7 +181,7 @@ read_all(port)
 	n = fread(buf, 1, BUFSIZ, fptr->f);
 	if (n == 0) {
 	    if (feof(fptr->f)) break;
-	    rb_sys_fail(__r49_Qnil_to_NULL);
+	    rb_sys_fail(Qnil);
 	}
 	str_cat(str, buf, n);
     }
@@ -214,7 +214,7 @@ Fio_read(obj, args)
     n = fread(RSTRING(str)->ptr, 1, RSTRING(str)->len, fptr->f);
     if (n == 0) {
 	if (feof(fptr->f)) return Qnil;
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
     }
 
     RSTRING(str)->len = n;
@@ -291,7 +291,7 @@ Fio_gets(obj)
 	    ;
 
 	if (c == EOF && !append && bp == buf) {
-	    str = __r49_Qnil_to_NULL;
+	    str = Qnil;
 	    goto return_gets;
 	}
 
@@ -370,7 +370,7 @@ Fio_each_byte(obj)
     while ((c = getc(f)) != EOF) {
 	rb_yield(INT2FIX(c & 0xff));
     }
-    if (ferror(f) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (ferror(f) != 0) rb_sys_fail(Qnil);
     return obj;
 }
 
@@ -391,7 +391,7 @@ Fio_getc(obj)
 
     c = getc(f);
     if (c == EOF) {
-	if (ferror(f) != 0) rb_sys_fail(__r49_Qnil_to_NULL);
+	if (ferror(f) != 0) rb_sys_fail(Qnil);
 	return Qnil;
     }
     return INT2FIX(c & 0xff);
@@ -453,7 +453,7 @@ Fio_syswrite(obj, str)
 
     n = write(fileno(f), RSTRING(str)->ptr, RSTRING(str)->len);
 
-    if (n == -1) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (n == -1) rb_sys_fail(Qnil);
 
     return INT2FIX(n);
 }
@@ -477,7 +477,7 @@ Fio_sysread(obj, len)
 
     n = read(fileno(fptr->f), RSTRING(str)->ptr, RSTRING(str)->len);
 
-    if (n == -1) rb_sys_fail(__r49_Qnil_to_NULL);
+    if (n == -1) rb_sys_fail(Qnil);
     if (n == 0) return Qnil;	/* EOF */
 
     RSTRING(str)->len = n;
@@ -512,7 +512,7 @@ Fio_binmode(obj)
 
     GetOpenFile(obj, fptr);
     if (setmode(fileno(fptr), O_BINARY) == -1)
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
 #endif
     return obj;
 }
@@ -559,7 +559,7 @@ rb_fdopen(fd, mode)
 	    f = fdopen(fd, mode);
 	}
 	if (f == NULL) {
-	    rb_sys_fail(__r49_Qnil_to_NULL);
+	    rb_sys_fail(Qnil);
 	}
     }
     return f;
@@ -583,7 +583,7 @@ pipe_open(pname, mode)
 
     if ((fptr->mode & FMODE_READABLE) && pipe(pr) == -1 ||
 	(fptr->mode & FMODE_WRITABLE) && pipe(pw) == -1)
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
 
     doexec = (strcmp("-", pname) != 0);
     if (!doexec) {
@@ -625,7 +625,7 @@ pipe_open(pname, mode)
     }
     if (pid == -1) {
 	close(pr[0]); close(pw[1]);
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
     }
 
     fptr->pid = pid;
@@ -1023,7 +1023,7 @@ Fselect(obj, args)
 	    if (tp == NULL) goto retry;
 	    interrupt = 1;
 	}
-	rb_sys_fail(__r49_Qnil_to_NULL);
+	rb_sys_fail(Qnil);
     }
     if (n == 0) return Qnil;
 

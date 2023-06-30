@@ -317,7 +317,7 @@ void *alloca(unsigned long size);
     _tmp->n = 1;\
     GC_List = _tmp;\
 }
-#define GC_PRO2(var) GC_PRO3((var),__r49_Qnil_to_NULL)
+#define GC_PRO2(var) GC_PRO3((var),Qnil)
 #define GC_PRO3(var,init) {\
     (var) = (init);\
     GC_PRO(var);\

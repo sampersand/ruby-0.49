@@ -187,7 +187,7 @@ Eval()
     if (each == Qnil) each = rb_intern("each");
 
     tree = eval_tree;
-    eval_tree = __r49_Qnil_to_NULL;
+    eval_tree = Qnil;
 
     return rb_eval(tree);
 }
@@ -649,7 +649,7 @@ rb_eval(node)
 	    }
 	    else {
 		argc = 1;
-		argv = __r49_Qnil_to_NULL;
+		argv = Qnil;
 	    }
 
 	    /* restore iter. level */
@@ -680,8 +680,8 @@ rb_eval(node)
 		the_env->local_tbl = node->nd_tbl;
 	    }
 	    else {
-		the_env->local_vars = __r49_Qnil_to_NULL;
-		the_env->local_tbl = __r49_Qnil_to_NULL;
+		the_env->local_vars = Qnil;
+		the_env->local_tbl = Qnil;
 	    }
 	    if ((state = EXEC_TAG()) == 0) {
 		result = rb_eval(node->nd_body);
@@ -889,7 +889,7 @@ rb_eval(node)
 
       case NODE_UNDEF:
 	{
-	    rb_add_method(the_class, node->nd_mid, __r49_Qnil_to_NULL, MTH_UNDEF);
+	    rb_add_method(the_class, node->nd_mid, Qnil, MTH_UNDEF);
 	}
 	return Qnil;
 
@@ -1225,7 +1225,7 @@ rb_iterate(it_proc, data1, bl_proc, data2)
 
     PUSH_ENV();
     block.level = tag_level;
-    block.var = __r49_Qnil_to_NULL;
+    block.var = Qnil;
     block.body = node;
     block.env = *the_env;
     the_env->block = &block;
@@ -1493,8 +1493,8 @@ rb_call(class, recv, mid, argc, argv, scope)
     else {
 	the_env->file = sourcefile;
 	the_env->line = sourceline;
-	the_env->local_vars = __r49_Qnil_to_NULL;
-	the_env->local_tbl = __r49_Qnil_to_NULL;
+	the_env->local_vars = Qnil;
+	the_env->local_tbl = Qnil;
 
 	PUSH_TAG();
 	switch (state = EXEC_TAG()) {
@@ -1587,7 +1587,7 @@ rb_funcall(VALUE recv, ID mid, int n, ...)
     }
     else {
 	argc = 1;
-	argv = __r49_Qnil_to_NULL;
+	argv = Qnil;
     }
 
     return rb_call(CLASS_OF(recv), recv, mid, argc, argv, MTH_FUNC);
@@ -1658,7 +1658,7 @@ Feval(obj, src)
 
     if ((state = EXEC_TAG()) == 0) {
 	lex_setsrc("(eval)", src->ptr, src->len);
-	eval_tree = __r49_Qnil_to_NULL;
+	eval_tree = Qnil;
 	yyparse();
 	sourcefile = oldsrc;
 	if (nerrs == 0)
@@ -1712,7 +1712,7 @@ find_file(file)
 	sep = Qnil;
     }
     else {
-	path = __r49_Qnil_to_NULL;
+	path = Qnil;
     }
 
     found = dln_find_file(file, path);
@@ -1765,7 +1765,7 @@ Fload(obj, fname)
     node = eval_tree;
     state = EXEC_TAG();
     if (state == 0) {
-	eval_tree = __r49_Qnil_to_NULL;
+	eval_tree = Qnil;
 	rb_load_file(file);
 	if (nerrs == 0) {
 	    result = Eval();
