@@ -10,3 +10,7 @@ def open(*x)
   end if
   value
 end def
+
+do open("example.rb", "r") using i
+  print(i)
+end

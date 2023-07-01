@@ -151,7 +151,9 @@ static char *builtin_types[] = {
     "Fixnum",
     "Dictionary",
     "Data",
-    __r49_critical_bugfix("Method", "Struct", "Bignum",)
+#ifdef __r49_critical_bugfix /* otherwise WrongType segfaults on these types */
+    "Method", "Struct", "Bignum"
+#endif
 };
 
 __r49_noreturn

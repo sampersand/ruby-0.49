@@ -427,7 +427,7 @@ Fary_each(ary)
     else {
 	return (VALUE)ary;
     }
-    __r49_ncleanup(printf("%s:%d: return qnil", __FILE__, __LINE__);)
+    __r49_ncleanup_q(printf("%s:%d: return qnil", __FILE__, __LINE__);)
     return Qnil;
 }
 

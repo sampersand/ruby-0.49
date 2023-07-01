@@ -12,12 +12,24 @@
  * compile on 32 bit machines.
  */
 #ifdef __r49_required_change
-# undef  __r49_required_change
-# define __r49_required_change(...) __VA_ARGS__
+# define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_replacement(old, new) new
 #else
-# define __r49_required_change(...)
+# define __r49_required_change_q(...)
 # define __r49_required_replacement(old, new) old
+#endif
+
+/* All of this functionality should be available on every platform these days. */
+#ifndef __r49_dont_define_haves
+# define HAVE_MEMMOVE
+# define HAVE_STRERROR
+# define HAVE_STRTOUL
+# define HAVE_STRFTIME
+# define HAVE_STRSTR
+# define HAVE_GETOPT_LONG
+# define HAVE_MKDIR
+# define HAVE_STRDUP
+# define HAVE_RANDOM
 #endif
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
@@ -25,11 +37,10 @@
  * consider the intended value.
  */
 #ifdef __r49_critical_bugfix
-# undef  __r49_critical_bugfix
-# define __r49_critical_bugfix(...) __VA_ARGS__
+# define __r49_critical_bugfix_q(...) __VA_ARGS__
 # define __r49_critical_replacement(old, new) new
 #else
-# define __r49_critical_bugfix(...)
+# define __r49_critical_bugfix_q(...)
 # define __r49_critical_replacement(old, new) old
 #endif
 
@@ -37,30 +48,36 @@
  * even though it's references in a lot of places internally), but won't preclude normal operation.
  */
 #ifdef __r49_bugfix
-# undef  __r49_bugfix
-# define __r49_bugfix(...) __VA_ARGS__
+# define __r49_bugfix_q(...) __VA_ARGS__
 #else
-# define __r49_bugfix(...)
+# define __r49_bugfix_q(...)
 #endif
+
+/* Ruby 0.49 doesn't raise an error when you recurse too far, and just segfaults.
+ * This fixes that.
+ */
+#if defined(__r49_bugfix) && !defined(__r49_no_recursion_limit)
+# define __r49_recursion_limit 1000 /* semi-conservative estimate; 1027 is the max on my computer */
+#endif
+
 
 /* Cleanup is cleaning up code which probably wasn't intended to be kept around (eg printing debug
  * code after `array.each()` ends), but won't preclude normal operation.
  */
 #ifdef __r49_cleanup
-# undef  __r49_cleanup
-# define __r49_ncleanup(...)
+# define __r49_ncleanup_q(...)
 #else
-# define __r49_ncleanup(...) __VA_ARGS__
+# define __r49_ncleanup_q(...) __VA_ARGS__
 #endif
 
 #define __r49_validated(x) x
 
-#define __r49_implicit_arg(type, arg) __r49_required_change(type arg;)
-#define __r49_implicit_var(type) __r49_required_change(type)
-#define __r49_implicit_return(type) __r49_required_change(type)
+#define __r49_implicit_arg(type, arg) __r49_required_change_q(type arg;)
+#define __r49_implicit_var(type) __r49_required_change_q(type)
+#define __r49_implicit_return(type) __r49_required_change_q(type)
 #define __r49_void_return __r49_implicit_return(void)
-#define __r49_noargs __r49_required_change(void)
-#define __r49_anyargs __r49_required_change(...)
+#define __r49_noargs __r49_required_change_q(void)
+#define __r49_anyargs __r49_required_change_q(...)
 
 #include <sys/_types/_time_t.h>
 #include <sys/_types/_uid_t.h>

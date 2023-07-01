@@ -15,13 +15,25 @@
 static int first = 1;
 static char state[256];
 
+/* These are required to be predeclared */
+#if defined(__r49_required_change) && defined(HAVE_RANDOM)
+char *initstate(unsigned seed, char *state, size_t size);
+long random(void);
+char *setstate(const char *state);
+void srandom(unsigned seed);
+#endif
+
 static VALUE
 Fsrand(obj, args)
     VALUE obj, args;
 {
-    int seed, old;
+    /* The int size no longer corresponds to VALUE's size. Even though `random` returns a long and
+     * `rand` returns an `int`, we need to have the size be equal to VALUE for the `rb_scan_args`
+     * functions call.
+     */
+    __r49_required_replacement(int, VALUE) seed, old;
 #ifdef HAVE_RANDOM
-    static int saved_seed;
+    static __r49_required_replacement(int, VALUE) saved_seed;
 #endif
 
     if (rb_scan_args(args, "01", &seed) == 0) {
@@ -46,7 +58,8 @@ Fsrand(obj, args)
 
     return int2inum(old);
 #else
-    __r49_replace(old = srand(seed), (srand(seed), old=0));
+    /* `srand` doesn't return a value. */
+    old = __r49_required_replacement(srand(seed), (srand(seed), 0));
     return int2inum(old);
 #endif
 }

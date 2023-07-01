@@ -24,14 +24,29 @@ extern NODE *eval_tree;
 
 struct ENVIRON *the_env, *top_env;
 
+#ifdef __r49_recursion_limit /* add support for recursion limits */
+unsigned __r48_recursion_size;
+#endif
+
+#ifdef __r49_recursion_limit
+# define __R49_RECURSION_PUSH() \
+	do { if (__r48_recursion_size++ >= __r49_recursion_limit) \
+		Fail("recursion limit of %d reached",  __r49_recursion_limit); }while(0)
+# define __R49_RECURSION_POP() do { --__r48_recursion_size; } while(0)
+#else
+# define __R49_RECURSION_PUSH() do {} while(0)
+# define __R49_RECURSION_POP() do{} while(0)
+#endif
+
 #define PUSH_ENV() {\
+    __R49_RECURSION_PUSH(); \
     struct ENVIRON _this;\
     if (the_env) _this = *the_env; else bzero(&_this, sizeof(_this));\
     _this.prev = the_env;\
     _this.flags = 0;\
     the_env = &_this;\
 
-#define POP_ENV()  the_env = the_env->prev; }
+#define POP_ENV() __R49_RECURSION_POP(); the_env = the_env->prev; }
 
 struct BLOCK {
     NODE *var;
@@ -472,7 +487,8 @@ rb_eval(node)
 	    if (state == 0) {
 		if (node->type == NODE_DO) {
 		    the_env->iterator = 1;
-		    rb_eval(node->nd_iter);
+		    /* allow you to use the return value of blocks */
+		    __r49_critical_bugfix_q(result =) rb_eval(node->nd_iter);
 		}
 		else {
 		    VALUE recv;

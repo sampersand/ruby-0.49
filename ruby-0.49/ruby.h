@@ -113,7 +113,7 @@ void *memmove(void *, const void *, unsigned long);
 #else
 # define RSHIFT(x,y) (((x)<0) ? ~((~(x))>>y) : (x)>>y)
 #endif
-#define FIX2INT(x) RSHIFT((int)x,1)
+#define FIX2INT(x) RSHIFT((__r49_required_replacement(int, VALUE))x,1)
 
 #define FIX2UINT(f) ((unsigned int)(f)>>1)
 #define FIXNUM_P(f) (((__r49_required_replacement(int, VALUE))(f))&FIXNUM_FLAG)
@@ -167,8 +167,9 @@ extern VALUE C_Data;
 #define Check_Type(x,t) {if (TYPE(x)!=(t)) WrongType(x,t);}
 #define Need_Fixnum(x)  {if (!FIXNUM_P(x)) (x) = num2fix(x);}
 #define NUM2INT(x) (FIXNUM_P(x)?FIX2INT(x):num2int(x))
-VALUE num2fix();
-int   num2int();
+
+VALUE num2fix(__r49_required_change_q(VALUE val));
+int   num2int(__r49_required_change_q(VALUE val));
 
 struct RBasic *newobj(unsigned long size);
 #define NEWOBJ(obj,type) type *obj = (type*)newobj(sizeof(type))

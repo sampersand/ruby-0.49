@@ -5,3 +5,5 @@ x`
 - `=begin` doesn't exist
 - `BEGIN`/`END` dont exist
 - blocks dont use `do`/`end` or `{`..`}`
+
+- function definitions with no arguments take any amount of arguments...?

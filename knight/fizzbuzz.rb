@@ -1,8 +1,8 @@
-x=()
-print(x)
+
 __END__
-exit()
 def fizzbuzz(max)
+  print(1,"\n")
+  $stdout.flush()
   if (!iterator_p())
     (x = []
     do fizzbuzz(max) using i
@@ -11,6 +11,7 @@ def fizzbuzz(max)
     return x
     )
   end
+
 
   for x in 1..max
     print(x, "\n")
