@@ -7,7 +7,7 @@
 #pragma clang diagnostic ignored "-Wnon-literal-null-conversion"
 
 /* todo: fix these */
-#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
+#pragma clang diagnostic error "-Wtautological-constant-out-of-range-compare"
 #pragma clang diagnostic ignored "-Wint-conversion"
 
 #define __r49
@@ -20,6 +20,7 @@
  * making sure that `sizeof(VALUE) == sizeof(void *)` and stuff. If you disable this, it'll only
  * compile on 32 bit machines.
  */
+#define __r49_64_bit
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_replacement(old, new) new
@@ -107,6 +108,7 @@
 #define __r49_unchecked_ignore(pragma) __R49_IGNORE(pragma)
 #define __R49_WARN_PUSH() _Pragma(__R49_STR(clang diagnostic push))
 #define __R49_IGNORE(what) _Pragma(__R49_STR(clang diagnostic ignored #what))
+#define __r49_ignore_warning(warning, ...) __R49_WARN_PUSH() __R49_IGNORE(warning) __VA_ARGS__ __R49_WARN_POP()
 #define __R49_WARN_POP() _Pragma(__R49_STR(clang diagnostic pop))
 
 

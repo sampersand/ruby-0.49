@@ -117,8 +117,17 @@ void *memmove(void *, const void *, unsigned long);
 
 #define FIX2UINT(f) ((unsigned int)(f)>>1)
 #define FIXNUM_P(f) (((__r49_required_replacement(int, VALUE))(f))&FIXNUM_FLAG)
-#define POSFIXABLE(f) ((f) <= FIXNUM_MAX)
-#define NEGFIXABLE(f) ((f) >= FIXNUM_MIN)
+
+/* In 64bit, everything is posfixable and negfixable. */
+#ifdef __r49_64_bit
+# define __r49_64bit_ignore_tautological_constant_out_of_range_compare(...) \
+	__r49_ignore_warning(-Wtautological-constant-out-of-range-compare, __VA_ARGS__)
+#else
+# define __r49_64bit_ignore_tautological_constant_out_of_range_compare(...) __VA_ARGS__
+#endif
+#define POSFIXABLE(f) __r49_64bit_ignore_tautological_constant_out_of_range_compare((f) <= FIXNUM_MAX)
+#define NEGFIXABLE(f) __r49_64bit_ignore_tautological_constant_out_of_range_compare((f) >= FIXNUM_MIN)
+
 #define FIXABLE(f) (POSFIXABLE(f) && NEGFIXABLE(f))
 
 #define POINTER(p) (p)
