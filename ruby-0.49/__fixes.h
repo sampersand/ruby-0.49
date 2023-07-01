@@ -2,11 +2,9 @@
 #define __FIXES_H
 
 
-/* Never going to fix these */
+/* Never going to fix these, they retain the essence of the wild west */
 #pragma clang diagnostic ignored "-Wparentheses"
 #pragma clang diagnostic ignored "-Wnon-literal-null-conversion"
-
-/* todo: fix these */
 #pragma clang diagnostic ignored "-Wint-conversion"
 
 #define __r49
@@ -23,14 +21,13 @@
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_replacement(old, new) new
- /* These shouldn't still exist in the codebase */
+ /* These shouldn't still exist in the codebase, but can exist without the requirements */
 # pragma clang diagnostic error "-Wint-to-pointer-cast"
 # pragma clang diagnostic error "-Wpointer-to-int-cast"
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_replacement(old, new) old
 #endif
-
 
 /* Changes that are required to get Ruby 0.47 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
@@ -97,8 +94,16 @@
 # define __r49_ncleanup_q(...) __VA_ARGS__
 #endif
 
-#define __r49_validated(x) x
+/* Define the noreturn attribute */
+#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 201112L
+# define __r49_noreturn void
+#elif __STDC_VERSION__ >= 202000L
+# define __r49_noreturn void [[noreturn]]
+#else
+# define __r49_noreturn _Noreturn void
+#endif
 
+#define __r49_validated(x) x
 #define __r49_implicit_arg(type, arg) __r49_required_change_q(type arg;)
 #define __r49_implicit_var(type) __r49_required_change_q(type)
 #define __r49_implicit_return(type) __r49_required_change_q(type)
@@ -122,24 +127,8 @@
 #define __r49_ignore_warning(warning, ...) __R49_WARN_PUSH() __R49_IGNORE(warning) __VA_ARGS__ __R49_WARN_POP()
 #define __R49_WARN_POP() _Pragma(__R49_STR(clang diagnostic pop))
 
-
-// this is a thing
-#ifdef __R49_NOCLEANUP
-#endif
-
-#ifdef __R49_BUGFIX
-# undef __R49_BUGFIX
-# define __R49_BUGFIX(x) x
-# define __R49_BUGFIX_REPLACE(old, new) new
-#else
-# define __R49_BUGFIX(x)
-# define __R49_BUGFIX_REPLACE(old, new) old
-#endif
-
 #define __r49_unchecked(new) new
 #define __r49_implicit_int int
-#define __r49_noreturn _Noreturn void
-#define __r49_null 0
 #define __r49_replace(old, new) new
 #define __r49_cast_to_RBasic(ptr) ((struct RBasic *) (ptr))
 #define __r49_unchecked_cast(to, val) ((to) (val))
