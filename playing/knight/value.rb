@@ -1,10 +1,3 @@
-def takes_keywords(*kw)
-  print(kw.assoc('a')[0], "\n")
-  print(kw.assoc('b')[0], "\n")
-end
-
-takes_keywords('a'::34, 'b'::45)
-__END__
 def tap; yield(self) ; self end
 
 class value
