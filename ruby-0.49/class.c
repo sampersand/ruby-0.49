@@ -323,7 +323,7 @@ rb_scan_args(VALUE args, char *fmt, ...) {
 	len = RARRAY(args)->len;
     }
 
-    va_start(vargs, args);
+    __R49_UNCHECKED_IGNORE(-Wvarargs, va_start(vargs, args));
 
     if (*p == '*') {
 	var = va_arg(vargs, VALUE*);

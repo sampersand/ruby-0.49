@@ -1,6 +1,15 @@
 #ifndef __FIXES_H
 #define __FIXES_H
 
+
+/* Never going to fix these */
+#pragma clang diagnostic ignored "-Wparentheses"
+#pragma clang diagnostic ignored "-Wnon-literal-null-conversion"
+
+/* todo: fix these */
+#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
+#pragma clang diagnostic ignored "-Wint-conversion"
+
 #define __r49
 #define __r49_required_change
 #define __r49_critical_bugfix
@@ -14,9 +23,15 @@
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_replacement(old, new) new
+# define __r49_required_int_to_value VALUE
+
+ /* These shouldn't still exist in the codebase */
+# pragma clang diagnostic error "-Wint-to-pointer-cast"
+# pragma clang diagnostic error "-Wpointer-to-int-cast"
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_replacement(old, new) old
+# define __r49_required_int_to_value int
 #endif
 
 /* All of this functionality should be available on every platform these days. */
@@ -89,6 +104,7 @@
 
 #define __R49_STR(x) #x
 #define __R49_UNCHECKED_IGNORE(pragma, ...) __R49_WARN_PUSH() __R49_IGNORE(pragma) __VA_ARGS__ __R49_WARN_POP()
+#define __r49_unchecked_ignore(pragma) __R49_IGNORE(pragma)
 #define __R49_WARN_PUSH() _Pragma(__R49_STR(clang diagnostic push))
 #define __R49_IGNORE(what) _Pragma(__R49_STR(clang diagnostic ignored #what))
 #define __R49_WARN_POP() _Pragma(__R49_STR(clang diagnostic pop))
@@ -106,17 +122,6 @@
 # define __R49_BUGFIX(x)
 # define __R49_BUGFIX_REPLACE(old, new) old
 #endif
-
-// Never going to fix this.
-__R49_IGNORE(-Wparentheses)
-__R49_IGNORE(-Wnon-literal-null-conversion)
-
-// TODO: fix these
-__R49_IGNORE(-Wint-to-pointer-cast)
-__R49_IGNORE(-Wpointer-to-int-cast)
-__R49_IGNORE(-Wtautological-constant-out-of-range-compare)
-__R49_IGNORE(-Wint-conversion)
-__R49_IGNORE(-Wvarargs)
 
 #define __r49_unchecked(new) new
 #define __r49_implicit_int int

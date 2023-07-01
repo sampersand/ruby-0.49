@@ -54,4 +54,7 @@ st_table *st_copy();
 
 int st_strhash();
 
-#endif // __r49_FIXED: ST_INCLUDED
+__R49_WARN_PUSH()
+__R49_IGNORE(-Wextra-tokens)
+#endif ST_INCLUDED
+__R49_WARN_POP()

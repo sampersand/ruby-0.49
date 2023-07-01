@@ -32,7 +32,6 @@ struct_alloc(class, name)
     return (VALUE)st;
 }
 
-// __r49: added `s`, which was undoubtably missing. 
 static VALUE
 struct_find(s, id)
     struct RStruct *s;
@@ -52,7 +51,6 @@ struct_find(s, id)
 static VALUE
 Fstruct_access(s)
     struct RStruct *s;
-    // __r49: added `s`, which was undoubtably missing. 
 {
     return struct_find(s, the_env->last_func);
 }
@@ -177,9 +175,9 @@ Fstruct_aref(s, idx)
     struct RArray *ary;
     int i;
 
-	// __r49: added `s`, which was undoubtably missing. 
+    /* Add the `s` parameter, which was undoubtedly unintentionally missing */
     if (TYPE(idx) == T_STRING)
-	return struct_find(s, rb_intern(RSTRING(idx)->ptr));
+	return struct_find(__r49_required_change_q(s,) rb_intern(RSTRING(idx)->ptr));
 	
     i = NUM2INT(idx);
     if (s->len <= i)
@@ -248,7 +246,7 @@ static VALUE
 Fstruct_clone(s)
     struct RStruct *s;
 {
-	// __r49: added `s`, idk if that's good
+    /* __r49: it's missing an argument, but i havent checked to see if `s` is correct */
     struct RStruct *st = (struct RStruct*)struct_alloc(__r49_unchecked(s), s->name);
 
     CLONESETUP(st, s);

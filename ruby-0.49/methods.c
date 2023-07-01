@@ -19,7 +19,7 @@
 #if 0
 #define EXPR1(c,m) (((int)(c)*(m))>>0)
 #else
-#define EXPR1(c,m) ((int)(c)^(m))
+#define EXPR1(c,m) ((__r49_required_int_to_value)(c)^(m))
 #endif
 
 #define TRIAL 3

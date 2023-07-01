@@ -2146,7 +2146,8 @@ struct register_info
   {									\
     int temp;								\
     stackp -= 2;		/* Remove failure points.  */		\
-    temp = (int) *--stackp;	/* How many regs pushed.  */	        \
+__R49_UNCHECKED_IGNORE(-Wpointer-to-int-cast,\
+    temp = (int) *--stackp;)	/* How many regs pushed.  */	        \
     temp *= NUM_REG_ITEMS;	/* How much to take off the stack.  */	\
     stackp -= temp; 		/* Remove the register info.  */	\
   }

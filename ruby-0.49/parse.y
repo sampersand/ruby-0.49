@@ -1876,7 +1876,10 @@ read_escape(flag)
 		    i *= 16;
 		    i += c - '0';
 		}
-		else if ((int)index("abcdefABCDEF", (c = nextc()))) {
+		/* For some reason there was an int cast here, which no longer is guaranteed to
+		 * work in 64 bit
+		 */
+		else if (__r49_required_replacement((int),) index("abcdefABCDEF", (c = nextc()))) {
 		    i *= 16;
 		    i += toupper(c) - 'A' + 10;
 		}
