@@ -892,9 +892,8 @@ args 		: expr2
 primary		: var_ref
 		| '(' compexpr rparen
 		    {
-#ifdef __r49_bugfix /* make `()` in expression context not segfault */
-			if (!$2) $$ = NEW_NIL(); else
-#endif
+		    	/* __r49: make `()` in expression context not segfault */
+			__r49_bugfix_q(if (!$2) $$ = NEW_NIL(); else)
 			$$ = $2;
 		    }
 
@@ -1664,6 +1663,10 @@ retry:
 
       case '%':
 	if (lex_state == EXPR_BEG || lex_state == EXPR_MID) {
+#ifdef __r49_bugfix /* fix `%` being parsed as a constant when it shouldnt be */
+	    int __r49_is_constant = isalnum(nextc()); pushback();
+	    if (!__r49_is_constant) goto __r49_not_a_constant;
+#endif
 	    /* class constant */
 	    newtok();
 	    tokadd('%');
@@ -1671,6 +1674,7 @@ retry:
 	    break;
 	}
 	else {
+	__r49_bugfix_q(__r49_not_a_constant:)
 	    lex_state = EXPR_BEG;
 	    if (nextc() == '=') {
 		yylval.id = '%';

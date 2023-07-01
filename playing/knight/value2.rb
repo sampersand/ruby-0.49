@@ -7,11 +7,18 @@ class value
     end
   end def
 
-  def value.@setup(*meths)
+  # def value.@forward2(cls, *meths)
+  #   for meth in meths
+  #     id = q[0].id2name
+  #     print(sprintf("def %s(rhs); %s.new(@data %s rhs) end\n", id = meth.id2name, cls, id))
+  #   end
+  # end def
+  def value.@forward2(*meths)
     for meth in meths
       eval(sprintf("def %s(rhs)
-        %s.new(@data %s rhs.%s)
-      end", id = meth[0], meth[1][0].id2name, id, meth[1][1].id2name))
+        p(%%coerced, rhs, rhs.apply('to_s'), self)
+        apply('class').new(@data %s rhs.apply(%%coerced))
+      end", id = meth.id2name, id))
     end
   end def
 
@@ -29,7 +36,7 @@ class value
   end
 
   @forward(\to_s, \to_i)
-  # @forward2(\+, \*)
+  @forward2(\+, \*)
   # @forward2('integer', \-, \/, \%)
   # @forward2('boolean', \<, \>, \!, \==)
 
@@ -47,13 +54,12 @@ class value
 end
 
 class string: value
-  @setup('+'::self::\to_s, '*'::self::\to_i)
+  # %coerced = 'to_s'
   def truthy; @data != "" end
 end
 
 class integer: value
-  # we couldn't use `\%` because of parsing issues.
-  @setup(\+::self::\to_i, -\::self::\to_i, \*::self::\to_i, \/::self::\to_i, \%::self::\to_i)
+  %coerced = 'to_i'
   def truthy; @data != 0 end
 end
 
@@ -65,8 +71,8 @@ class array: value
   def truthy; @data.length != "" end
 end
 
-p(string.new("A") * 3)
-# p(integer.new(3) + "4")
+# p(string.new("A") + 3)
+p(integer.new(3) + "4")
 # print(value.new(12), "\n")
 __END__
 
