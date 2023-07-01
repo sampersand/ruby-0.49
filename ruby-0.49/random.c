@@ -58,7 +58,7 @@ Fsrand(obj, args)
 
     return int2inum(old);
 #else
-    /* `srand` doesn't return a value. */
+    /* `srand` doesn't return a value, so we just use `0` always.. */
     old = __r49_required_replacement(srand(seed), (srand(seed), 0));
     return int2inum(old);
 #endif
@@ -68,7 +68,10 @@ static VALUE
 Frand(obj, max)
     VALUE obj, max;
 {
-    int val;
+    /* Technically not a required replacement, but it aligns with how `srand` works, so we use
+     * VALUE
+     */
+    __r49_required_replacement(int, VALUE) val;
 
 #ifdef HAVE_RANDOM
     if (first == 1) {
