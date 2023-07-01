@@ -7,32 +7,43 @@
 #pragma clang diagnostic ignored "-Wnon-literal-null-conversion"
 
 /* todo: fix these */
-#pragma clang diagnostic error "-Wtautological-constant-out-of-range-compare"
 #pragma clang diagnostic ignored "-Wint-conversion"
 
 #define __r49
+#define __r49_64bit
 #define __r49_required_change
 #define __r49_critical_bugfix
 #define __r49_bugfix
 #define __r49_cleanup
 
-/* Required changes are things that are required to get it to even run on 64. Stuff like
- * making sure that `sizeof(VALUE) == sizeof(void *)` and stuff. If you disable this, it'll only
- * compile on 32 bit machines.
+/* Changes that are required to even compile it. In ruby 0.47, things like missing parameters or
+ * extra parameters sometimes appeared, so this removes things that would preclude any modern
+ * compiler from accepting the code.
  */
-#define __r49_64_bit
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_replacement(old, new) new
-# define __r49_required_int_to_value VALUE
-
  /* These shouldn't still exist in the codebase */
 # pragma clang diagnostic error "-Wint-to-pointer-cast"
 # pragma clang diagnostic error "-Wpointer-to-int-cast"
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_replacement(old, new) old
-# define __r49_required_int_to_value int
+#endif
+
+
+/* Changes that are required to get Ruby 0.47 to compile on 64 bit architectures. This is mostly
+ * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
+ * it'll only compile on 32 bit machines.
+ */
+#ifdef __r49_64bit
+# define __r49_64bit_q(...) __VA_ARGS__
+# define __r49_64bit_replacement(old, new) new
+# define __r49_64bit_int_to_value VALUE
+#else
+# define __r49_64bit_q(...)
+# define __r49_64bit_replacement(old, new) old
+# define __r49_64bit_int_to_value int
 #endif
 
 /* All of this functionality should be available on every platform these days. */

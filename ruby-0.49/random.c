@@ -31,9 +31,9 @@ Fsrand(obj, args)
      * `rand` returns an `int`, we need to have the size be equal to VALUE for the `rb_scan_args`
      * functions call.
      */
-    __r49_required_replacement(int, VALUE) seed, old;
+    __r49_64bit_int_to_value seed, old;
 #ifdef HAVE_RANDOM
-    static __r49_required_replacement(int, VALUE) saved_seed;
+    static __r49_64bit_int_to_value saved_seed;
 #endif
 
     if (rb_scan_args(args, "01", &seed) == 0) {
@@ -68,10 +68,8 @@ static VALUE
 Frand(obj, max)
     VALUE obj, max;
 {
-    /* Technically not a required replacement, but it aligns with how `srand` works, so we use
-     * VALUE
-     */
-    __r49_required_replacement(int, VALUE) val;
+    /* Technically not required, but it aligns with how `srand` works, so we use VALUE */
+    __r49_64bit_int_to_value val;
 
 #ifdef HAVE_RANDOM
     if (first == 1) {

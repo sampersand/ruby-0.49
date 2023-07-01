@@ -877,7 +877,7 @@ rb_eval(node)
 		Bug("unexpected local variable asignment");
 
 	    for (i=1;local;i++) {
-		the_env->local_vars[(__r49_required_int_to_value)local->nd_head] = the_env->argv[i];
+		the_env->local_vars[(__r49_64bit_int_to_value)local->nd_head] = the_env->argv[i];
 		local = local->nd_next;
 	    }
 	    if (node->nd_rest >= 0) {

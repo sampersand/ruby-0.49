@@ -116,7 +116,7 @@ static VALUE
 Frng_to_s(obj)
     VALUE obj;
 {
-    __r49_required_replacement(int, VALUE) beg, end;
+    __r49_64bit_int_to_value beg, end;
     VALUE fmt, str, args[4];
 
     beg = rb_iv_get(obj, "start");

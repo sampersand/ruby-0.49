@@ -113,13 +113,13 @@ void *memmove(void *, const void *, unsigned long);
 #else
 # define RSHIFT(x,y) (((x)<0) ? ~((~(x))>>y) : (x)>>y)
 #endif
-#define FIX2INT(x) RSHIFT((__r49_required_replacement(int, VALUE))x,1)
+#define FIX2INT(x) RSHIFT((__r49_64bit_int_to_value)x,1)
 
 #define FIX2UINT(f) ((unsigned int)(f)>>1)
-#define FIXNUM_P(f) (((__r49_required_replacement(int, VALUE))(f))&FIXNUM_FLAG)
+#define FIXNUM_P(f) (((__r49_64bit_int_to_value)(f))&FIXNUM_FLAG)
 
 /* In 64bit, everything is posfixable and negfixable. */
-#ifdef __r49_64_bit
+#ifdef __r49_64bit
 # define __r49_64bit_ignore_tautological_constant_out_of_range_compare(...) \
 	__r49_ignore_warning(-Wtautological-constant-out-of-range-compare, __VA_ARGS__)
 #else
