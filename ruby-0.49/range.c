@@ -116,13 +116,25 @@ static VALUE
 Frng_to_s(obj)
     VALUE obj;
 {
-    int beg, end;
+    __r49_required_replacement(int, VALUE) beg, end;
     VALUE fmt, str, args[4];
-    
 
     beg = rb_iv_get(obj, "start");
     end = rb_iv_get(obj, "end");
 
+/* If you convert a range of anything other than integers to a string, it segfaults.
+ * Not critical because it's not a common codepath. */
+#ifdef __r49_bugfix
+    if (!FIXNUM_P(beg) || !FIXNUM_P(end)) {
+    	GC_LINK;
+    	GC_PRO(fmt);
+    	str = obj_as_string(beg);
+    	str_cat(str, "..", 2);
+    	fmt = Fstr_plus(str, obj_as_string(end));
+    	GC_UNLINK;
+    	return fmt;
+    }
+#endif
     GC_LINK;
     GC_PRO3(fmt, str_new2("%d..%d"));
     args[0] = obj; args[1] = fmt; args[2]= beg; args[3] = end;

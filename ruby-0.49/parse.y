@@ -892,7 +892,7 @@ args 		: expr2
 primary		: var_ref
 		| '(' compexpr rparen
 		    {
-#ifdef __r49_critical_bugfix /* make `()` in expression context not segfault */
+#ifdef __r49_bugfix /* make `()` in expression context not segfault */
 			if (!$2) $$ = NEW_NIL(); else
 #endif
 			$$ = $2;
@@ -1698,7 +1698,7 @@ retry:
 	  case '&':		/* $&: last match */
 	  case '~':		/* $~: match-data */
 	  case '=':		/* $=: ignorecase */
-	  __R49_BUGFIX(case ';': /* $;: field separator */)
+	  __r49_bugfix_q(case ';': /* $;: field separator */)
 	    tokadd(c);
 	    tokadd('\0');
 	    goto id_fetch;
