@@ -206,8 +206,8 @@ void
 rb_syswait(pid)
     int pid;
 {
-	__R49_WARN_PUSH()
-	__R49_IGNORE(-Wincompatible-function-pointer-types)
+    __r49_unchecked(__r49_warnings_push())
+    __r49_unchecked(__r49_warnings_ignore("incompatible-function-pointer-types"))
 
     RETSIGTYPE (*hfunc)(), (*ifunc)(), (*qfunc)();
 
@@ -221,7 +221,7 @@ rb_syswait(pid)
     signal(SIGINT, ifunc);
     signal(SIGQUIT, qfunc);
 
-    __R49_WARN_POP()
+    __r49_unchecked(__r49_warnings_pop())
 }
 
 static VALUE

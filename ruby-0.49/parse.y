@@ -14,8 +14,8 @@
 
 #define YYDEBUG 1
 #include "__fixes.h"
-__R49_IGNORE(-Wincompatible-pointer-types)
-__R49_IGNORE(-Wnon-literal-null-conversion)
+__r49_warnings_ignore("incompatible-pointer-types")
+__r49_warnings_ignore("non-literal-null-conversion")
 #include "ruby.h"
 #include "env.h"
 #include "node.h"

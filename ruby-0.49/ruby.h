@@ -27,10 +27,12 @@
 #include <alloca.h>
 //#endif
 
-typedef intptr_t UINT;
-typedef intptr_t VALUE;
+#ifndef __r49 /* these are redefined within `__r49.h` */
+typedef unsigned int UINT;
+typedef unsigned int VALUE;
 typedef UINT ID;
 typedef unsigned short USHORT;
+#endif
 
 void bzero(void *s, unsigned long n);
 struct RClass;
@@ -102,11 +104,7 @@ void *memmove(void *, const void *, unsigned long);
 # define FIXNUM_MIN RSHIFT((long)LONG_MIN,1)
 
 #define FIXNUM_FLAG 0x01
-#ifdef __r49
-# define INT2FIX(i) (VALUE)(((unsigned)(i))<<1 | FIXNUM_FLAG)
-#else
-# define INT2FIX(i) (VALUE)(((int)(i))<<1 | FIXNUM_FLAG)
-#endif
+#define INT2FIX(i) (VALUE)(((__r49_required_replacement(int, unsigned))(i))<<1 | FIXNUM_FLAG)
 
 #if (-1==(((-1)<<1)&FIXNUM_FLAG)>>1)
 # define RSHIFT(x,y) ((x)>>y)
@@ -121,7 +119,7 @@ void *memmove(void *, const void *, unsigned long);
 /* In 64bit, everything is posfixable and negfixable. */
 #ifdef __r49_64bit
 # define __r49_64bit_ignore_tautological_constant_out_of_range_compare(...) \
-	__r49_ignore_warning(-Wtautological-constant-out-of-range-compare, __VA_ARGS__)
+	__r49_warnings_ignore_q("tautological-constant-out-of-range-compare", __VA_ARGS__)
 #else
 # define __r49_64bit_ignore_tautological_constant_out_of_range_compare(...) __VA_ARGS__
 #endif

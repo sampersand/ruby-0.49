@@ -57,7 +57,10 @@
 #define const
 #endif
 
-/* #define	NO_ALLOCA	/ * try it out for now */  // __r49: uncommented it
+__r49_warnings_push()
+__r49_warnings_ignore("comment")
+/* #define	NO_ALLOCA	/* try it out for now */
+__r49_warnings_pop()
 #ifndef NO_ALLOCA
 /* Make alloca work the best possible way.  */
 #ifdef __GNUC__
@@ -1244,7 +1247,7 @@ re_compile_pattern (pattern, size, bufp)
                           preceding jump_n's n to upper_bound - 1.  */
                        BUFPUSH (set_number_at);
 		       GET_BUFFER_SPACE (2);
-                       __R49_UNCHECKED_IGNORE(-Wconstant-conversion, STORE_NUMBER_AND_INCR (b, -5));
+		       __r49_warnings_ignore_q(__r49_unchecked("constant-conversion"), STORE_NUMBER_AND_INCR (b, -5));
                        STORE_NUMBER_AND_INCR (b, upper_bound - 1);
                      }
 		   /* When hit this when matching, set the succeed_n's n.  */
@@ -1830,7 +1833,7 @@ re_compile_fastmap (bufp)
 
 	    p += p[-1] + 2;
 	    size = EXTRACT_UNSIGNED (&p[-2]);
-	    __R49_UNCHECKED_IGNORE(-Wconstant-conversion, c = 0x8000);
+	    __r49_warnings_ignore_q(__r49_unchecked("constant-conversion"), c = 0x8000);
 	    for (j = 0; j < size; j++) {
 	      for (beg = (unsigned char) p[j*4 + 0]; c < beg; c++)
 		if (ismbchar (c))
@@ -2146,7 +2149,7 @@ struct register_info
   {									\
     int temp;								\
     stackp -= 2;		/* Remove failure points.  */		\
-__R49_UNCHECKED_IGNORE(-Wpointer-to-int-cast,\
+__r49_warnings_ignore_q(__r49_unchecked("pointer-to-int-cast"),\
     temp = (int) *--stackp;)	/* How many regs pushed.  */	        \
     temp *= NUM_REG_ITEMS;	/* How much to take off the stack.  */	\
     stackp -= temp; 		/* Remove the register info.  */	\

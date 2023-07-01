@@ -1,6 +1,6 @@
 /* This is a general purpose hash table package written by Peter Moore @ UCB. */
 #include "__fixes.h"
-__r49_unchecked_ignore(-Wpointer-to-int-cast)
+__r49_unchecked(__r49_warnings_ignore("pointer-to-int-cast"))
 
 static	char	sccsid[] = "@(#) st.c 5.1 89/12/14 Crucible";
 #ifndef lint
