@@ -1,21 +1,21 @@
-def a b
-a()
-# def __old_open open2
-# def open2(*x)
-#   value = __old_open(*x)
-#   if iterator_p() then
-#     protect
-#       yield 2
-#     ensure
-#       value.close
-#     end
-#   end if
-#   3
-# end def
+def __old_open open
+def open2(*x)
+  value = __old_open(*x)
+  if iterator_p() then
+    protect
+      yield 'yielded'
+      return
+    ensure
+      value.close
+    end
+  end if
+  'called'
+end def
 
-# do open2("example.rb", "r") using i
-#   print(i)
-# end
+print(open2("example.rb", "r"), "\n")
+do open2("example.rb", "r") using i
+  print(i, "\n")
+end
 
 __END__
 def a b

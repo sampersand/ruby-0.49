@@ -1,10 +1,24 @@
 def fizzbuzz(max)
-  print(iterator_p())
+  if iterator_p() then else
+    x = []
+    do fizzbuzz(max) using i
+      x.push(i)
+    end do
+    return x
+  end if
+
+
+  for x in 1..max
+    yield case 0
+          when x % 15; "FizzBuzz"
+          when x % 3;  "Fizz"
+          when x % 5;  "Buzz"
+          else         x
+          end
+  end
 end
 
-do fizzbuzz(1) 
-end
-
+print(fizzbuzz(20)._inspect())
 
 __END__
 def fizzbuzz(max)
@@ -19,16 +33,6 @@ def fizzbuzz(max)
     )
   end
 
-
-  for x in 1..max
-    print(x, "\n")
-    yield case 0
-          when x % 15; "FizzBuzz"
-          when x % 3;  "Fizz"
-          when x % 5;  "Buzz"
-          else         x
-          end
-  end
 end
 
 do fizzbuzz(15) using i
