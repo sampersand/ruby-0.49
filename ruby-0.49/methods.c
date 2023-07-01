@@ -108,6 +108,9 @@ rb_alias(class, name, def)
 	unliteralize(__r49_cast_to_RBasic(body));
     }
     body = search_method(class, def, __r49_unchecked_cast(struct RClass **, &body));
+#ifdef __r49_bugfix /* aliasing to an undefined value just silently passes when it shoudlnt */
+    if (!body) Fail("undefined method %s for %s", rb_id2name(def), rb_class2name(class));
+#endif
     st_insert(class->m_tbl, name, __r49_unchecked_cast(char *, body));
 }
 

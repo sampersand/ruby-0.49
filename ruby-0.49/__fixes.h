@@ -73,8 +73,10 @@
  */
 #ifdef __r49_bugfix
 # define __r49_bugfix_q(...) __VA_ARGS__
+# define __r49_bugfix_replacement(old, new) new
 #else
 # define __r49_bugfix_q(...)
+# define __r49_bugfix_replacement(old, new) old
 #endif
 
 /* Ruby 0.49 doesn't raise an error when you recurse too far, and just segfaults.
@@ -161,6 +163,12 @@ struct st_table;
 #define USHORT unsigned short
 #define __R49_PrVALUE "z" // TODO: configure this with intptr_t
 
+
+
+#ifdef __r49_bugfix
+void rb_define_single_alias(VALUE obj, char *name1, char *name2);
+#endif
+
 #ifndef sprintf
 int sprintf(char *, const char *, ...);
 #endif
@@ -200,6 +208,7 @@ __r49_noreturn rb_break(void);
 void rb_clear_cache2(struct RClass *class);
 void rb_clear_cache(struct RMethod *body);
 void rb_alias(struct RClass *class, ID name, ID def);
+void rb_alias2(struct RClass *class, ID name, ID def);
 VALUE rb_iterate(VALUE (*it_proc)(), char *data1, VALUE (*bl_proc)(), char *data2);
 VALUE rb_iv_set(VALUE obj, char *name, VALUE val);
 void rb_trap_exit(void);

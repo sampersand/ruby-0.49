@@ -1,28 +1,37 @@
-def fuinc rand1
-  3
-end
+def a b
+a()
+# def __old_open open2
+# def open2(*x)
+#   value = __old_open(*x)
+#   if iterator_p() then
+#     protect
+#       yield 2
+#     ensure
+#       value.close
+#     end
+#   end if
+#   3
+# end def
 
-print(do rand1(0, 2, 3); end, "\n")
-print(rand1(0, 2, 3), "\n")
+# do open2("example.rb", "r") using i
+#   print(i)
+# end
 
 __END__
-def __old_open open
+def a b
+def b; 34 end
+print(a())
+rb_eval
+def __old_open open2
 
-def open(*x)
-  file = __old_open(*x)
+# def open2(*x)
+#   value = __old_open(*x)
+#   if iterator_p() then
+#     yield 2
+#   end if
+#   3
+# end def
 
-  if !iterator_p() then
-    return file
-  end if
-
-  protect
-    yield file
-  ensure
-    file.close
-  end
-end def
-
-print(open("example.rb", "r"))
-print(do open("example.rb", "r") using i
-  print(i)
-end)
+# do open2("example.rb", "r") using i
+#   print(i)
+# end

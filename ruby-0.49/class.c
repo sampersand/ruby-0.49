@@ -253,7 +253,6 @@ rb_define_single_method(obj, name, func, argc)
     // __r49_orig: rb_define_method(rb_single_class(obj), name, func, argc, MTH_METHOD);
     rb_define_method(rb_single_class(obj), name, func, argc);
 }
-
 void
 rb_define_mfunc(class, name, func, argc)
     struct RClass *class;
@@ -264,6 +263,19 @@ rb_define_mfunc(class, name, func, argc)
     rb_define_func(class, name, func, argc);
     rb_define_single_method(class, name, func, argc);
 }
+
+
+/* The `Dir` builtin functions define aliases on instances and not on singleton classes. This fixes
+ * that (when used with __r49_bugfix_replacement(rb_define_alias, rb_define_single_alias)) */
+#ifdef __r49_bugfix
+void
+rb_define_single_alias(obj, name1, name2)
+    VALUE obj;
+    char *name1, *name2;
+{
+    rb_define_alias(rb_single_class(obj), name1, name2);
+}
+#endif
 
 void
 rb_define_alias(class, name1, name2)

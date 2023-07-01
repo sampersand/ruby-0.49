@@ -1,3 +1,10 @@
+def fizzbuzz(max)
+  print(iterator_p())
+end
+
+do fizzbuzz(1) 
+end
+
 
 __END__
 def fizzbuzz(max)
