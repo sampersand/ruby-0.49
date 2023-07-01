@@ -1,7 +1,9 @@
-x = { '+' => 'itself', "A" => "B", 
-  "C" => "D"
-}
+def takes_keywords(*kw)
+  print(kw.assoc('a')[0], "\n")
+  print(kw.assoc('b')[0], "\n")
+end
 
+takes_keywords('a'::34, 'b'::45)
 __END__
 def tap; yield(self) ; self end
 
@@ -12,22 +14,14 @@ class value
     end
   end def
 
-  def value.@forward2(meths)
-    do meths.each_pair() using q
+  def value.@forward2(cls, *meths)
+    for meth in meths
       id = q[0].id2name
-      fn = if q[1].is_kind_of(String); q[1] + ".new" else fn = 'value.from' end
-      print(sprintf("def %s(rhs); %s(@data %s rhs) end\n", id, fn, id))
+      print(sprintf("def %s(rhs); %s.new(@data %s rhs) end\n", id = meth.id2name, cls, id))
     end
   end def
 
   def value.name; to_s().ucfirst end
-  def value.from(what)
-    case cls = what.apply("class")
-    when String; string.new(what)
-    when Fixnum; integer.new(what)
-    else fail("[BUG] unknown class: " + cls)
-    end
-  end
 
   attr("data", %TRUE)
   include Comparable
@@ -41,13 +35,9 @@ class value
   end
 
   @forward(\to_s, \to_i)
-  @forward2({
-    '+' => 'itself',
-    '-' => 'integer',
-    '*' => 'itself',
-    '/' => 'integer',
-    '%' => 'integer'
-  })
+  @forward2('itself', \+, \*)
+  @forward2('integer', \-, \/, \%)
+  @forward2('boolean', \<, \>, \!, \==)
 
   def <=>(rhs)
     protect

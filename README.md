@@ -7,10 +7,9 @@ Until now.
 After spending copious amounts of time fiddling with it to ensure things are working, you can now compile this locally!
 
 ## Compiling
-Clone this on your computer, then run `./configure`. The old configure file doesn't account for most modern systems, so there's a few things you have to edit in the `Makefile`:
+Clone this on your computer, then run `./configure`. The old configure file doesn't account for most modern systems, so you have to change a single thing in the makefile:
 
-1. Change `DBM = -fpcc-struct-return` to `DBM = `
-2. Add to the end of `DEFS =` the following: `-DHAVE_MEMMOVE -DHAVE_STRERROR -DHAVE_STRTOUL -DHAVE_STRFTIME -DHAVE_STRSTR -DHAVE_GETOPT_LONG -DHAVE_MKDIR -DHAVE_STRDUP`
+Convert `DBM = -fpcc-struct-return` to `DBM = `. 
 
 Then you can run `make` and start playing with ruby 0.49!
 
