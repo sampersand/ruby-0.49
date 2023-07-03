@@ -38,12 +38,11 @@
 #ifdef __r49_64bit
 # define __r49_64bit_q(...) __VA_ARGS__
 # define __r49_64bit_replacement(old, new) new
-# define __r49_64bit_int_to_value VALUE
 #else
 # define __r49_64bit_q(...)
 # define __r49_64bit_replacement(old, new) old
-# define __r49_64bit_int_to_value int
 #endif
+#define __r49_64bit_int_to_value __r49_64bit_replacement(int, VALUE)
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
  * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
@@ -107,11 +106,19 @@
 #define __r49_unchecked_cast2(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #define __r49_unchecked_cast_to_iter(ptr) __r49_unchecked_cast(VALUE (*)(), ptr)
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h> 
-#define vfork fork /* original ruby uses vfork. */
+
+#ifdef __r49_declare_prototypes
+# include <stdlib.h> /* HAVE_RANDOM: initstate, random, setstate, srandom */
+# include <stdio.h>
+# include <time.h> /* time */
+# include <string.h>
+# include <unistd.h> 
+# include <sys/stat.h> /* mkdir */
+# include <fcntl.h>  /* fcntl */
+# undef vfork
+# define vfork fork /* original ruby uses vfork. */
+#endif
+
 
 #if 0 /* these are the original funcitons, before i started doing `#include`s */
 
@@ -308,6 +315,7 @@ __r49_implicit(int) iterator_p(__r49_noargs);
 /* file.c */
 __r49_void_return Init_File(__r49_noargs);
 VALUE file_open(char *fname, char *mode);
+int eaccess(char *path, int mode);
 
 /* gc.c */
 __r49_void_return Init_GC(__r49_noargs);

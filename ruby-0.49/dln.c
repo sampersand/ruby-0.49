@@ -139,11 +139,6 @@ dln_find_1(fname, path, exe_flag)
 	    if (exe_flag == 0) return fbuf;
 	    /* looking for executable */
 #ifdef RUBY
-# ifdef __r49_declare_prototypes
-    /* i cant figure out where to import this from */
-    int eaccess(const char *pathname, int mode);
-# endif /* __r49_declare_prototypes */
-
 	    if (eaccess(fbuf, X_OK) == 0) return fbuf;
 #else
 	    {

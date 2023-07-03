@@ -18,10 +18,6 @@
 #include <setjmp.h>
 #include "st.h"
 
-#ifdef __r49_declare_prototypes
-# include <stdlib.h> /* exit, free */
-#endif /* __r49_declare_prototypes */
-
 static ID match, each;
 VALUE errstr, errat;
 extern NODE *eval_tree;
