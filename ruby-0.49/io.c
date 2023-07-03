@@ -20,7 +20,7 @@
 #include <sys/ioctl.h>
 
 #ifdef __r49_declare_prototypes
-# include <fcntl.h> 
+# include <fcntl.h>  /* fcntl */
 #endif
 
 VALUE rb_ad_string();

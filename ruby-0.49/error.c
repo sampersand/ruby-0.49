@@ -15,6 +15,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#ifdef __r49_declare_prototypes
+__r49_noreturn abort(void);
+#endif
+
 extern char *sourcefile;
 extern int   sourceline;
 

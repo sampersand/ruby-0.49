@@ -13,8 +13,8 @@
 #include "ruby.h"
 
 #ifdef __r49_declare_prototypes
-# include <sys/stat.h> 
-#endif
+# include <sys/stat.h> /* mkdir */
+#endif /* __r49_declare_prototypes */
 
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H

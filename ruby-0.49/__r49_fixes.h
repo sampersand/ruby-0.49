@@ -111,7 +111,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h> 
-// #include <sys/wait.h> 
 #define vfork fork /* original ruby uses vfork. */
 
 #if 0 /* these are the original funcitons, before i started doing `#include`s */

@@ -15,6 +15,10 @@
 #include "st.h"
 #include <stdio.h>
 
+#ifdef __r49_declare_prototypes
+void free(void *);
+#endif /* __r49_declare_prototypes */
+
 void *malloc();
 void *calloc();
 void *realloc();
