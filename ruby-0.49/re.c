@@ -206,7 +206,7 @@ re_last_match(id)
 #endif
 
 #define GET_MATCH(n) CONCAT(get_macth,n)
-#define GET_MATCH_FUNC(n) __r49_implicit_int_but(VALUE) GET_MATCH(n)(id) ID id; { return nth_match(n); }
+#define GET_MATCH_FUNC(n) __r49_implicit(VALUE) GET_MATCH(n)(id) ID id; { return nth_match(n); }
 
 GET_MATCH_FUNC(1);
 GET_MATCH_FUNC(2);
@@ -239,7 +239,8 @@ void
 reg_error(s)
 const char *s;
 {
-    Fail(s);
+    /* __r49: Fail takes `char *` technically, but never modifies it. */
+    Fail(__r49_warnings_ignore_q("incompatible-pointer-types-discards-qualifiers", s));
 }
 
 VALUE ignorecase;

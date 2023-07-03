@@ -82,7 +82,7 @@ rb_waitpid(pid, flags)
 static int wait_pid;
 static int wait_status;
 
-static __r49_validated(enum st_retval) wait_each(key, value)
+static __r49_implicit(enum st_retval) wait_each(key, value)
     int key, value;
 {
     wait_pid = key;
@@ -129,7 +129,7 @@ Fwaitpid(obj, vpid, vflags)
 
 char *strtok();
 
-__r49_implicit_int
+__r49_implicit(int) /* always returns `-1` */
 rb_proc_exec(str)
     char *str;
 {
@@ -675,7 +675,7 @@ Ftrap(argc, argv)
     return Qnil;
 }
 
-__r49_implicit_int_but(VALUE)
+__r49_implicit(VALUE)
 Fsleep(argc, argv)
     int argc;
     VALUE *argv;
@@ -713,7 +713,8 @@ Fproc_getpgrp(obj, args)
 	pid = NUM2INT(vpid);
     }
 
-    pgrp = __r49_replace(getpgrp(pid), getpgrp());
+    /* __r49: I'm not positive this is the right replacement; but getpgrp doesnt take a pid */
+    pgrp = __r49_required_replacement(getpgrp(pid), getpgrp());
     return INT2FIX(pgrp);
 }
 
@@ -726,7 +727,8 @@ Fproc_setpgrp(obj, pid, pgrp)
     ipid = NUM2INT(pid);
     ipgrp = NUM2INT(pgrp);
 
-    if (__r49_replace(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(Qnil);
+    /* __r49: I'm not positive this is the right replacement; but getpgrp doesnt take a pid */
+    if (__r49_required_replacement(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(Qnil);
 
     return Qnil;
 }

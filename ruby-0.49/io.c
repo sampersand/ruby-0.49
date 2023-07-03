@@ -519,7 +519,7 @@ Fio_binmode(obj)
 
 VALUE obj_alloc();
 
-__r49_implicit_int
+__r49_implicit(int)
 io_mode_flags(mode)
     char *mode;
 {

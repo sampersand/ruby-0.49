@@ -3,22 +3,18 @@
 
 #define __r49
 
-/* Never going to fix these, they retain the essence of the wild west of ruby */
-#pragma clang diagnostic ignored "-Wparentheses"
-#pragma clang diagnostic ignored "-Wnon-literal-null-conversion"
-#pragma clang diagnostic ignored "-Wint-conversion"
-
-#define __r49_str(x) #x
-#define __r49_warnings_ignore_q(warning, ...) __r49_warnings_push() __r49_warnings_ignore(warning) __VA_ARGS__ __r49_warnings_pop()
-#define __r49_warnings_ignore(warning) _Pragma(__r49_str(clang diagnostic ignored "-W" warning))
-#define __r49_warnings_push() _Pragma("clang diagnostic push")
-#define __r49_warnings_pop() _Pragma("clang diagnostic pop")
-
+#define __r49_TODO
 #define __r49_64bit
+#define __r49_modernc
 #define __r49_required_change
 #define __r49_critical_bugfix
 #define __r49_bugfix
-#define __r49_cleanup
+
+/**************************************************************************************************
+ **                                                                                              **
+ **                             Sourcecode change macro definitions                              **
+ **                                                                                              **
+ **************************************************************************************************/
 
 /* Changes that are required to even compile it. In ruby 0.47, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
@@ -49,19 +45,6 @@
 # define __r49_64bit_int_to_value int
 #endif
 
-/* All of this functionality should be available on every platform these days. */
-#ifndef __r49_dont_define_haves
-# define HAVE_MEMMOVE
-# define HAVE_STRERROR
-# define HAVE_STRTOUL
-# define HAVE_STRFTIME
-# define HAVE_STRSTR
-# define HAVE_GETOPT_LONG
-# define HAVE_MKDIR
-# define HAVE_STRDUP
-# define HAVE_RANDOM
-#endif
-
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
  * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
  * consider the intended value.
@@ -80,26 +63,12 @@
 #ifdef __r49_bugfix
 # define __r49_bugfix_q(...) __VA_ARGS__
 # define __r49_bugfix_replacement(old, new) new
+# ifndef __r49_no_recursion_limit /* ruby 0.49 segfaults if you recurse too deep; this fixes that */
+#  define __r49_recursion_limit 1000 /* semi-conservative estimate; 1027 is the max on my computer */
+# endif
 #else
 # define __r49_bugfix_q(...)
 # define __r49_bugfix_replacement(old, new) old
-#endif
-
-/* Ruby 0.49 doesn't raise an error when you recurse too far, and just segfaults.
- * This fixes that.
- */
-#if defined(__r49_bugfix) && !defined(__r49_no_recursion_limit)
-# define __r49_recursion_limit 1000 /* semi-conservative estimate; 1027 is the max on my computer */
-#endif
-
-
-/* Cleanup is cleaning up code which probably wasn't intended to be kept around (eg printing debug
- * code after `array.each()` ends), but won't preclude normal operation.
- */
-#ifdef __r49_cleanup
-# define __r49_ncleanup_q(...)
-#else
-# define __r49_ncleanup_q(...) __VA_ARGS__
 #endif
 
 /* Define the noreturn attribute */
@@ -111,13 +80,51 @@
 # define __r49_noreturn _Noreturn void
 #endif
 
-#define __r49_validated(x) x
-#define __r49_implicit_arg(type, arg) __r49_required_change_q(type arg;)
-#define __r49_implicit_var(type) __r49_required_change_q(type)
-#define __r49_implicit_return(type) __r49_required_change_q(type)
-#define __r49_void_return __r49_implicit_return(void)
+/* All of this functionality should be available on every platform these days. */
+#ifndef __r49_dont_define_haves
+# define HAVE_MEMMOVE
+# define HAVE_STRERROR
+# define HAVE_STRTOUL
+# define HAVE_STRFTIME
+# define HAVE_STRSTR
+# define HAVE_GETOPT_LONG
+# define HAVE_MKDIR
+# define HAVE_STRDUP
+# define HAVE_RANDOM
+#endif
+
+/* implicit definitions */
+#define __r49_implicit(what) __r49_required_change_q(what)
+#define __r49_implicit_arg(type, arg) __r49_required_change_q(__r49_implicit(type) arg;)
+#define __r49_void_return __r49_implicit(void)
 #define __r49_noargs __r49_required_change_q(void)
-#define __r49_anyargs __r49_required_change_q(...)
+
+#define __r49_unchecked(new) new
+#define __r49_cast_to_RBasic(ptr) ((struct RBasic *) (ptr))
+#define __r49_unchecked_cast(to, val) ((to) (val))
+#define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
+#define __r49_cast_ptr(to, from, val) (__r49_cast(struct to *, struct from *, val))
+#define __r49_unchecked_cast2(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
+#define __r49_unchecked_cast_to_iter(ptr) __r49_unchecked_cast(VALUE (*)(), ptr)
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#undef memcpy
+#undef bzero
+#undef bcopy
+#undef memmove
+
+int eaccess(char *path, int mode);
+
+#include <unistd.h> 
+#include <fcntl.h> 
+#include <time.h> 
+#include <sys/wait.h> 
+#include <sys/stat.h> 
+#define vfork fork /* original ruby uses vfork. */
+
+#if 0 /* these are the original funcitons, before i started doing `#include`s */
 
 #include <sys/_types/_time_t.h>
 #include <sys/_types/_uid_t.h>
@@ -127,45 +134,28 @@
 #include <sys/_types/_size_t.h>
 #include <sys/_types/_mode_t.h>
 
-#define __r49_unchecked(new) new
-#define __r49_implicit_int int
-#define __r49_replace(old, new) new
-#define __r49_cast_to_RBasic(ptr) ((struct RBasic *) (ptr))
-#define __r49_unchecked_cast(to, val) ((to) (val))
-#define __r49_unchecked_cast2(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
-#define __r49_unchecked_cast_to_iter(ptr) __r49_unchecked_cast(VALUE (*)(), ptr)
-#define __r49_unused_unchecked(expr) __r49_unchecked((void) (expr))
-#define __r49_implicit_int_but(what) what
+__r49_unchecked(int fcntl(int, int, ...));
+time_t time(time_t *tloc);
+__r49_unchecked(int wait(int *));
+int mkdir(const char *, mode_t);
+ssize_t write(int, const void *, size_t);
+ssize_t read(int, void *, size_t);
+int pipe(int[2]);
+__r49_unchecked(int close(int fd));
+__r49_unchecked(int dup2(int fd, int));
+unsigned sleep(unsigned);
+int fchown(int, uid_t, gid_t);
+__r49_unchecked(int getpid(void));
+__r49_unchecked(int getppid(void));
+uid_t geteuid(void);
+int setuid(uid_t);
+pid_t getpgrp(void);
+int seteuid(uid_t);
+uid_t getuid(void);
+int chdir(const char *);
+int unlink(const char *);
+char *crypt(const char *, const char *);
 
-struct RBasic;
-struct RClass;
-struct RString;
-struct RMethod;
-struct RBignum;
-struct RArray;
-struct RDict;
-struct global_entry;
-struct node;
-enum mth_scope;
-struct Regexp;
-struct RRegexp;
-struct st_table;
-#define NODE struct node
-#define st_table struct st_table
-#define Regexp struct Regexp
-
-// these need #define and then #undef later because you cant predeclare them.
-typedef uintptr_t UINT;
-typedef uintptr_t VALUE;
-typedef UINT ID;
-typedef unsigned short USHORT;
-#define __R49_PrVALUE "z" // TODO: configure this with intptr_t
-
-
-
-#ifdef __r49_bugfix
-void rb_define_single_alias(VALUE obj, char *name1, char *name2);
-#endif
 
 #ifndef sprintf
 int sprintf(char *, const char *, ...);
@@ -195,38 +185,64 @@ void srand(unsigned int);
 int rand(void);
 
 int eaccess(char *path, int mode);
+#endif
 
 
-ssize_t write(int, const void *, size_t);
-ssize_t read(int, void *, size_t);
-int pipe(int[2]);
-__r49_unchecked(int close(int fd));
-__r49_unchecked(int dup2(int fd, int));
-unsigned sleep(unsigned);
-int fchown(int, uid_t, gid_t);
-__r49_unchecked(int fcntl(int, int, ...));
-__r49_unchecked(int getpid(void));
-time_t time(time_t *tloc);
-__r49_unchecked(int getppid(void));
-__r49_unchecked(int wait(int *));
-int mkdir(const char *, mode_t);
-uid_t geteuid(void);
-int setuid(uid_t);
-pid_t getpgrp(void);
-// __r49_unchecked(int getpgrp(int, ...));
-int seteuid(uid_t);
-uid_t getuid(void);
-int chdir(const char *);
-int unlink(const char *);
-char *crypt(const char *, const char *);
 
+/**************************************************************************************************
+ **                                                                                              **
+ **                           Disabling unnecessary compiler warnings                            **
+ **                                                                                              **
+ **************************************************************************************************/
+
+#define __r49_str(x) #x
+#define __r49_warnings_push() _Pragma("clang diagnostic push")
+#define __r49_warnings_pop() _Pragma("clang diagnostic pop")
+#define __r49_warnings_ignore(warning) _Pragma(__r49_str(clang diagnostic ignored "-W" warning))
+#define __r49_warnings_ignore_q(warning, ...) \
+	__r49_warnings_push() \
+	__r49_warnings_ignore(warning) \
+	__VA_ARGS__ \
+	__r49_warnings_pop()
+
+/* Never going to fix these, they retain the essence of the wild west of early Ruby */
+__r49_warnings_ignore("parentheses");
+__r49_warnings_ignore("non-literal-null-conversion");
+__r49_warnings_ignore("int-conversion");
+__r49_warnings_ignore("unused-value");
+__r49_warnings_ignore("empty-body");
+
+
+/**************************************************************************************************
+ **                                                                                              **
+ **                             Prototype declarations and typedefs                              **
+ **                                                                                              **
+ **************************************************************************************************/
+
+
+struct RBasic;
+struct RClass;
+struct RString;
+struct RMethod;
+struct RBignum;
+struct RArray;
+struct RDict;
+struct RRegexp;
+
+struct Regexp;
+struct st_table;
+struct global_entry;
+struct node;
+enum mth_scope;
+
+typedef __r49_64bit_replacement(unsigned int, uintptr_t) VALUE;
+typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
 
 /**************************************************************************************************
  **                                                                                              **
  **                          Function prototype declarations, per file                           **
  **                                                                                              **
  **************************************************************************************************/
-
 
 /* array.c */
 __r49_void_return Init_Array(__r49_noargs);
@@ -235,7 +251,7 @@ VALUE Fary_shift(struct RArray *ary);
 VALUE Fary_sort(struct RArray *ary);
 VALUE Fary_to_s(VALUE ary);
 VALUE Fary_unshift(struct RArray *ary, __r49_64bit_int_to_value new);
-VALUE ary_new2(__r49_implicit_int len);
+VALUE ary_new2(__r49_implicit(int) len);
 VALUE ary_new3(int n, ...);
 VALUE ary_join(struct RArray *ary, struct RString *sep);
 
@@ -258,7 +274,7 @@ VALUE dbl2big(double d);
 VALUE str2inum(char *str, int base);
 
 /* class.c */
-void rb_add_method(struct RClass *class, ID mid, NODE *node, enum mth_scope scope);
+void rb_add_method(struct RClass *class, ID mid, struct node *node, enum mth_scope scope);
 VALUE rb_single_class(struct RBasic *obj);
 VALUE rb_define_class_id(ID id, struct RBasic *super);
 VALUE rb_define_module_id(ID id);
@@ -283,7 +299,7 @@ __r49_void_return Init_DBM(__r49_noargs);
 __r49_void_return Init_Enumerable(__r49_noargs);
 
 /* error.c */
-__r49_noreturn Fail(__r49_validated(const) char *, ...);
+__r49_noreturn Fail(char *, ...);
 __r49_noreturn rb_sys_fail(char *mesg);
 
 /* etc.c */
@@ -298,7 +314,7 @@ VALUE rb_iterate(VALUE (*it_proc)(), char *data1, VALUE (*bl_proc)(), char *data
 void rb_trap_eval(VALUE cmd);
 VALUE rb_resque(VALUE (*b_proc)(), char *data1, VALUE (*r_proc)(), char *data2);
 VALUE TopLevel(char *script, int argc, char **argv);
-__r49_implicit_int iterator_p(__r49_noargs);
+__r49_implicit(int) iterator_p(__r49_noargs);
 
 /* file.c */
 __r49_void_return Init_File(__r49_noargs);
@@ -321,7 +337,7 @@ __r49_void_return rb_call_inits(__r49_noargs);
 
 /* io.c */
 __r49_void_return Init_IO(__r49_noargs);
-__r49_implicit_int io_mode_flags(char *mode);
+__r49_implicit(int) io_mode_flags(char *mode);
 void io_ctl(VALUE obj, VALUE req, struct RString *arg, int io_p);
 
 /* math.c */
@@ -331,7 +347,7 @@ __r49_void_return Init_Math(__r49_noargs);
 void rb_clear_cache2(struct RClass *class);
 void rb_clear_cache(struct RMethod *body);
 void rb_alias(struct RClass *class, ID name, ID def);
-NODE* rb_get_method_body(struct RClass *class, ID id, int envset, enum mth_scope scope);
+struct node* rb_get_method_body(struct RClass *class, ID id, int envset, enum mth_scope scope);
 
 /* numeric.c */
 __r49_void_return Init_Numeric(__r49_noargs);
@@ -351,9 +367,9 @@ __r49_void_return lex_setsrc(char *src, char *ptr, int len);
 void yyappend_print(__r49_noargs);
 void yywhole_loop(int chop, int split);
 int yyparse(void);
-void freenode(NODE *node);
+void freenode(struct node *node);
 __r49_unchecked(void yyerror(char *));
-__r49_implicit_int yylex(__r49_noargs);
+__r49_implicit(int) yylex(__r49_noargs);
 char *rb_id2name(ID id);
 
 /* process.c */
@@ -361,7 +377,7 @@ __r49_void_return Init_process(__r49_noargs);
 void rb_trap_exit(void);
 void rb_syswait(int pid);
 void mark_trap_list(__r49_noargs);
-__r49_implicit_int rb_proc_exec(char *str);
+__r49_implicit(int) rb_proc_exec(char *str);
 
 /* random.c */
 __r49_void_return Init_Random(__r49_noargs);
@@ -374,7 +390,7 @@ VALUE range_new(VALUE class, VALUE start, VALUE end);
 __r49_void_return Init_Regexp(__r49_noargs);
 VALUE re_last_match(ID id);
 VALUE regexp_new(char *s, int len);
-void reg_free(Regexp *rp);
+void reg_free(struct Regexp *rp);
 int str_cicmp(struct RString *str1, struct RString *str2);
 int research(struct RRegexp *reg, struct RString *str, int start, int ignorecase);
 
@@ -392,8 +408,8 @@ VALUE Fstr_times(struct RString *str, VALUE times);
 void str_modify(struct RString *str);
 
 /* st.c */
-__r49_implicit_int st_insert(register st_table *table, register char *key, char *value);
-__r49_implicit_int st_lookup(st_table *table, register char *key, char **value);
+__r49_implicit(int) st_insert(register struct st_table *table, register char *key, char *value);
+__r49_implicit(int) st_lookup(struct st_table *table, register char *key, char **value);
 
 /* struct.c */
 __r49_void_return Init_Struct(__r49_noargs);
@@ -420,7 +436,4 @@ __r49_void_return mark_global_tbl(__r49_noargs);
 __r49_void_return Init_version(__r49_noargs);
 __r49_void_return show_version(__r49_noargs);
 
-#undef NODE
-#undef Regexp
-#undef st_table
 #endif

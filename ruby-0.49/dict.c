@@ -112,7 +112,7 @@ Fdic_delete_if(dic)
     return (VALUE)dic;
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_clear(key, value)
     VALUE key, value;
 {
@@ -148,7 +148,7 @@ Fdic_length(dic)
     return INT2FIX(dic->tbl->num_entries);
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_each(key, value)
     VALUE key, value;
 {
@@ -164,7 +164,7 @@ Fdic_each(dic)
     return (VALUE)dic;
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_each_key(key, value)
     VALUE key, value;
 {
@@ -180,7 +180,7 @@ Fdic_each_key(dic)
     return (VALUE)dic;
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_each_pair(key, value)
     VALUE key, value;
 {
@@ -196,7 +196,7 @@ Fdic_each_pair(dic)
     return (VALUE)dic;
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_to_a(key, value, ary)
     VALUE key, value, ary;
 {
@@ -218,7 +218,7 @@ Fdic_to_a(dic)
     return ary;
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_inspect(key, value, str)
     VALUE key, value;
     struct RString *str;
@@ -270,7 +270,7 @@ Fdic_to_s(dic)
     return str;
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_keys(key, value, ary)
     VALUE key, value, ary;
 {
@@ -291,7 +291,7 @@ Fdic_keys(dic)
     return ary;
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_values(key, value, ary)
     VALUE key, value, ary;
 {
@@ -326,7 +326,7 @@ Fdic_has_key(dic, key)
 
 static VALUE value_found;
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 dic_search_value(key, value, arg)
     VALUE key, value, arg;
 {

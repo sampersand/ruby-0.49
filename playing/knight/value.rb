@@ -1,17 +1,18 @@
 load('utils.rb')
 
+
 class value
   def value.@forward(*meths)
     for meth in meths
-      eval(sprintf("def %s; @data.%s end", id = meth.id2name, id))
+      evalf("def %s; @data.%s end", id = meth.id2name, id)
     end
   end def
 
   def value.@setup(*meths)
     for meth in meths
-      eval(sprintf("def %s(rhs)
-        %s.new(@data %s rhs.%s)
-      end", id = meth[0], meth[1][0].id2name, id, meth[1][1].id2name))
+      id = meth[0]
+      if id.responds_to("id2name") then id = id.id2name end if
+      evalf("def %s(rhs) %s.new(@data %s rhs.%s) end", id , meth[1][0], id, meth[1][1].id2name)
     end
   end def
 
@@ -29,15 +30,12 @@ class value
   end
 
   @forward(\to_s, \to_i)
-  # @forward2(\+, \*)
-  # @forward2('integer', \-, \/, \%)
-  # @forward2('boolean', \<, \>, \!, \==)
 
   def <=>(rhs)
     protect
-      value.from(@data <=> rhs)
+      @data <=> rhs
     resque
-      value.from(%FALSE)
+      %FALSE
     end
   end
 
@@ -47,14 +45,18 @@ class value
 end
 
 class string: value
-  @setup('+'::self::\to_s, '*'::self::\to_i)
+  @setup(?+::self::\to_s, ?*::self::\to_i)
   def truthy; @data != "" end
 end
 
 class integer: value
-  # we couldn't use `\%` because of parsing issues.
-  @setup(\+::self::\to_i, -\::self::\to_i, \*::self::\to_i, \/::self::\to_i, \%::self::\to_i)
-  def truthy; @data != 0 end
+  @setup(
+    ?+::self::\to_i,
+    ?-::self::\to_i,
+    ?*::self::\to_i,
+    ?/::self::\to_i,
+    ?%::self::\to_i)
+  def truthy; @data != 0 end def
 end
 
 class boolean: value
@@ -65,7 +67,8 @@ class array: value
   def truthy; @data.length != "" end
 end
 
-p(string.new("A") * 3)
+p(string.new("A") < "b" < "c")
+p(nil > "a")
 # p(integer.new(3) + "4")
 # print(value.new(12), "\n")
 __END__

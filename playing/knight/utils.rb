@@ -13,3 +13,7 @@ def puts(*x)
   print(*x)
   print("\n")
 end
+
+def evalf(fmt, *x)
+  eval(sprintf(fmt, *x))
+end

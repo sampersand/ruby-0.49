@@ -344,7 +344,7 @@ Fstr_next(orig)
     return (VALUE)str;
 }
 
-static __r49_implicit_int
+static __r49_implicit(int)
 str_hash(str)
     struct RString *str;
 {
@@ -960,7 +960,7 @@ Fstr_toupper(str)
 	if (islower(*s)) {
 	    *s = toupper(*s);
 	}
-	__r49_unused_unchecked(*s++);
+	*s++;
     }
 
     return (VALUE)str;
@@ -979,7 +979,7 @@ Fstr_tolower(str)
 	if (isupper(*s)) {
 	    *s = tolower(*s);
 	}
-	__r49_unused_unchecked(*s++);
+	*s++;
     }
 
     return (VALUE)str;
@@ -1018,7 +1018,7 @@ struct tr {
     char *p, *pend;
 } trsrc, trrepl;
 
-static __r49_implicit_int_but(char)
+static __r49_implicit(int)
 trnext(t)
     struct tr *t;
 {

@@ -55,7 +55,7 @@ Fstruct_access(s)
     return struct_find(s, the_env->last_func);
 }
 
-static __r49_replace(VALUE, __r49_void_return)
+static __r49_required_replacement(VALUE, __r49_void_return) /* the return type is given, but never used */
 struct_add(s, mem, val)
     struct RStruct *s;
     char *mem;
@@ -74,7 +74,6 @@ struct_add(s, mem, val)
     s->tbl[pos].key = rb_intern(mem);
     s->tbl[pos].value = val;
     rb_define_single_method(s, mem, Fstruct_access, 0);
-
 }
 
 #include <stdarg.h>
@@ -134,7 +133,7 @@ Fstruct_new(class, args)
     return st;
 }
 
-static __r49_replace(VALUE, __r49_void_return)
+static __r49_required_replacement(VALUE, __r49_void_return) /* the return type is given, but never used */
 Fstruct_each(s)
     struct RStruct *s;
 {

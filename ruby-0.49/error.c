@@ -36,7 +36,7 @@ err_print(fmt, args)
     char *fmt;
     va_list args;
 {
-    extern __r49_implicit_var(VALUE) errstr;
+    extern __r49_implicit(VALUE) errstr;
     char buf[BUFSIZ];
 
     err_sprintf(buf, fmt, args);
@@ -110,7 +110,7 @@ Bug(char *fmt, ...)
 }
 
 __r49_noreturn
-Fail(__r49_validated(const) char *fmt, ...)
+Fail(char *fmt, ...)
 {
     va_list args;
     char buf[BUFSIZ]; 

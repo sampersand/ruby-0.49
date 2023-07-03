@@ -55,6 +55,7 @@ Ftime_now(class)
 
 static VALUE
 time_new_internal(class, sec, usec)
+    __r49_implicit_arg(VALUE, class)
     int sec, usec;
 {
     VALUE obj = obj_alloc(class);

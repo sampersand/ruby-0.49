@@ -25,7 +25,7 @@ VALUE C_Fixnum;
 extern VALUE C_Range;
 double big2dbl();
 
-static __r49_implicit_int
+static __r49_implicit(VALUE)
 num_coerce_bin(this, other)
     VALUE this, other;
 {
@@ -216,7 +216,7 @@ Fflo_plus(x, y)
       case T_FLOAT:
 	return float_new(x->value + y->value);
       case T_STRING:
-	return Fstr_plus(obj_as_string(x), __r49_unchecked_cast(struct RString *, y));
+	return Fstr_plus(obj_as_string(x), __r49_cast_ptr(RString, RFloat, y));
       default:
 	return num_coerce_bin(x, y);
     }
@@ -250,7 +250,7 @@ Fflo_mul(x, y)
       case T_FLOAT:
 	return float_new(x->value * y->value);
       case T_STRING:
-	return Fstr_times(__r49_unchecked_cast(struct RString *, y), INT2FIX((int)x->value));
+	return Fstr_times(__r49_cast_ptr(RString, RFloat, y), INT2FIX((int)x->value));
       default:
 	return num_coerce_bin(x, y);
     }
@@ -316,7 +316,7 @@ Fflo_mod(x, y)
     return float_new(value);
 }
 
-__r49_implicit_int_but(VALUE)
+__r49_implicit(VALUE)
 Fflo_pow(x, y)
     struct RFloat *x, *y;
 {
@@ -865,7 +865,7 @@ Ffix_class(fix)
     return C_Fixnum;
 }
 
-static __r49_implicit_int_but(VALUE) Ffix_abs(fix)
+static __r49_implicit(VALUE) Ffix_abs(fix)
     VALUE fix;
 {
     int i = FIX2INT(fix);
@@ -885,7 +885,7 @@ Ffix_id2name(fix)
 }
 
 extern VALUE M_Comparable;
-extern __r49_implicit_int_but(VALUE) Fkrn_inspect(__r49_validated(VALUE));
+extern __r49_implicit(VALUE) Fkrn_inspect(__r49_required_change_q(VALUE));
 
 __r49_void_return
 Init_Numeric(__r49_noargs)

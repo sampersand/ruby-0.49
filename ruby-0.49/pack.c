@@ -77,7 +77,7 @@ Fpck_pack(ary, fmt)
     items = ary->len;
     idx = 0;
 
-#define NEXTFROM (items-- > 0 ? ary->ptr[idx++] : Fail(toofew), __r49_validated(0))
+#define NEXTFROM (items-- > 0 ? ary->ptr[idx++] : Fail(toofew) __r49_required_change_q(, 0))
 
     while (p < pend) {
 	type = *p++;		/* get data type */
@@ -117,7 +117,7 @@ Fpck_pack(ary, fmt)
 		    str_cat(res, ptr, len);
 		else {
 		    str_cat(res, ptr, plen);
-		    __r49_unused_unchecked(len == plen);
+		    len == plen;
 		    while (len >= 10) {
 			str_cat(res, nul10, 10);
 			len -= 10;
@@ -131,7 +131,7 @@ Fpck_pack(ary, fmt)
 		    str_cat(res, ptr, len);
 		else {
 		    str_cat(res, ptr, plen);
-		    __r49_unused_unchecked(len == plen);
+		    len == plen;
 		    while (len >= 10) {
 			str_cat(res, spc10, 10);
 			len -= 10;

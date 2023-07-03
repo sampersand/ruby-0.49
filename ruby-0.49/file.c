@@ -181,7 +181,7 @@ stat_new(st)
 static char lastpath[MAXPATHLEN];
 static struct stat laststat;
 
-__r49_implicit_int
+__r49_implicit(int)
 cache_stat(path, st)
     char *path;
     struct stat *st;
@@ -389,7 +389,7 @@ Ffile_l(obj, fname)
     return FALSE;
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 Ffile_S(obj, fname)
     VALUE obj;
     struct RString *fname;
@@ -801,7 +801,7 @@ Ffile_chown(obj, args)
     return INT2FIX(i);
 }
 
-__r49_implicit_int_but(VALUE)
+__r49_implicit(VALUE)
 Ffile_chown2(obj, owner, group)
     VALUE obj, owner, group;
 {
@@ -869,7 +869,7 @@ Ffile_symlink(obj, from, to)
     return TRUE;
 }
 
-__r49_implicit_int_but(VALUE)
+__r49_implicit(VALUE)
 Ffile_readlink(obj, path)
     VALUE obj;
     struct RString *path;

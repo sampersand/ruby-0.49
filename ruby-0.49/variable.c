@@ -57,7 +57,7 @@ struct global_entry {
     VALUE (*set_hook)();
 };
 
-static __r49_validated(enum st_retval) mark_global_entry(key, entry)
+static __r49_implicit(enum st_retval) mark_global_entry(key, entry)
     ID key;
     struct global_entry *entry;
 {
@@ -198,7 +198,7 @@ rb_gvar_get(entry)
     return Qnil;
 }
 
-__r49_implicit_int_but(VALUE)
+__r49_implicit(VALUE)
 rb_ivar_get_1(obj, id)
     struct RBasic *obj;
     ID id;
@@ -280,7 +280,7 @@ rb_gvar_set2(name, val)
     return val;
 }
 
-__r49_implicit_int_but(VALUE)
+__r49_implicit(VALUE)
 rb_ivar_set_1(obj, id, val)
     struct RBasic *obj;
     ID id;

@@ -1,4 +1,4 @@
-#include "__fixes.h"
+#include "__r49_fixes.h"
 /* Extended regular expression matching and search library.
    Copyright (C) 1985, 1989-90 Free Software Foundation, Inc.
 

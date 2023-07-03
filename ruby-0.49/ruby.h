@@ -10,7 +10,7 @@
 
 ************************************************/
 
-#include "__fixes.h"
+#include "__r49_fixes.h"
 
 #ifndef RUBY_H
 #define RUBY_H
@@ -27,26 +27,26 @@
 #include <alloca.h>
 //#endif
 
-#ifndef __r49 /* these are redefined within `__r49.h` */
 typedef unsigned int UINT;
+#if 0 /* __r49: these are redefined within `__r49.h, but left here for posterity. */
 typedef unsigned int VALUE;
 typedef UINT ID;
-typedef unsigned short USHORT;
 #endif
+typedef unsigned short USHORT;
 
 void bzero(void *s, unsigned long n);
 struct RClass;
 void rb_include_module(struct RClass *, struct RClass *);
 
-__r49_replace(int, __r49_void_return) Error(char *, ...);
-__r49_replace(int, __r49_noreturn) Fail(__r49_validated(const) char *, ...);
-__r49_replace(int, __r49_void_return) Warning(char *, ...);
-__r49_replace(int, __r49_noreturn) Fatal(char *, ...);
-__r49_replace(int, __r49_noreturn) Bug(char *, ...);
+__r49_required_replacement(int, __r49_void_return) Error(char *, ...);
+__r49_required_replacement(int, __r49_noreturn) Fail(char *, ...);
+__r49_required_replacement(int, __r49_void_return) Warning(char *, ...);
+__r49_required_replacement(int, __r49_noreturn) Fatal(char *, ...);
+__r49_required_replacement(int, __r49_noreturn) Bug(char *, ...);
 
 VALUE rb_iv_get(VALUE obj, char *name);
 VALUE obj_is_kind_of(VALUE obj, VALUE c);
-__r49_replace(int, __r49_noreturn) WrongType(VALUE x, int t);
+__r49_required_replacement(int, __r49_noreturn) WrongType(VALUE x, int t);
 int iterator_p(void);
 
 struct RString;
@@ -104,7 +104,7 @@ void *memmove(void *, const void *, unsigned long);
 # define FIXNUM_MIN RSHIFT((long)LONG_MIN,1)
 
 #define FIXNUM_FLAG 0x01
-#define INT2FIX(i) (VALUE)(((__r49_required_replacement(int, unsigned))(i))<<1 | FIXNUM_FLAG)
+#define INT2FIX(i) (VALUE)(((__r49_required_replacement(int, VALUE))(i))<<1 | FIXNUM_FLAG)
 
 #if (-1==(((-1)<<1)&FIXNUM_FLAG)>>1)
 # define RSHIFT(x,y) ((x)>>y)

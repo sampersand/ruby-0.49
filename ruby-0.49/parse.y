@@ -13,7 +13,7 @@
 %{
 
 #define YYDEBUG 1
-#include "__fixes.h"
+#include "__r49_fixes.h"
 __r49_warnings_ignore("incompatible-pointer-types")
 __r49_warnings_ignore("non-literal-null-conversion")
 #include "ruby.h"
@@ -1176,7 +1176,7 @@ static struct kwtable {
     "yield",	YIELD,		EXPR_BEG,
 };
 
-__r49_implicit_int
+__r49_implicit(int)
 yylex(__r49_noargs)
 {
     register int c;
@@ -2525,7 +2525,7 @@ rb_intern(name)
 
 static char *find_ok;
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 id_find(name, id1, id2)
     char *name;
     ID id1, id2;

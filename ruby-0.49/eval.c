@@ -138,7 +138,7 @@ error_print()
     exit(1);
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 main(argc, argv)
     int argc;
     char *argv[];
@@ -307,7 +307,7 @@ rb_eval(node)
     int go_out = 0;
     VALUE result;
 
-    __r49_unused_unchecked(&go_out);
+    &go_out;
   again:
     if (node == Qnil) return Qnil;
 
@@ -1122,7 +1122,7 @@ Ffail(self, args)
     return Qnil;		/* not reached */
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 iterator_p()
 {
     return ITERATOR_P();
@@ -1138,7 +1138,7 @@ rb_yield(val)
     VALUE result;
     int cnt;
 
-    __r49_unused_unchecked(&go_out);
+    &go_out;
     block = the_env->block;
     if (!ITERATOR_P()) {
 	Fail("yield called out of iterator");
@@ -1300,7 +1300,7 @@ rb_resque(b_proc, data1, r_proc, data2)
     int go_out;
     VALUE result;
 
-    __r49_unused_unchecked(&go_out);
+    &go_out;
     go_out = 0;
     PUSH_TAG();
     switch (state = EXEC_TAG()) {
@@ -1397,7 +1397,7 @@ rb_call(class, recv, mid, argc, argv, scope)
     NODE *body;
     VALUE result;
 
-    __r49_unused_unchecked(&go_out);
+    &go_out;
     PUSH_ENV();
     the_env->flags |= DURING_CALL;
     the_env->argc = argc;
@@ -1814,7 +1814,7 @@ Fload(obj, fname)
 
 static VALUE rb_loadfiles;
 
-__r49_implicit_int
+__r49_implicit(int)
 Frequire(obj, fname)
     VALUE obj;
     struct RString *fname;

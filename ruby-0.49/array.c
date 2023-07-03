@@ -427,7 +427,9 @@ Fary_each(ary)
     else {
 	return (VALUE)ary;
     }
-    __r49_ncleanup_q(printf("%s:%d: return qnil", __FILE__, __LINE__);)
+#ifndef __r49_bugfix /* this looks like debug code that was left in the original interpreter */
+    printf("%s:%d: return qnil", __FILE__, __LINE__);
+#endif
     return Qnil;
 }
 

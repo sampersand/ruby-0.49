@@ -110,6 +110,13 @@ Fkrn_class(obj)
     return obj->class;
 }
 
+#ifdef __r49_64bit
+# include <inttypes.h> /* for `PRIuPTR */
+# define __R49_PrVALUE PRIuPTR
+#else
+# define __R49_PrVALUE
+#endif
+
 VALUE
 Fkrn_to_s(obj)
     VALUE obj;
@@ -127,7 +134,7 @@ Fkrn_inspect(obj)
     return rb_funcall(obj, rb_intern("to_s"), 0, Qnil);
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 obj_inspect(id, value, str)
     ID id;
     VALUE value;

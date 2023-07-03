@@ -138,12 +138,12 @@ Fgc_set_threshold(obj, val)
 #include <sys/types.h>
 #include <sys/times.h>
 
-static __r49_implicit_int Fgc_begin()
+static __r49_implicit(int) Fgc_begin()
 {
     return Qnil;
 }
 
-static __r49_implicit_int Fgc_end()
+static __r49_implicit(int) Fgc_end()
 {
     return Qnil;
 }
@@ -287,7 +287,7 @@ void gc()
     rb_funcall(M_GC, end_hook, 0, Qnil);
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 mark_entry(key, value)
     ID key;
     VALUE value;
@@ -303,7 +303,7 @@ mark_tbl(tbl)
     st_foreach(tbl, mark_entry, 0);
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 mark_dicentry(key, value)
     ID key;
     VALUE value;
@@ -414,7 +414,7 @@ sweep(__r49_noargs)
     }
 }
 
-static __r49_validated(enum st_retval)
+static __r49_implicit(enum st_retval)
 freemethod(key, body)
     ID key;
     char *body;
