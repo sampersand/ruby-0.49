@@ -28,13 +28,15 @@
 //#endif
 
 typedef unsigned int UINT;
-#if 0 /* __r49: these are redefined within `__r49.h, but left here for posterity. */
+#if 0 /* __r49: included in `__r49_fixes.h`, and can cause conflicts, but left here for posterity */
 typedef unsigned int VALUE;
 typedef UINT ID;
 #endif
 typedef unsigned short USHORT;
 
+#if 0 /* __r49: included in `__r49_fixes.h`, and can cause conflicts, but left here for posterity */
 void bzero(void *s, unsigned long n);
+#endif 
 struct RClass;
 void rb_include_module(struct RClass *, struct RClass *);
 
@@ -60,7 +62,9 @@ VALUE str_cat(struct RString *, char *, UINT);
 struct RBasic;
 void obj_free(struct RBasic *);
 char *rb_class2name(struct RClass *);
+#if 0 /* __r49: included in `__r49_fixes.h`, and can cause conflicts, but left here for posterity */
 void bcopy(const void *src, void *dst, unsigned long len);
+#endif
 unsigned long strlen(const char *);
 unsigned long strtoul(const char *, char **, int);
 VALUE assoc_new(VALUE elm1, VALUE elm2);
@@ -77,9 +81,10 @@ VALUE ary_new(void);
 VALUE ary_new4(int, VALUE *);
 
 
-
+#if 0 /* __r49: included in `__r49_fixes.h`, and can cause conflicts, but left here for posterity */
 void *memcpy(void *, const void *, unsigned long);
 void *memmove(void *, const void *, unsigned long);
+#endif
 
 #ifdef __STDC__
 # include <limits.h>

@@ -12,16 +12,15 @@
 
 #include "ruby.h"
 
+#ifdef __r49_declare_prototypes
+# include <time.h> /* time */
+# ifdef HAVE_RANDOM
+#  include <stdlib.h> /* initstate, random, setstate, srandom */
+# endif /* HAVE_RANDOM */
+#endif /* __r49_declare_prototypes */
+
 static int first = 1;
 static char state[256];
-
-/* These are required to be predeclared */
-#if defined(__r49_required_change) && defined(HAVE_RANDOM)
-char *initstate(unsigned seed, char *state, size_t size);
-long random(void);
-char *setstate(const char *state);
-void srandom(unsigned seed);
-#endif
 
 static VALUE
 Fsrand(obj, args)

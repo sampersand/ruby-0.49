@@ -19,6 +19,10 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 
+#ifdef __r49_declare_prototypes
+# include <fcntl.h> 
+#endif
+
 VALUE rb_ad_string();
 
 VALUE C_IO;

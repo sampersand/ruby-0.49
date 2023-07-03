@@ -5,10 +5,10 @@
 
 #define __r49_TODO
 #define __r49_64bit
-#define __r49_modernc
 #define __r49_required_change
 #define __r49_critical_bugfix
 #define __r49_bugfix
+#define __r49_declare_prototypes
 
 /**************************************************************************************************
  **                                                                                              **
@@ -110,18 +110,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#undef memcpy
-#undef bzero
-#undef bcopy
-#undef memmove
-
-int eaccess(char *path, int mode);
-
 #include <unistd.h> 
-#include <fcntl.h> 
-#include <time.h> 
-#include <sys/wait.h> 
-#include <sys/stat.h> 
+// #include <sys/wait.h> 
 #define vfork fork /* original ruby uses vfork. */
 
 #if 0 /* these are the original funcitons, before i started doing `#include`s */
@@ -250,7 +240,7 @@ VALUE Fary_push(struct RArray *ary, VALUE item);
 VALUE Fary_shift(struct RArray *ary);
 VALUE Fary_sort(struct RArray *ary);
 VALUE Fary_to_s(VALUE ary);
-VALUE Fary_unshift(struct RArray *ary, __r49_64bit_int_to_value new);
+VALUE Fary_unshift(struct RArray *ary, __r49_implicit(VALUE) new);
 VALUE ary_new2(__r49_implicit(int) len);
 VALUE ary_new3(int n, ...);
 VALUE ary_join(struct RArray *ary, struct RString *sep);

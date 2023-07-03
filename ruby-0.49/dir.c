@@ -12,6 +12,10 @@
 
 #include "ruby.h"
 
+#ifdef __r49_declare_prototypes
+# include <sys/stat.h> 
+#endif
+
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

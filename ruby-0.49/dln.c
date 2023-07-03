@@ -139,6 +139,9 @@ dln_find_1(fname, path, exe_flag)
 	    if (exe_flag == 0) return fbuf;
 	    /* looking for executable */
 #ifdef RUBY
+# ifdef __r49_declare_prototypes
+	    extern int eaccess(const char *pathname, int mode);
+# endif
 	    if (eaccess(fbuf, X_OK) == 0) return fbuf;
 #else
 	    {
