@@ -524,7 +524,7 @@ Ftime_times(obj)
 }
 
 __r49_void_return
-Init_Time(__r49_noargs)
+Init_Time()
 {
     C_Time = rb_define_class("Time", C_Object);
     rb_include_module(C_Time, M_Comparable);

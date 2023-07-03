@@ -257,7 +257,7 @@ Fstruct_clone(s)
 }
 
 __r49_void_return
-Init_Struct(__r49_noargs)
+Init_Struct()
 {
     C_Struct = rb_define_class("Struct", C_Object);
     rb_include_module(C_Struct, M_Enumerable);

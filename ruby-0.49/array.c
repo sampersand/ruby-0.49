@@ -37,7 +37,7 @@ ary_new2(len)
 }
 
 VALUE
-ary_new(__r49_noargs)
+ary_new()
 {
     return ary_new2(ARY_DEFAULT_SIZE);
 }

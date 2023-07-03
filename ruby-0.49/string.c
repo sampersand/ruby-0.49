@@ -1492,7 +1492,7 @@ extern VALUE M_Comparable;
 extern VALUE M_Enumerable;
 
 __r49_void_return
-Init_String(__r49_noargs)
+Init_String()
 {
     C_String  = rb_define_class("String", C_Object);
     rb_include_module(C_String, M_Comparable);

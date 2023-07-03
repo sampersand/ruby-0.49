@@ -848,7 +848,7 @@ Fpck_unpack(str, fmt)
 }
 
 __r49_void_return
-Init_pack(__r49_noargs)
+Init_pack()
 {
     rb_define_method(C_Array, "pack", Fpck_pack, 1);
     rb_define_method(C_String, "unpack", Fpck_unpack, 1);

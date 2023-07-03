@@ -374,7 +374,7 @@ Fdbm_to_a(obj)
 }
 
 __r49_void_return
-Init_DBM(__r49_noargs)
+Init_DBM()
 {
     C_DBM = rb_define_class("DBM", C_Object);
     rb_include_module(C_DBM, M_Enumerable);

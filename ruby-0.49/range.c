@@ -147,7 +147,7 @@ Frng_to_s(obj)
 extern VALUE M_Enumerable;
 
 __r49_void_return
-Init_Range(__r49_noargs)
+Init_Range()
 {
     C_Range = rb_define_class("Range", C_Object);
     rb_include_module(C_Range, M_Enumerable);

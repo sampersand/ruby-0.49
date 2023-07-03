@@ -96,7 +96,6 @@
 #define __r49_implicit(what) __r49_required_change_q(what)
 #define __r49_implicit_arg(type, arg) __r49_required_change_q(__r49_implicit(type) arg;)
 #define __r49_void_return __r49_implicit(void)
-#define __r49_noargs __r49_required_change_q(void)
 
 #define __r49_unchecked(new) new
 #define __r49_cast_to_RBasic(ptr) ((struct RBasic *) (ptr))
@@ -241,7 +240,7 @@ typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
  **************************************************************************************************/
 
 /* array.c */
-__r49_void_return Init_Array(__r49_noargs);
+__r49_void_return Init_Array(void);
 VALUE Fary_push(struct RArray *ary, VALUE item);
 VALUE Fary_shift(struct RArray *ary);
 VALUE Fary_sort(struct RArray *ary);
@@ -252,7 +251,7 @@ VALUE ary_new3(int n, ...);
 VALUE ary_join(struct RArray *ary, struct RString *sep);
 
 /* bignum.c */
-__r49_void_return Init_Bignum(__r49_noargs);
+__r49_void_return Init_Bignum(void);
 VALUE Fbig_and(struct RBignum *x, struct RBignum *y);
 VALUE Fbig_clone(struct RBignum *x);
 VALUE Fbig_lshift(struct RBignum *x, VALUE y);
@@ -279,30 +278,30 @@ VALUE class_new(struct RClass *super);
 VALUE single_class_new(struct RClass *super);
 
 /* comparable.c */
-__r49_void_return Init_Comparable(__r49_noargs);
+__r49_void_return Init_Comparable(void);
 
 /* dict.c */
-__r49_void_return Init_Dict(__r49_noargs);
+__r49_void_return Init_Dict(void);
 VALUE Fdic_aset(struct RDict *dic, VALUE key, VALUE val);
 
 /* dir.c */
-__r49_void_return Init_Dir(__r49_noargs);
+__r49_void_return Init_Dir(void);
 
 /* dbm.c */
-__r49_void_return Init_DBM(__r49_noargs);
+__r49_void_return Init_DBM(void);
 
 /* enumerable.c */
-__r49_void_return Init_Enumerable(__r49_noargs);
+__r49_void_return Init_Enumerable(void);
 
 /* error.c */
 __r49_noreturn Fail(char *, ...);
 __r49_noreturn rb_sys_fail(char *mesg);
 
 /* etc.c */
-__r49_void_return Init_Etc(__r49_noargs);
+__r49_void_return Init_Etc(void);
 
 /* eval.c */
-__r49_void_return Init_load(__r49_noargs);
+__r49_void_return Init_load(void);
 __r49_noreturn rb_exit(int status);
 __r49_noreturn rb_fail(VALUE mesg);
 __r49_noreturn rb_break(void);
@@ -310,35 +309,35 @@ VALUE rb_iterate(VALUE (*it_proc)(), char *data1, VALUE (*bl_proc)(), char *data
 void rb_trap_eval(VALUE cmd);
 VALUE rb_resque(VALUE (*b_proc)(), char *data1, VALUE (*r_proc)(), char *data2);
 VALUE TopLevel(char *script, int argc, char **argv);
-__r49_implicit(int) iterator_p(__r49_noargs);
+__r49_implicit(int) iterator_p(void);
 
 /* file.c */
-__r49_void_return Init_File(__r49_noargs);
+__r49_void_return Init_File(void);
 VALUE file_open(char *fname, char *mode);
 int eaccess(char *path, int mode);
 
 /* gc.c */
-__r49_void_return Init_GC(__r49_noargs);
+__r49_void_return Init_GC(void);
 void rb_global_variable(VALUE *var);
 void unliteralize(struct RBasic *obj);
 void gc(void);
 void obj_free(struct RBasic *);
 void mark(register struct RBasic *obj);
-__r49_void_return sweep(__r49_noargs);
+__r49_void_return sweep(void);
 void *xcalloc(unsigned long n, unsigned long size);
 void *xmalloc(unsigned long size);
 void *xrealloc(void *ptr, unsigned long size);
 
 /* inits.c */
-__r49_void_return rb_call_inits(__r49_noargs);
+__r49_void_return rb_call_inits(void);
 
 /* io.c */
-__r49_void_return Init_IO(__r49_noargs);
+__r49_void_return Init_IO(void);
 __r49_implicit(int) io_mode_flags(char *mode);
 void io_ctl(VALUE obj, VALUE req, struct RString *arg, int io_p);
 
 /* math.c */
-__r49_void_return Init_Math(__r49_noargs);
+__r49_void_return Init_Math(void);
 
 /* methods.c */
 void rb_clear_cache2(struct RClass *class);
@@ -347,44 +346,44 @@ void rb_alias(struct RClass *class, ID name, ID def);
 struct node* rb_get_method_body(struct RClass *class, ID id, int envset, enum mth_scope scope);
 
 /* numeric.c */
-__r49_void_return Init_Numeric(__r49_noargs);
+__r49_void_return Init_Numeric(void);
 
 /* object.c */
-__r49_void_return Init_Object(__r49_noargs);
+__r49_void_return Init_Object(void);
 VALUE Fkrn_to_s(VALUE obj);
 VALUE obj_is_member_of(VALUE obj, VALUE c);
 VALUE obj_alloc(VALUE class);
 
 /* pack.c */
-__r49_void_return Init_pack(__r49_noargs);
+__r49_void_return Init_pack(void);
 
 /* parse.y */
-__r49_void_return Init_sym(__r49_noargs);
+__r49_void_return Init_sym(void);
 __r49_void_return lex_setsrc(char *src, char *ptr, int len);
-void yyappend_print(__r49_noargs);
+void yyappend_print(void);
 void yywhole_loop(int chop, int split);
 int yyparse(void);
 void freenode(struct node *node);
 __r49_unchecked(void yyerror(char *));
-__r49_implicit(int) yylex(__r49_noargs);
+__r49_implicit(int) yylex(void);
 char *rb_id2name(ID id);
 
 /* process.c */
-__r49_void_return Init_process(__r49_noargs);
+__r49_void_return Init_process(void);
 void rb_trap_exit(void);
 void rb_syswait(int pid);
-void mark_trap_list(__r49_noargs);
+void mark_trap_list(void);
 __r49_implicit(int) rb_proc_exec(char *str);
 
 /* random.c */
-__r49_void_return Init_Random(__r49_noargs);
+__r49_void_return Init_Random(void);
 
 /* range.c */
-__r49_void_return Init_Range(__r49_noargs);
+__r49_void_return Init_Range(void);
 VALUE range_new(VALUE class, VALUE start, VALUE end);
 
 /* re.c */
-__r49_void_return Init_Regexp(__r49_noargs);
+__r49_void_return Init_Regexp(void);
 VALUE re_last_match(ID id);
 VALUE regexp_new(char *s, int len);
 void reg_free(struct Regexp *rp);
@@ -399,7 +398,7 @@ void rb_load_file(char *fname);
 VALUE Fsprintf(int argc, VALUE *argv);
 
 /* string.c */
-__r49_void_return Init_String(__r49_noargs);
+__r49_void_return Init_String(void);
 VALUE Fstr_plus(struct RString *str1, struct RString *str2);
 VALUE Fstr_times(struct RString *str, VALUE times);
 void str_modify(struct RString *str);
@@ -409,14 +408,14 @@ __r49_implicit(int) st_insert(register struct st_table *table, register char *ke
 __r49_implicit(int) st_lookup(struct st_table *table, register char *key, char **value);
 
 /* struct.c */
-__r49_void_return Init_Struct(__r49_noargs);
+__r49_void_return Init_Struct(void);
 VALUE struct_new(char *name, ...);
 
 /* time.c */
-__r49_void_return Init_Time(__r49_noargs);
+__r49_void_return Init_Time(void);
 
 /* variable.c */
-__r49_void_return Init_var_tables(__r49_noargs);
+__r49_void_return Init_var_tables(void);
 VALUE rb_gvar_get(struct global_entry *entry);
 VALUE rb_gvar_set(struct global_entry *entry, VALUE val);
 VALUE rb_gvar_set2(char *name, VALUE val);
@@ -427,10 +426,10 @@ VALUE rb_const_set(ID id, VALUE val);
 VALUE rb_iv_set(VALUE obj, char *name, VALUE val);
 VALUE rb_mvar_get(ID id);
 VALUE rb_id2class(ID id);
-__r49_void_return mark_global_tbl(__r49_noargs);
+__r49_void_return mark_global_tbl(void);
 
 /* version.c */
-__r49_void_return Init_version(__r49_noargs);
-__r49_void_return show_version(__r49_noargs);
+__r49_void_return Init_version(void);
+__r49_void_return show_version(void);
 
 #endif

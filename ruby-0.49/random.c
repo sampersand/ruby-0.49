@@ -78,7 +78,7 @@ Frand(obj, max)
 }
 
 __r49_void_return
-Init_Random(__r49_noargs)
+Init_Random()
 {
     extern VALUE C_Kernel;
 

@@ -76,7 +76,7 @@ static __r49_implicit(enum st_retval) mark_global_entry(key, entry)
 }
 
 __r49_void_return
-mark_global_tbl(__r49_noargs)
+mark_global_tbl()
 {
     st_foreach(global_tbl, mark_global_entry, 0);
 }

@@ -1146,7 +1146,7 @@ extern VALUE M_Enumerable;
 VALUE rb_readonly_hook();
 
 __r49_void_return
-Init_IO(__r49_noargs)
+Init_IO()
 {
     extern VALUE C_Kernel;
 

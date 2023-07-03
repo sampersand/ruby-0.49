@@ -392,7 +392,7 @@ void mark(obj)
 }
 
 __r49_void_return
-sweep(__r49_noargs)
+sweep()
 {
     register struct RBasic *link = object_list;
     register struct RBasic *next;

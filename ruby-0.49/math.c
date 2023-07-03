@@ -110,7 +110,7 @@ Fmath_sqrt(obj, x)
 }
 
 __r49_void_return
-Init_Math(__r49_noargs)
+Init_Math()
 {
     M_Math = rb_define_module("Math");
 

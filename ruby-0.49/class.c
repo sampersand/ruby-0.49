@@ -92,7 +92,7 @@ rb_define_class(name, super)
 }
 
 VALUE
-module_new(__r49_noargs)
+module_new()
 {
     NEWOBJ(mdl, struct RClass);
     OBJSETUP(mdl, C_Module, T_MODULE);

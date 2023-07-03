@@ -888,7 +888,7 @@ extern VALUE M_Comparable;
 extern __r49_implicit(VALUE) Fkrn_inspect(__r49_required_change_q(VALUE));
 
 __r49_void_return
-Init_Numeric(__r49_noargs)
+Init_Numeric()
 {
     coerce = rb_intern("coerce");
     to_i = rb_intern("to_i");

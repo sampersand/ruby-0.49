@@ -478,7 +478,7 @@ static int trap_immediate;
 #endif
 
 void
-mark_trap_list(__r49_noargs)
+mark_trap_list()
 {
     int i;
 
@@ -814,7 +814,7 @@ Fproc_seteuid(obj, euid)
 VALUE M_Process;
 
 __r49_void_return
-Init_process(__r49_noargs)
+Init_process()
 {
     extern VALUE C_Kernel;
 

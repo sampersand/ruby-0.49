@@ -350,7 +350,7 @@ static VALUE boot_defclass(name, super)
 VALUE TopSelf;
 
 __r49_void_return
-Init_Object(__r49_noargs)
+Init_Object()
 {
     VALUE metaclass;
 

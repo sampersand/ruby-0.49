@@ -1177,7 +1177,7 @@ static struct kwtable {
 };
 
 __r49_implicit(int)
-yylex(__r49_noargs)
+yylex()
 {
     register int c;
     struct kwtable *low = kwtable, *mid, *high = LAST(kwtable);
