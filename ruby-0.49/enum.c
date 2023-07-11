@@ -12,7 +12,7 @@
 
 #include "ruby.h"
 
-#define __r49_unchecked_cast_to_iter(ptr) __r49_unchecked_cast(VALUE (*)(), ptr)
+#define __r49_unchecked_cast_to_iter(ptr) (__r49_unchecked((VALUE (*)()) ptr))
 
 VALUE M_Enumerable;
 static ID id_each, id_match, id_equal, id_cmp;
@@ -58,12 +58,7 @@ Fenum_grep(obj, pat)
 	GC_LINK;
 	GC_PRO(tmp);
 
-	rb_iterate(
-		__r49_unchecked_cast_to_iter(rb_each),
-		obj,
-		__r49_unchecked_cast_to_iter(enum_grep),
-		__r49_unchecked_cast(char *, &arg[0])
-	);
+	rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_grep), __r49_cast(char *, VALUE *, &arg[0]));
 
 	GC_UNLINK;
 	return tmp;
@@ -88,12 +83,7 @@ Fenum_find(obj)
     int enum_found;
 
     enum_found = FALSE;
-    rb_iterate(
-    	__r49_unchecked_cast_to_iter(rb_each),
-    	obj,
-    	__r49_unchecked_cast_to_iter(enum_find),
-    	__r49_unchecked_cast(char *, &enum_found)
-    );
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_find), __r49_cast(char *, int *, &enum_found));
     return enum_found;
 }
 
@@ -116,12 +106,7 @@ Fenum_find_all(obj)
     GC_LINK;
     GC_PRO3(tmp, ary_new());
 
-    rb_iterate(
-    	__r49_unchecked_cast_to_iter(rb_each),
-    	obj,
-    	__r49_unchecked_cast_to_iter(enum_find_all),
-    	Qnil
-    );
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_find_all), Qnil);
 
     GC_UNLINK;
     return tmp;
@@ -238,12 +223,7 @@ Fenum_min(obj)
 
     GC_LINK;
     GC_PRO2(min);
-    rb_iterate(
-    	__r49_unchecked_cast_to_iter(rb_each),
-    	obj,
-    	__r49_unchecked_cast_to_iter(enum_min),
-    	__r49_unchecked_cast(char *, &min)
-    );
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_min), __r49_cast(char *, VALUE *, &min));
     GC_UNLINK;
     return min;
 }
@@ -271,12 +251,7 @@ Fenum_max(obj)
 
     GC_LINK;
     GC_PRO2(max);
-    rb_iterate(
-    	__r49_unchecked_cast_to_iter(rb_each),
-    	obj,
-    	__r49_unchecked_cast_to_iter(enum_max),
-    	__r49_unchecked_cast(char *, &max)
-    );
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_max), __r49_cast(char *, VALUE *, &max));
     GC_UNLINK;
     return max;
 }
@@ -311,12 +286,7 @@ Fenum_index(obj, val)
     iv.i = 0;
     iv.v = val;
     iv.found = 0;
-    rb_iterate(
-    	__r49_unchecked_cast_to_iter(rb_each),
-    	obj,
-    	__r49_unchecked_cast_to_iter(enum_index),
-    	__r49_unchecked_cast(char *, &iv)
-    );
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_index), __r49_cast(char *, struct i_v_pair *, &iv));
     if (iv.found) return INT2FIX(iv.i);
     return Qnil;		/* not found */
 }
@@ -341,12 +311,7 @@ Fenum_includes(obj, val)
 
     iv.i = 0;
     iv.v = val;
-    rb_iterate(
-    	__r49_unchecked_cast_to_iter(rb_each),
-    	obj,
-    	__r49_unchecked_cast_to_iter(enum_includes),
-    	__r49_unchecked_cast(char *, &iv)
-    );
+    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_includes), __r49_cast(char *, struct i_v_pair *, &iv));
     if (iv.i) return TRUE;
     return FALSE;
 }

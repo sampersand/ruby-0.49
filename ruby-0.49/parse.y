@@ -2156,7 +2156,7 @@ call_op(recv, id, narg, arg1)
 	arg_data.id = id;
 	arg_data.narg = narg;
 	if (narg == 1) arg_data.arg = arg1->nd_lit;
-	result = NEW_LIT(rb_resque(call_lit, __r49_unchecked_cast2(char *, struct call_arg *, &arg_data), except_lit, Qnil));
+	result = NEW_LIT(rb_resque(call_lit, __r49_unchecked_cast(char *, struct call_arg *, &arg_data), except_lit, Qnil));
 	freenode(recv);
 	if (narg == 1) freenode(arg1);
 	return result;

@@ -39,7 +39,7 @@ rb_name_class(class, id)
 {
     VALUE body;
 
-    if (st_lookup(class_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &body))) {
+    if (st_lookup(class_tbl, id, __r49_unchecked_cast(char **, VALUE *, &body))) {
 	Bug("%s %s already exists",
 	    TYPE(body)==T_CLASS?"class":"module", rb_id2name(id));
     }
@@ -87,9 +87,9 @@ rb_global_entry(id)
 {
     struct global_entry *entry;
 
-    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast(char **, struct global_entry **, &entry))) {
 	entry = ALLOC(struct global_entry);
-	st_insert(global_tbl, id, __r49_unchecked_cast2(char *, struct global_entry *, entry));
+	st_insert(global_tbl, id, __r49_unchecked_cast(char *, struct global_entry *, entry));
 	entry->id = id;
 	entry->mode = GLOBAL_UNDEF;
 	entry->v.var = Qnil;
@@ -116,7 +116,7 @@ rb_define_variable(name, var, get_hook, set_hook)
 	id = rb_intern(buf);
     }
 
-    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast(char **, struct global_entry **, &entry))) {
 	entry = rb_global_entry(id);
     }
     entry->mode = GLOBAL_VAR;
@@ -142,11 +142,11 @@ rb_define_varhook(name, get_hook, set_hook)
 	id = rb_intern(buf);
     }
 
-    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast(char **, struct global_entry **, &entry))) {
 	entry = ALLOC(struct global_entry);
 	entry->id = id;
 	entry->mode = GLOBAL_VAL;
-	st_insert(global_tbl, id, __r49_unchecked_cast2(char *, struct global_entry *, entry));
+	st_insert(global_tbl, id, __r49_unchecked_cast(char *, struct global_entry *, entry));
     }
     else if (entry->mode == GLOBAL_UNDEF) {
 	entry->mode = GLOBAL_VAL;
@@ -171,7 +171,7 @@ rb_id2class(id)
 {
     VALUE class;
 
-    if (st_lookup(class_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &class)))
+    if (st_lookup(class_tbl, id, __r49_unchecked_cast(char **, VALUE *, &class)))
 	return class;
     return Qnil;
 }
@@ -207,7 +207,7 @@ rb_ivar_get_1(obj, id)
 
     if (obj->iv_tbl == Qnil)
 	return Qnil;
-    if (st_lookup(obj->iv_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &val)))
+    if (st_lookup(obj->iv_tbl, id, __r49_unchecked_cast(char **, VALUE *, &val)))
 	return val;
     return Qnil;
 }
@@ -225,7 +225,7 @@ rb_mvar_get(id)
 {
     VALUE val;
 
-    if (st_lookup(class_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &val))) return val;
+    if (st_lookup(class_tbl, id, __r49_unchecked_cast(char **, VALUE *, &val))) return val;
     return Qnil;
 }
 
@@ -237,7 +237,7 @@ rb_const_get(id)
     VALUE value;
 
     while (class) {
-	if (class->c_tbl && st_lookup(class->c_tbl, id, __r49_unchecked_cast2(char **, VALUE *, &value))) {
+	if (class->c_tbl && st_lookup(class->c_tbl, id, __r49_unchecked_cast(char **, VALUE *, &value))) {
 	    return value;
 	}
 	class = class->super;
@@ -272,7 +272,7 @@ rb_gvar_set2(name, val)
     ID id;
 
     id = rb_intern(name);
-    if (!st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry))) {
+    if (!st_lookup(global_tbl, id, __r49_unchecked_cast(char **, struct global_entry **, &entry))) {
 	entry = rb_global_entry(id);
     }
     rb_gvar_set(entry, val);
@@ -388,7 +388,7 @@ Fdefined(obj, name)
 
     switch (id & ID_SCOPE_MASK) {
       case ID_GLOBAL:
-	if (st_lookup(global_tbl, id, __r49_unchecked_cast2(char **, struct global_entry **, &entry)) && entry->mode != GLOBAL_UNDEF)
+	if (st_lookup(global_tbl, id, __r49_unchecked_cast(char **, struct global_entry **, &entry)) && entry->mode != GLOBAL_UNDEF)
 	    return TRUE;
 	break;
 

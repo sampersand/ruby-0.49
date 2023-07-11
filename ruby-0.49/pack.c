@@ -269,7 +269,7 @@ Fpck_pack(ary, fmt)
 		else {
 		    s = NUM2INT(from);
 		}
-		str_cat(res, __r49_unchecked_cast2(char *, short *, &s), sizeof(short));
+		str_cat(res, __r49_cast(char *, short *, &s), sizeof(short));
 	    }
 	    break;
 
@@ -283,7 +283,7 @@ Fpck_pack(ary, fmt)
 		else {
 		    i = NUM2INT(from);
 		}
-		str_cat(res, __r49_unchecked_cast2(char *, int *, &i), sizeof(int));
+		str_cat(res, __r49_cast(char *, int *, &i), sizeof(int));
 	    }
 	    break;
 
@@ -297,7 +297,7 @@ Fpck_pack(ary, fmt)
 		else {
 		    l = NUM2INT(from);
 		}
-		str_cat(res, __r49_unchecked_cast2(char *, long *, &l), sizeof(long));
+		str_cat(res, __r49_cast(char *, long *, &l), sizeof(long));
 	    }
 	    break;
 
@@ -311,7 +311,7 @@ Fpck_pack(ary, fmt)
 		    s = NUM2INT(from);
 		}
 		s = htons(s);
-		str_cat(res, __r49_unchecked_cast2(char *, short *, &s), sizeof(short));
+		str_cat(res, __r49_cast(char *, short *, &s), sizeof(short));
 	    }
 	    break;
 
@@ -325,7 +325,7 @@ Fpck_pack(ary, fmt)
 		    l = NUM2INT(from);
 		}
 		l = htonl(l);
-		str_cat(res, __r49_unchecked_cast2(char *, long *, &l), sizeof(long));
+		str_cat(res, __r49_cast(char *, long *, &l), sizeof(long));
 	    }
 	    break;
 
@@ -345,7 +345,7 @@ Fpck_pack(ary, fmt)
 		    f = (float)NUM2INT(from);
 		    break;
 		}
-		str_cat(res, __r49_unchecked_cast2(char *, float *, &f), sizeof(float));
+		str_cat(res, __r49_cast(char *, float *, &f), sizeof(float));
 	    }
 	    break;
 
@@ -365,7 +365,7 @@ Fpck_pack(ary, fmt)
 		    d = (double)NUM2INT(from);
 		    break;
 		}
-		str_cat(res, __r49_unchecked_cast2(char *, double *, &d), sizeof(double));
+		str_cat(res, __r49_cast(char *, double *, &d), sizeof(double));
 	    }
 	    break;
 
@@ -379,7 +379,7 @@ Fpck_pack(ary, fmt)
 		    s = NUM2INT(from);
 		}
 		s = htovs(s);
-		str_cat(res, __r49_unchecked_cast2(char *, short *, &s), sizeof(short));
+		str_cat(res, __r49_cast(char *, short *, &s), sizeof(short));
 	    }
 	    break;
 
@@ -393,7 +393,7 @@ Fpck_pack(ary, fmt)
 		    l = NUM2INT(from);
 		}
 		l = htovl(l);
-		str_cat(res, __r49_unchecked_cast2(char *, long *, &l), sizeof(long));
+		str_cat(res, __r49_cast(char *, long *, &l), sizeof(long));
 	    }
 	    break;
 

@@ -42,7 +42,7 @@ search_method(class, id, origin)
     struct RMethod *body;
     NODE *list;
 
-    while (!st_lookup(class->m_tbl, id, __r49_unchecked_cast(char **, &body))) {
+    while (!st_lookup(class->m_tbl, id, __r49_cast(char **, struct RMethod **, &body))) {
 	class = class->super;
 	if (class == Qnil) return Qnil;
     }
@@ -101,17 +101,17 @@ rb_alias(class, name, def)
 {
     struct RMethod *body;
 
-    if (st_lookup(class->m_tbl, name, __r49_unchecked_cast(char **, &body))) {
+    if (st_lookup(class->m_tbl, name, __r49_unchecked_cast(char **, struct RMethod **, &body))) {
 	if (verbose) {
 	    Warning("redefine %s", rb_id2name(name));
 	}
 	unliteralize(__r49_cast_to_RBasic(RMethod, body));
     }
-    body = search_method(class, def, __r49_unchecked_cast(struct RClass **, &body));
+    body = search_method(class, def, __r49_unchecked_cast(struct RClass **, struct RMethod **, &body));
 #ifdef __r49_bugfix /* aliasing to an undefined value just silently passes when it shoudlnt */
     if (!body) Fail("undefined method %s for %s", rb_id2name(def), rb_class2name(class));
 #endif
-    st_insert(class->m_tbl, name, __r49_unchecked_cast(char *, body));
+    st_insert(class->m_tbl, name, __r49_unchecked_cast(char *, struct RMethod *, body));
 }
 
 void

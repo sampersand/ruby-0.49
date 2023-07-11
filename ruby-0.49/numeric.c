@@ -217,7 +217,7 @@ Fflo_plus(x, y)
       case T_FLOAT:
 	return float_new(x->value + y->value);
       case T_STRING:
-	return Fstr_plus(obj_as_string(x), __r49_cast_ptr(RString, RFloat, y));
+	return Fstr_plus(obj_as_string(x), __r49_cast(struct RString *, struct RFloat *, y));
       default:
 	return num_coerce_bin(x, y);
     }
@@ -251,7 +251,7 @@ Fflo_mul(x, y)
       case T_FLOAT:
 	return float_new(x->value * y->value);
       case T_STRING:
-	return Fstr_times(__r49_cast_ptr(RString, RFloat, y), INT2FIX((int)x->value));
+	return Fstr_times(__r49_cast(struct RString *, struct RFloat *, y), INT2FIX((int)x->value));
       default:
 	return num_coerce_bin(x, y);
     }
@@ -584,7 +584,7 @@ Ffix_plus(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_plus(__r49_unchecked_cast2(struct RBignum *, VALUE, big1), __r49_unchecked_cast2(struct RBignum *, VALUE, big2));
+		r = Fbig_plus(__r49_unchecked_cast(struct RBignum *, VALUE, big1), __r49_unchecked_cast(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;
@@ -617,7 +617,7 @@ Ffix_minus(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_minus(__r49_unchecked_cast2(struct RBignum *, VALUE, big1), __r49_unchecked_cast2(struct RBignum *, VALUE, big2));
+		r = Fbig_minus(__r49_unchecked_cast(struct RBignum *, VALUE, big1), __r49_unchecked_cast(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;
@@ -646,7 +646,7 @@ Ffix_mul(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_mul(__r49_unchecked_cast2(struct RBignum *, VALUE, big1), __r49_unchecked_cast2(struct RBignum *, VALUE, big2));
+		r = Fbig_mul(__r49_unchecked_cast(struct RBignum *, VALUE, big1), __r49_unchecked_cast(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;

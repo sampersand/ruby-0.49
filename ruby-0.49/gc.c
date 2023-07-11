@@ -419,7 +419,7 @@ freemethod(key, body)
     ID key;
     char *body;
 {
-    freenode(__r49_unchecked_cast(struct node *, body));
+    freenode(__r49_unchecked_cast(struct node *, char *, body));
     return ST_CONTINUE;
 }
 

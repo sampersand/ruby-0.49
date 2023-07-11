@@ -273,7 +273,7 @@ group_member(gid)
 	GETGROUPS_T gary[NGROUPS];
 	int anum;
 
-	anum = getgroups(NGROUPS, __r49_unchecked_cast(gid_t *, gary));
+	anum = getgroups(NGROUPS, __r49_unchecked_cast(gid_t *, GETGROUPS_T *, gary));
 	while (--anum >= 0)
 	    if (gary[anum] == gid)
 		return TRUE;

@@ -9,18 +9,25 @@
 #define __r49_declare_prototypes
 
 
-/**************************************************************************************************
- **                                                                                              **
- **                           Disabling unnecessary compiler warnings                            **
- **                                                                                              **
- **************************************************************************************************/
-
 #ifdef __clang__
 # define __r49_str(x) #x
 # define __R49_PRAGMA(...) _Pragma(__r49_str(__VA_ARGS__))
 #else
 # define __R49_PRAGMA(...) /* support for non-standard C compilers (if anyone even uses them...) */
-#endif /* defined(__clang__) */
+#endif /* __clang__ */
+
+#ifdef __STDC_VERSION__
+# define __R49_C_VERSION __STDC_VERSION__
+#else
+# define __R49_C_VERSION 0L
+#endif /* __STDC_VERSION__ */
+
+
+/**************************************************************************************************
+ **                                                                                              **
+ **                           Disabling unnecessary compiler warnings                            **
+ **                                                                                              **
+ **************************************************************************************************/
 
 #define __R49_WARNINGS_PUSH() __R49_PRAGMA(clang diagnostic push)
 #define __R49_WARNINGS_POP() __R49_PRAGMA(clang diagnostic pop)
@@ -59,7 +66,7 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_replacement(old, new) old
-#endif /* defined(__r49_required_change) */
+#endif /* __r49_required_change */
 
 /* Changes that are required to get Ruby 0.47 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
@@ -71,7 +78,7 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 #else
 # define __r49_64bit_q(...)
 # define __r49_64bit_replacement(old, new) old
-#endif /* defined(__r49_64bit) */
+#endif /* __r49_64bit */
 #define __r49_64bit_int_to_value __r49_64bit_replacement(int, VALUE)
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
@@ -84,7 +91,7 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 #else
 # define __r49_critical_bugfix_q(...)
 # define __r49_critical_bugfix_replacement(old, new) old
-#endif /* defined(__r49_critical_bugfix) */
+#endif /* __r49_critical_bugfix */
 
 /* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, 
  * even though it's references in a lot of places internally), but won't preclude normal operation.
@@ -94,20 +101,20 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define __r49_bugfix_replacement(old, new) new
 # ifndef __r49_no_recursion_limit /* ruby 0.49 segfaults if you recurse too deep; this fixes that */
 #  define __r49_recursion_limit 1000 /* semi-conservative estimate; 1027 is the max on my computer */
-# endif /* !defined(__r49_no_recursion_limit) */
+# endif /* !__r49_no_recursion_limit */
 #else
 # define __r49_bugfix_q(...)
 # define __r49_bugfix_replacement(old, new) old
-#endif /* defined(__r49_bugfix) */
+#endif /* __r49_bugfix */
 
 /* Define the noreturn attribute */
-#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 201112L
-# define __r49_noreturn void
-#elif __STDC_VERSION__ >= 202000L
+#if 202000L <= __R49_C_VERSION
 # define __r49_noreturn void [[noreturn]]
+#elif 201112L <= __R49_C_VERSION
+# define __r49_noreturn void _Noreturn
 #else
-# define __r49_noreturn _Noreturn void
-#endif /* defined(__STDC_VERSION__) */
+# define __r49_noreturn void
+#endif /* 20200L <= __R49_C_VERSION */
 
 /* All of this functionality should be available on every platform these days. */
 #ifndef __r49_dont_define_haves
@@ -120,19 +127,22 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define HAVE_MKDIR
 # define HAVE_STRDUP
 # define HAVE_RANDOM
-#endif /* !defined(__r49_dont_define_haves) */
+#endif /* !__r49_dont_define_haves */
 
 /* implicit definitions */
 #define __r49_implicit(what) __r49_required_change_q(what)
 #define __r49_implicit_arg(type, arg) __r49_required_change_q(__r49_implicit(type) arg;)
 #define __r49_void_return __r49_implicit(void)
 
+#if 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
+# define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
+#else
+# define __r49_cast(to, from, val) ((to) (val))
+#endif
+
 #define __r49_unchecked(new) new
-#define __r49_unchecked_cast(to, val) ((to) (val))
-#define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
-#define __r49_cast_ptr(to, from, val) (__r49_cast(struct to *, struct from *, val))
-#define __r49_unchecked_cast2(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
-#define __r49_cast_to_RBasic(from, ptr) (__r49_cast_ptr(RBasic, from, ptr))
+#define __r49_unchecked_cast(to, from, val) (__r49_unchecked(__r49_cast(to, from, val)))
+#define __r49_cast_to_RBasic(from, ptr) (__r49_cast(struct RBasic *, struct from *, ptr))
 
 
 #ifdef __r49_declare_prototypes
@@ -145,7 +155,7 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # include <fcntl.h>  /* fcntl */
 # undef vfork
 # define vfork fork /* original ruby uses vfork. */
-#endif /* defined(__r49_declare_prototypes) */
+#endif /* __r49_declare_prototypes */
 
 
 #if 0 /* these are the original funcitons, before i started doing `#include`s */
@@ -437,6 +447,6 @@ __r49_void_return mark_global_tbl(void);
 /* version.c */
 __r49_void_return Init_version(void);
 __r49_void_return show_version(void);
-#endif /* defined(__r49_declare_prototypes) */
+#endif /* __r49_declare_prototypes */
 
-#endif /* !defined(__R49_FIXES_H) */
+#endif /* !__R49_FIXES_H */

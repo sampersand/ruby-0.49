@@ -76,7 +76,7 @@ Fdic_aref(dic, key)
 {
     VALUE val = Qnil;
 
-    if (!st_lookup(dic->tbl, key, __r49_unchecked_cast2(char **, VALUE *, &val))) {
+    if (!st_lookup(dic->tbl, key, __r49_unchecked_cast(char **, VALUE *, &val))) {
 	return Qnil;
     }
     return val;
@@ -319,7 +319,7 @@ Fdic_has_key(dic, key)
 {
     VALUE val;
 
-    if (st_lookup(dic->tbl, key, __r49_unchecked_cast2(char **, VALUE *, &val)))
+    if (st_lookup(dic->tbl, key, __r49_unchecked_cast(char **, VALUE *, &val)))
 	return TRUE;
     return FALSE;
 }
