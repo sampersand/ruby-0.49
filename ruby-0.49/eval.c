@@ -617,11 +617,11 @@ rb_eval(node)
 	JUMP_TAG(TAG_RETRY);
 	break;
 
-#ifdef __r49_critical_bugfix /* provide support for `redo` */
+#ifdef __r49_bugfix /* provide support for `redo` */
       case NODE_REDO:
 	JUMP_TAG(TAG_REDO);
 	break;
-#endif
+#endif /* defined(__r49_bugfix) */
 
       case NODE_RETURN:
 	if (node->nd_stts) last_val = rb_eval(node->nd_stts);
@@ -1158,15 +1158,13 @@ rb_yield(val)
       retry:
       case 0:
 
-#ifdef __r49_critical_bugfix
-      	// if nothing is given in the body of a `do` block, it segfaults.
-	if (!block->body) {
-	    result = Qnil;
-	} else
-#endif
+      	/* __r49: if nothing is given in the body of a `do` block, it segfaults. */
+	__r49_critical_bugfix_q(if (!block->body) result = Qnil; else)
 	if (block->body->type == NODE_CFUNC) {
 	    the_env->flags |= DURING_ITERATE;
-	    result = (*block->body->nd_cfnc)(val, block->body->nd_argc);
+	    /* __r49: The replacement allows us to actually use iterators */
+	    result = (*block->body->nd_cfnc)(val, block->body->
+	    	__r49_critical_bugfix_replacement(nd_argc, nd_value));
 	}
 	else {
 	    result = rb_eval(block->body);
@@ -1378,7 +1376,8 @@ rb_undefined(obj, id)
 	desc = Fkrn_to_s(obj);
     }
     Fail("undefined method `%s' for \"%s\"(%s)",
-	 rb_id2name(__r49_critical_replacement(NUM2INT(id), id)),
+	 /* __r49: the `NUM2INT(id)` causes segfaults, but `id` doesn't. */
+	 rb_id2name(__r49_critical_bugfix_replacement(NUM2INT(id), id)),
 	 RSTRING(desc)->ptr,
 	 rb_class2name(CLASS_OF(obj)));
 }

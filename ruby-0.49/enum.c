@@ -12,6 +12,8 @@
 
 #include "ruby.h"
 
+#define __r49_unchecked_cast_to_iter(ptr) __r49_unchecked_cast(VALUE (*)(), ptr)
+
 VALUE M_Enumerable;
 static ID id_each, id_match, id_equal, id_cmp;
 
@@ -43,6 +45,7 @@ enum_grep2(i, pat)
 static VALUE
 Fenum_grep(obj, pat)
     VALUE obj;
+    __r49_implicit_arg(VALUE, pat)
 {
     if (iterator_p()) {
 	rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_grep2), pat);
@@ -97,6 +100,7 @@ Fenum_find(obj)
 static void
 enum_find_all(i, tmp)
     VALUE i;
+    __r49_implicit_arg(VALUE, tmp)
 {
     if (rb_yield(i)) {
 	Fary_push(tmp, i);
@@ -126,6 +130,7 @@ Fenum_find_all(obj)
 static void
 enum_collect(i, tmp)
     VALUE i;
+    __r49_implicit_arg(VALUE, tmp)
 {
     VALUE retval;
 
@@ -299,6 +304,7 @@ enum_index(item, iv)
 static VALUE
 Fenum_index(obj, val)
     VALUE obj;
+    __r49_implicit_arg(VALUE, val)
 {
     struct i_v_pair iv;
 
@@ -329,6 +335,7 @@ enum_includes(item, iv)
 static VALUE
 Fenum_includes(obj, val)
     VALUE obj;
+    __r49_implicit_arg(VALUE, val)
 {
     struct i_v_pair iv;
 

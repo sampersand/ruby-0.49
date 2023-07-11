@@ -14,6 +14,6 @@ def puts(*x)
   print("\n")
 end
 
-def evalf(fmt, *x)
+def func evalf(fmt, *x)
   eval(sprintf(fmt, *x))
 end

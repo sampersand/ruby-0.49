@@ -105,7 +105,7 @@ rb_alias(class, name, def)
 	if (verbose) {
 	    Warning("redefine %s", rb_id2name(name));
 	}
-	unliteralize(__r49_cast_to_RBasic(body));
+	unliteralize(__r49_cast_to_RBasic(RMethod, body));
     }
     body = search_method(class, def, __r49_unchecked_cast(struct RClass **, &body));
 #ifdef __r49_bugfix /* aliasing to an undefined value just silently passes when it shoudlnt */

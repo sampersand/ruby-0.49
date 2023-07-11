@@ -87,6 +87,7 @@ Fnum_downto(from, to)
 static VALUE
 Fnum_step(from, to, step)
     VALUE from, to;
+    __r49_implicit_arg(VALUE, step)
 {
     int i, end, diff;
 

@@ -57,10 +57,7 @@
 #define const
 #endif
 
-__r49_warnings_push()
-__r49_warnings_ignore("comment")
 /* #define	NO_ALLOCA	/* try it out for now */
-__r49_warnings_pop()
 #ifndef NO_ALLOCA
 /* Make alloca work the best possible way.  */
 #ifdef __GNUC__
@@ -968,7 +965,7 @@ re_compile_pattern (pattern, size, bufp)
                       c1++;
 		      while (c1--)    
 			PATUNFETCH;
-#if 1 /* The original was: */
+#if 1 /* The original was: */ /* __r49: NOTE: I didn't write the previous comment */
 		      SET_LIST_BIT ('[');
 		      SET_LIST_BIT (':');
 #else /* I think this is the right way.  */
@@ -1247,7 +1244,14 @@ re_compile_pattern (pattern, size, bufp)
                           preceding jump_n's n to upper_bound - 1.  */
                        BUFPUSH (set_number_at);
 		       GET_BUFFER_SPACE (2);
-		       __r49_warnings_ignore_q(__r49_unchecked("constant-conversion"), STORE_NUMBER_AND_INCR (b, -5));
+#ifdef __r49_bugfix
+		       /* In older C compilers this looks to have been legal. However, modern ones
+		        * handle it differently, so I had to edit it. I'm 85% sure it works now. */
+		       *b++ = -5;
+		       *b++ = -1;
+#else
+                       __r49_warnings_ignore_q("constant-conversion", STORE_NUMBER_AND_INCR (b, -5));
+#endif
                        STORE_NUMBER_AND_INCR (b, upper_bound - 1);
                      }
 		   /* When hit this when matching, set the succeed_n's n.  */
@@ -1833,7 +1837,9 @@ re_compile_fastmap (bufp)
 
 	    p += p[-1] + 2;
 	    size = EXTRACT_UNSIGNED (&p[-2]);
-	    __r49_warnings_ignore_q(__r49_unchecked("constant-conversion"), c = 0x8000);
+	    /* In 0.69 this was corrected to use 0x80; assigning 0x8000 to an unsigned char wraps it
+	     * to 0x00. I presume this was a bug that wasn't caught until later. */
+	    __r49_warnings_ignore_q("constant-conversion", c = __r49_bugfix_replacement(0x8000, 0x80));
 	    for (j = 0; j < size; j++) {
 	      for (beg = (unsigned char) p[j*4 + 0]; c < beg; c++)
 		if (ismbchar (c))

@@ -93,6 +93,7 @@ static __r49_implicit(enum st_retval) wait_each(key, value)
 
 static VALUE
 Fwait(obj)
+    __r49_implicit_arg(VALUE, obj) /* __r49: note: `obj` isnt even used */
 {
     int pid, state;
 
@@ -206,8 +207,8 @@ void
 rb_syswait(pid)
     int pid;
 {
-    __r49_unchecked(__r49_warnings_push())
-    __r49_unchecked(__r49_warnings_ignore("incompatible-function-pointer-types"))
+    __r49_unchecked(__R49_WARNINGS_PUSH())
+    __r49_unchecked(__R49_WARNINGS_IGNORE("incompatible-function-pointer-types"))
 
     RETSIGTYPE (*hfunc)(), (*ifunc)(), (*qfunc)();
 
@@ -221,7 +222,7 @@ rb_syswait(pid)
     signal(SIGINT, ifunc);
     signal(SIGQUIT, qfunc);
 
-    __r49_unchecked(__r49_warnings_pop())
+    __r49_unchecked(__R49_WARNINGS_POP())
 }
 
 static VALUE
@@ -510,7 +511,7 @@ sighandle(sig)
     rb_trap_eval(trap_list[sig]);
 #endif
 
-    __r49_unchecked(return 0;)
+    __r49_required_change_q(return 0;)
 }
 
 void
@@ -554,7 +555,7 @@ read(fd, buf, nbytes)
 
 #ifdef SYS_wait
 int
-wait(status)
+wait(status) // __r49: todo 
     union wait *status;
 {
     int res;

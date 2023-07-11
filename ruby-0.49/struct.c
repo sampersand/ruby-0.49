@@ -245,8 +245,9 @@ static VALUE
 Fstruct_clone(s)
     struct RStruct *s;
 {
-    /* __r49: it's missing an argument, but i havent checked to see if `s` is correct */
-    struct RStruct *st = (struct RStruct*)struct_alloc(__r49_unchecked(s), s->name);
+    /* __r49: This function wasn't fixed before it was completely rewritten, so I can't verify
+     * my assumptions. However, it makes sense to use `s` as the clone source. */
+    struct RStruct *st = (struct RStruct*)struct_alloc(__r49_required_change_q(s,) s->name);
 
     CLONESETUP(st, s);
     st->len = s->len;

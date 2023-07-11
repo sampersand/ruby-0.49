@@ -1,6 +1,5 @@
 load('utils.rb')
 
-
 class value
   def value.@forward(*meths)
     for meth in meths

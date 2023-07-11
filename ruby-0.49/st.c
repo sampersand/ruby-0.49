@@ -1,6 +1,6 @@
 /* This is a general purpose hash table package written by Peter Moore @ UCB. */
 #include "__r49_fixes.h"
-__r49_unchecked(__r49_warnings_ignore("pointer-to-int-cast"))
+__r49_unchecked(__R49_WARNINGS_IGNORE("pointer-to-int-cast"))
 #ifdef __r49_TODO
 # define __r49_validated(x) x
 # define __r49_implicit_int int

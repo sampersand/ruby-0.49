@@ -433,6 +433,7 @@ dln_load_text_data(fd, hdrp, bss, disp)
 static int
 undef_print(key, value, arg)
     char *key;
+    /* __r47: `value`, `arg` dont have types defined, but arent used */
 {
     fprintf(stderr, "  %s\n", key);
     return ST_CONTINUE;

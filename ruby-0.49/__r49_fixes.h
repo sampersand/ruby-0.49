@@ -1,14 +1,44 @@
 #ifndef __R49_FIXES_H
 #define __R49_FIXES_H
 
-#define __r49
-
 #define __r49_TODO
 #define __r49_64bit
 #define __r49_required_change
 #define __r49_critical_bugfix
 #define __r49_bugfix
 #define __r49_declare_prototypes
+
+
+/**************************************************************************************************
+ **                                                                                              **
+ **                           Disabling unnecessary compiler warnings                            **
+ **                                                                                              **
+ **************************************************************************************************/
+
+#ifdef __clang__
+# define __r49_str(x) #x
+# define __R49_PRAGMA(...) _Pragma(__r49_str(__VA_ARGS__))
+#else
+# define __R49_PRAGMA(...) /* support for non-standard C compilers (if anyone even uses them...) */
+#endif /* defined(__clang__) */
+
+#define __R49_WARNINGS_PUSH() __R49_PRAGMA(clang diagnostic push)
+#define __R49_WARNINGS_POP() __R49_PRAGMA(clang diagnostic pop)
+#define __R49_WARNINGS_IGNORE(warning) __R49_PRAGMA(clang diagnostic ignored "-W" warning)
+#define __r49_warnings_ignore_q(warning, ...) \
+	__R49_WARNINGS_PUSH() \
+	__R49_WARNINGS_IGNORE(warning) \
+	__VA_ARGS__ \
+	__R49_WARNINGS_POP()
+
+/* Never going to fix these, they retain the essence of the wild west of early Ruby */
+__R49_WARNINGS_IGNORE("parentheses") /* there's a lot of `if (foo = bar)` in the source code */
+__R49_WARNINGS_IGNORE("non-literal-null-conversion") /* Qnil is used instead of NULL/0 a lot. */
+__R49_WARNINGS_IGNORE("int-conversion") /* There's a lot of int conversion thrown around */
+__R49_WARNINGS_IGNORE("unused-value") /* there's a few places with unused values */
+__R49_WARNINGS_IGNORE("empty-body") /* there's a single one of these, in `sprintf.c`. */
+__R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`. */
+
 
 /**************************************************************************************************
  **                                                                                              **
@@ -29,7 +59,7 @@
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_replacement(old, new) old
-#endif
+#endif /* defined(__r49_required_change) */
 
 /* Changes that are required to get Ruby 0.47 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
@@ -41,7 +71,7 @@
 #else
 # define __r49_64bit_q(...)
 # define __r49_64bit_replacement(old, new) old
-#endif
+#endif /* defined(__r49_64bit) */
 #define __r49_64bit_int_to_value __r49_64bit_replacement(int, VALUE)
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
@@ -50,11 +80,11 @@
  */
 #ifdef __r49_critical_bugfix
 # define __r49_critical_bugfix_q(...) __VA_ARGS__
-# define __r49_critical_replacement(old, new) new
+# define __r49_critical_bugfix_replacement(old, new) new
 #else
 # define __r49_critical_bugfix_q(...)
-# define __r49_critical_replacement(old, new) old
-#endif
+# define __r49_critical_bugfix_replacement(old, new) old
+#endif /* defined(__r49_critical_bugfix) */
 
 /* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, 
  * even though it's references in a lot of places internally), but won't preclude normal operation.
@@ -64,11 +94,11 @@
 # define __r49_bugfix_replacement(old, new) new
 # ifndef __r49_no_recursion_limit /* ruby 0.49 segfaults if you recurse too deep; this fixes that */
 #  define __r49_recursion_limit 1000 /* semi-conservative estimate; 1027 is the max on my computer */
-# endif
+# endif /* !defined(__r49_no_recursion_limit) */
 #else
 # define __r49_bugfix_q(...)
 # define __r49_bugfix_replacement(old, new) old
-#endif
+#endif /* defined(__r49_bugfix) */
 
 /* Define the noreturn attribute */
 #if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 201112L
@@ -77,7 +107,7 @@
 # define __r49_noreturn void [[noreturn]]
 #else
 # define __r49_noreturn _Noreturn void
-#endif
+#endif /* defined(__STDC_VERSION__) */
 
 /* All of this functionality should be available on every platform these days. */
 #ifndef __r49_dont_define_haves
@@ -90,7 +120,7 @@
 # define HAVE_MKDIR
 # define HAVE_STRDUP
 # define HAVE_RANDOM
-#endif
+#endif /* !defined(__r49_dont_define_haves) */
 
 /* implicit definitions */
 #define __r49_implicit(what) __r49_required_change_q(what)
@@ -98,12 +128,11 @@
 #define __r49_void_return __r49_implicit(void)
 
 #define __r49_unchecked(new) new
-#define __r49_cast_to_RBasic(ptr) ((struct RBasic *) (ptr))
 #define __r49_unchecked_cast(to, val) ((to) (val))
 #define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #define __r49_cast_ptr(to, from, val) (__r49_cast(struct to *, struct from *, val))
 #define __r49_unchecked_cast2(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
-#define __r49_unchecked_cast_to_iter(ptr) __r49_unchecked_cast(VALUE (*)(), ptr)
+#define __r49_cast_to_RBasic(from, ptr) (__r49_cast_ptr(RBasic, from, ptr))
 
 
 #ifdef __r49_declare_prototypes
@@ -116,7 +145,7 @@
 # include <fcntl.h>  /* fcntl */
 # undef vfork
 # define vfork fork /* original ruby uses vfork. */
-#endif
+#endif /* defined(__r49_declare_prototypes) */
 
 
 #if 0 /* these are the original funcitons, before i started doing `#include`s */
@@ -183,38 +212,13 @@ int eaccess(char *path, int mode);
 #endif
 
 
-
-/**************************************************************************************************
- **                                                                                              **
- **                           Disabling unnecessary compiler warnings                            **
- **                                                                                              **
- **************************************************************************************************/
-
-#define __r49_str(x) #x
-#define __r49_warnings_push() _Pragma("clang diagnostic push")
-#define __r49_warnings_pop() _Pragma("clang diagnostic pop")
-#define __r49_warnings_ignore(warning) _Pragma(__r49_str(clang diagnostic ignored "-W" warning))
-#define __r49_warnings_ignore_q(warning, ...) \
-	__r49_warnings_push() \
-	__r49_warnings_ignore(warning) \
-	__VA_ARGS__ \
-	__r49_warnings_pop()
-
-/* Never going to fix these, they retain the essence of the wild west of early Ruby */
-__r49_warnings_ignore("parentheses");
-__r49_warnings_ignore("non-literal-null-conversion");
-__r49_warnings_ignore("int-conversion");
-__r49_warnings_ignore("unused-value");
-__r49_warnings_ignore("empty-body");
-
-
 /**************************************************************************************************
  **                                                                                              **
  **                             Prototype declarations and typedefs                              **
  **                                                                                              **
  **************************************************************************************************/
 
-
+#ifdef __r49_declare_prototypes
 struct RBasic;
 struct RClass;
 struct RString;
@@ -232,6 +236,7 @@ enum mth_scope;
 
 typedef __r49_64bit_replacement(unsigned int, uintptr_t) VALUE;
 typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
+#endif /* __r49_declare_prototypes */
 
 /**************************************************************************************************
  **                                                                                              **
@@ -239,6 +244,7 @@ typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
  **                                                                                              **
  **************************************************************************************************/
 
+#ifdef __r49_declare_prototypes
 /* array.c */
 __r49_void_return Init_Array(void);
 VALUE Fary_push(struct RArray *ary, VALUE item);
@@ -431,5 +437,6 @@ __r49_void_return mark_global_tbl(void);
 /* version.c */
 __r49_void_return Init_version(void);
 __r49_void_return show_version(void);
+#endif /* defined(__r49_declare_prototypes) */
 
-#endif
+#endif /* !defined(__R49_FIXES_H) */

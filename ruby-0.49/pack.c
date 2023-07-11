@@ -20,8 +20,8 @@
 			+(((x)&0x0000FF00)<<8)	\
 			+(((x)&0x00FF0000)>>8)	)
 
-__r49_unchecked(__r49_warnings_push())
-__r49_unchecked(__r49_warnings_ignore("macro-redefined"))
+__r49_unchecked(__R49_WARNINGS_PUSH())
+__r49_unchecked(__R49_WARNINGS_IGNORE("macro-redefined"))
 
 #ifdef WORDS_BIGENDIAN
 #define ntohs(x) (x)
@@ -43,7 +43,7 @@ __r49_unchecked(__r49_warnings_ignore("macro-redefined"))
 #define vtohl(x) (x)
 #endif
 
-__r49_unchecked(__r49_warnings_pop())
+__r49_unchecked(__R49_WARNINGS_POP())
 
 extern VALUE C_String, C_Array;
 double atof();

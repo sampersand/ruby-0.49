@@ -138,12 +138,12 @@ Fgc_set_threshold(obj, val)
 #include <sys/types.h>
 #include <sys/times.h>
 
-static __r49_implicit(int) Fgc_begin()
+static __r49_implicit(VALUE) Fgc_begin()
 {
     return Qnil;
 }
 
-static __r49_implicit(int) Fgc_end()
+static __r49_implicit(VALUE) Fgc_end()
 {
     return Qnil;
 }
@@ -343,12 +343,12 @@ void mark(obj)
 	mark(obj->class);
 	break;
       case T_ICLASS:
-	mark(__r49_cast_to_RBasic(RCLASS(obj)->super));
+	mark(__r49_cast_to_RBasic(RClass, RCLASS(obj)->super));
 	if (RCLASS(obj)->c_tbl) mark_tbl(RCLASS(obj)->c_tbl);
 	mark_tbl(RCLASS(obj)->m_tbl);
 	break;
       case T_CLASS:
-	mark(__r49_cast_to_RBasic(RCLASS(obj)->super));
+	mark(__r49_cast_to_RBasic(RClass, RCLASS(obj)->super));
       case T_MODULE:
 	if (RCLASS(obj)->c_tbl) mark_tbl(RCLASS(obj)->c_tbl);
 	mark_tbl(RCLASS(obj)->m_tbl);
@@ -367,7 +367,7 @@ void mark(obj)
 	mark_dict(RDICT(obj)->tbl);
 	break;
       case T_STRING:
-	if (RSTRING(obj)->orig) mark(__r49_cast_to_RBasic(RSTRING(obj)->orig));
+	if (RSTRING(obj)->orig) mark(__r49_cast_to_RBasic(RString, RSTRING(obj)->orig));
 	break;
       case T_DATA:
 	if (RDATA(obj)->dmark) (*RDATA(obj)->dmark)(DATA_PTR(obj));

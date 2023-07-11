@@ -687,6 +687,7 @@ Fsock_recv(sock, len, flags)
     return result;
 }
 
+__r49_void_return
 Init_Socket ()
 {
     C_BasicSocket = rb_define_class("BasicSocket", C_IO);
