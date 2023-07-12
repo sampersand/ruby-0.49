@@ -1,12 +1,16 @@
-# ruby-0.49
+# Ruby v0.49
 
-Ruby 0.49 is the oldest known version of Ruby. The problem is that it was written exclusively for 32 bit computers.
+Ruby 0.49 is the [oldest extant version](https://git.ruby-lang.org/ruby.git/refs/tags) of Ruby. While it's fascinating to see where Ruby came from, actually running Ruby 0.49 is difficult nowadays: It was written exclusively for 32 bit computers, was compiled in an (even for the time) old version of C, and has multiple bugs that can lead to segmentation faults.
 
 Until now.
 
-After spending copious amounts of time fiddling with it to ensure things are working, you can now compile this locally!
+After spending copious amounts of time fiddling with it, you can now install, compile, and play with Ruby 0.49 locally on your computer!
+
+## Notes
+The contents of the ruby repo 
 
 ## Compiling
+Clone this repo on your computer
 Clone this on your computer, then run `./configure`. The old configure file doesn't account for most modern systems, so you have to change a single thing in the makefile:
 
 Convert `DBM = -fpcc-struct-return` to `DBM = `. 
