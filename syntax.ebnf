@@ -2,21 +2,22 @@ program := compexpr ;
 compexpr := exprs [endline] ;
 exprs := [[exprs endline] expr] ;
 expr
-  := 'class' IDENTIFIER superclass compexpr 'end' ['class']
-    | 'module' IDENTIFIER compexpr 'end' ['module']
-    | 'def' ['func'] fname f_arglist compexpr 'end' ['def']
-    | 'def' singleton '.' fname f_arglist compexpr 'end' ['def']
-    | 'undef' fname
-    | 'def' fname fname
-    | 'include' inc_list
-    | mlhs '=' args
-    | expr2
-mlhs := mlhs_head [mlhs_tail] ;
+ := 'class' IDENTIFIER superclass compexpr 'end' ['class']
+  | 'module' IDENTIFIER compexpr 'end' ['module']
+  | 'def' ['func'] fname f_arglist compexpr 'end' ['def']
+  | 'def' singleton '.' fname f_arglist compexpr 'end' ['def']
+  | 'undef' fname
+  | 'def' fname fname
+  | 'include' inc_list
+  | mlhs_head [mlhs_tail] '=' args
+  | expr2
+  ;
 
 mlhs_head
-    := variable ','
-    | primary '[' args ']' ','
-    | primary '.' IDENTIFIER ',' ;
+ := variable ','
+  | primary '[' args ']' ','
+  | primary '.' IDENTIFIER ','
+  ;
 
 mlhs_tail := [mlhs_tail ','] lhs ;
 lhs := variable | primary '[' args ']' | primary '.' IDENTIFIER ;
@@ -25,12 +26,14 @@ inc_list := [inc_list ','] IDENTIFIER ;
 fname := fname0 | IVAR ;
 fname0 := IDENTIFIER ['='] | op ;
 
-op := '::' | '..'
-    | '<=>' | '==' | '!=' | '=~' | '!~' | '>' | '>=' | '<' | '<='
-    | '<<' | '>>' | '|' | '^' | '&'
-    | '+' | '-' | '*' | '/' | '%' | '**'
-    | '!' | '~' | '!@' | '~@' | '-@' | '+@'
-    | '[]' | '[]=' ;
+op
+ := '::' | '..'
+  | '<=>' | '==' | '!=' | '=~' | '!~' | '>' | '>=' | '<' | '<='
+  | '<<' | '>>' | '|' | '^' | '&'
+  | '+' | '-' | '*' | '/' | '%' | '**'
+  | '!' | '~' | '!@' | '~@' | '-@' | '+@'
+  | '[]' | '[]='
+  ;
 
 f_arglist := '(' f_args ')' | endline ;
 f_args := | f_arg [',' rest_arg] | rest_arg ;
@@ -46,7 +49,7 @@ expr2
   | 'until' expr2 endline compexpr 'end' ['until']
   | 'for' lhs 'in' expr2 endline compexpr 'end' ['for']
   | 'do' expr2 opt_using compexpr 'end' ['do']
-  | 'protect' compexpr resque ensure 'end' ['protect']
+  | 'protect' compexpr ['resque' compexpr] ['ensure' compexpr] 'end' ['protect']
   | 'redo' | 'break' | 'continue' | 'retry'
   | 'return' [expr2]
   | variable ('=' | SELF_ASGN) expr2
@@ -57,9 +60,10 @@ expr2
           | '<=>' | '<' | '<=' | '>' | '>=' | '==' | '!=' | '=~' | '!~' | '<<' | '>>'
           | '::' | '&&' | '||') expr2
   | ['+' | '-' | '!' | '~'] expr2
-  | primary ;
+  | primary
+  ;
 
-then := endline | 'then' | endline 'then' ;
+then := endline | [endline] 'then' ;
 
 if_tail : opt_else | 'elsif' expr2 then compexpr if_tail ;
 opt_else := ['else' compexpr] ;
@@ -68,10 +72,7 @@ opt_using := [[endline] 'using' lhs] endline ;
 
 cases := opt_else | 'when' args endline compexpr cases ;
 
-resque := ['resque' compexpr] ;
-ensure := ['ensure' compexpr] ;
 call_args := [args | '*' exprs | args ',' '*' exprs];
-opt_args := [args] ;
 args := [args ','] expr2 ;
 
 primary
@@ -80,14 +81,15 @@ primary
   | STRING
   | primary '[' args ']'
   | literal
-  | '[' opt_args ']'
-  | '{' assoc_list '}'
+  | '[' [args] ']'
+  | '{' [assocs] '}'
   | primary '.' IDENTIFIER '(' call_args ')'
   | primary '.' IDENTIFIER
   | IDENTIFIER '(' call_args ')'
   | IVAR '(' call_args ')'
   | 'super' '(' call_args ')'
   | 'super'
+  ;
 
 literal := numeric | '\\' symbol | '/' REGEXP ;
 
@@ -95,7 +97,6 @@ symbol := fname0 | IVAR | GVAR | CONSTANT ;
 numeric := INTEGER | FLOAT ;
 variable := IDENTIFIER | IVAR | GVAR | CONSTANT | 'nil' | 'self' ;
 
-assoc_list := [assocs] ;
 assocs := [assocs ','] assoc ;
 assoc := expr2 '=>' expr2 ;
 endline := ';' | '\n' ;

@@ -46,17 +46,15 @@ __R49_WARNINGS_IGNORE("unused-value") /* there's a few places with unused values
 __R49_WARNINGS_IGNORE("empty-body") /* there's a single one of these, in `sprintf.c`. */
 __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`. */
 
-
 /**************************************************************************************************
  **                                                                                              **
  **                             Sourcecode change macro definitions                              **
  **                                                                                              **
  **************************************************************************************************/
 
-/* Changes that are required to even compile it. In ruby 0.47, things like missing parameters or
+/* Changes that are required to even compile it. In ruby 0.49, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
- * compiler from accepting the code.
- */
+ * compiler from accepting the code. */
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_replacement(old, new) new
@@ -68,10 +66,9 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define __r49_required_replacement(old, new) old
 #endif /* __r49_required_change */
 
-/* Changes that are required to get Ruby 0.47 to compile on 64 bit architectures. This is mostly
+/* Changes that are required to get Ruby 0.49 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
- * it'll only compile on 32 bit machines.
- */
+ * it'll only compile on 32 bit machines. */
 #ifdef __r49_64bit
 # define __r49_64bit_q(...) __VA_ARGS__
 # define __r49_64bit_replacement(old, new) new
@@ -83,8 +80,7 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
  * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
- * consider the intended value.
- */
+ * consider the intended value. */
 #ifdef __r49_critical_bugfix
 # define __r49_critical_bugfix_q(...) __VA_ARGS__
 # define __r49_critical_bugfix_replacement(old, new) new
@@ -93,9 +89,8 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define __r49_critical_bugfix_replacement(old, new) old
 #endif /* __r49_critical_bugfix */
 
-/* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, 
- * even though it's references in a lot of places internally), but won't preclude normal operation.
- */
+/* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, even though
+ * it's references in a lot of places internally), but won't preclude normal operation. */
 #ifdef __r49_bugfix
 # define __r49_bugfix_q(...) __VA_ARGS__
 # define __r49_bugfix_replacement(old, new) new
@@ -107,7 +102,13 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define __r49_bugfix_replacement(old, new) old
 #endif /* __r49_bugfix */
 
-/* Define the noreturn attribute */
+/**************************************************************************************************
+ **                                                                                              **
+ **                                  Miscellaneous definitions                                   **
+ **                                                                                              **
+ **************************************************************************************************/
+
+/* Define the `__r49_noreturn` attribute */
 #if 202000L <= __R49_C_VERSION
 # define __r49_noreturn void [[noreturn]]
 #elif 201112L <= __R49_C_VERSION
@@ -129,17 +130,17 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define HAVE_RANDOM
 #endif /* !__r49_dont_define_haves */
 
-/* implicit definitions */
-#define __r49_implicit(what) __r49_required_change_q(what)
-#define __r49_implicit_arg(type, arg) __r49_required_change_q(__r49_implicit(type) arg;)
-#define __r49_void_return __r49_implicit(void)
-
 #if 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
 # define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #else
 # define __r49_cast(to, from, val) ((to) (val))
 #endif
 
+
+/* implicit definitions */
+#define __r49_implicit(what) __r49_required_change_q(what)
+#define __r49_implicit_arg(type, arg) __r49_implicit(type arg;)
+#define __r49_void_return __r49_implicit(void)
 #define __r49_unchecked(new) new
 #define __r49_unchecked_cast(to, from, val) (__r49_unchecked(__r49_cast(to, from, val)))
 #define __r49_cast_to_RBasic(from, ptr) (__r49_cast(struct RBasic *, struct from *, ptr))

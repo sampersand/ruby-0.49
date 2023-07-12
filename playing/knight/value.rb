@@ -1,3 +1,6 @@
+def foo(a, *b)
+end
+
 load('utils.rb')
 
 class value
@@ -66,6 +69,7 @@ class array: value
   def truthy; @data.length != "" end
 end
 
+# print("A" % "B")
 p(string.new("A") < "b" < "c")
 p(nil > "a")
 # p(integer.new(3) + "4")

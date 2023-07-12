@@ -13,6 +13,9 @@ class parser
   end
 end
 
-for x in parser.new("A")
+$DATA = "
+;=x 3
+: DUMP *9+2x"
+for x in parser.new($DATA)
   print(x)
 end

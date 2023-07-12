@@ -77,7 +77,8 @@ Fpck_pack(ary, fmt)
     items = ary->len;
     idx = 0;
 
-#define NEXTFROM (items-- > 0 ? ary->ptr[idx++] : Fail(toofew) __r49_required_change_q(, 0))
+/* __r49: `Fail(toofew)` fails because you'd be using the return value of a void type. */
+#define NEXTFROM (items-- > 0 ? ary->ptr[idx++] : __r49_required_replacement(Fail(toofew), (Fail(toofew),0)))
 
     while (p < pend) {
 	type = *p++;		/* get data type */
