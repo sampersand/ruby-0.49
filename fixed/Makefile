@@ -8,7 +8,7 @@ VPATH = .
 
 CC = gcc
 # __r49: removed this
-DBM = #-fpcc-struct-return
+# DBM = #-fpcc-struct-return
 YACC = bison -y
 INSTALL = /usr/bin/install -c
 INSTALL_PROGRAM = $(INSTALL)

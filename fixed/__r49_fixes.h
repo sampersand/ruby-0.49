@@ -1,26 +1,27 @@
 #ifndef __R49_FIXES_H
 #define __R49_FIXES_H
 
+#define __r49_dev /* define if you're working _on_ r49 */
+
 #define __r49_TODO
+
 #define __r49_64bit
 #define __r49_required_change
 #define __r49_critical_bugfix
 #define __r49_bugfix
-#define __r49_declare_prototypes
-
 
 #ifdef __clang__
 # define __r49_str(x) #x
 # define __R49_PRAGMA(...) _Pragma(__r49_str(__VA_ARGS__))
 #else
-# define __R49_PRAGMA(...) /* support for non-standard C compilers (if anyone even uses them...) */
-#endif /* __clang__ */
+# define __R49_PRAGMA(...) /* todo: support gcc and friends? */
+#endif
 
 #ifdef __STDC_VERSION__
 # define __R49_C_VERSION __STDC_VERSION__
 #else
-# define __R49_C_VERSION 0L
-#endif /* __STDC_VERSION__ */
+# define __R49_C_VERSION 0L  /* support for non-standard C compilers (if anyone even uses them...) */
+#endif
 
 
 /**************************************************************************************************
@@ -29,12 +30,17 @@
  **                                                                                              **
  **************************************************************************************************/
 
+#ifdef __r49_dev
+# define __R49_WARNINGS_ERROR(diag) __R49_PRAGMA(clang diagnostic error "-W" diag)
+#else
+# define __R49_WARNINGS_ERROR(diag) __R49_PRAGMA(clang diagnostic ignored "-W" diag)
+#endif
 #define __R49_WARNINGS_PUSH() __R49_PRAGMA(clang diagnostic push)
 #define __R49_WARNINGS_POP() __R49_PRAGMA(clang diagnostic pop)
-#define __R49_WARNINGS_IGNORE(warning) __R49_PRAGMA(clang diagnostic ignored "-W" warning)
-#define __r49_warnings_ignore_q(warning, ...) \
+#define __R49_WARNINGS_IGNORE(diag) __R49_PRAGMA(clang diagnostic ignored "-W" diag)
+#define __r49_warnings_ignore_q(diag, ...) \
 	__R49_WARNINGS_PUSH() \
-	__R49_WARNINGS_IGNORE(warning) \
+	__R49_WARNINGS_IGNORE(diag) \
 	__VA_ARGS__ \
 	__R49_WARNINGS_POP()
 
@@ -55,52 +61,74 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 /* Changes that are required to even compile it. In ruby 0.49, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
  * compiler from accepting the code. */
+#if defined(__r49_required_change) && __r49_required_change == 0
+# undef __r49_required_change /* You can disable things via `-D__r49_64bit=0` */
+#else
+# define __r49_required_change
+#endif
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_replacement(old, new) new
  /* These shouldn't still exist in the codebase, but can exist without the requirements */
-# pragma clang diagnostic error "-Wint-to-pointer-cast"
-# pragma clang diagnostic error "-Wpointer-to-int-cast"
+__R49_WARNINGS_ERROR("int-to-pointer-cast")
+__R49_WARNINGS_ERROR("pointer-to-int-cast")
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_replacement(old, new) old
-#endif /* __r49_required_change */
+#endif
 
 /* Changes that are required to get Ruby 0.49 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
  * it'll only compile on 32 bit machines. */
+#if defined(__r49_64bit) && __r49_64bit == 0
+# undef __r49_64bit
+#else
+# define __r49_64bit
+#endif
 #ifdef __r49_64bit
 # define __r49_64bit_q(...) __VA_ARGS__
 # define __r49_64bit_replacement(old, new) new
 #else
 # define __r49_64bit_q(...)
 # define __r49_64bit_replacement(old, new) old
-#endif /* __r49_64bit */
+#endif
 #define __r49_64bit_int_to_value __r49_64bit_replacement(int, VALUE)
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
  * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
  * consider the intended value. */
+#if defined(__r49_critical_bugfix) && __r49_critical_bugfix == 0
+# undef __r49_critical_bugfix
+#else
+# define __r49_critical_bugfix
+#endif
 #ifdef __r49_critical_bugfix
 # define __r49_critical_bugfix_q(...) __VA_ARGS__
 # define __r49_critical_bugfix_replacement(old, new) new
 #else
 # define __r49_critical_bugfix_q(...)
 # define __r49_critical_bugfix_replacement(old, new) old
-#endif /* __r49_critical_bugfix */
+#endif
 
 /* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, even though
  * it's references in a lot of places internally), but won't preclude normal operation. */
+#if defined(__r49_bugfix) && __r49_bugfix == 0
+# undef __r49_bugfix
+#else
+# define __r49_bugfix
+#endif
 #ifdef __r49_bugfix
 # define __r49_bugfix_q(...) __VA_ARGS__
 # define __r49_bugfix_replacement(old, new) new
-# ifndef __r49_no_recursion_limit /* ruby 0.49 segfaults if you recurse too deep; this fixes that */
+# ifndef __r49_recursion_limit  /* ruby 0.49 segfaults if you recurse too deep; this fixes that */
 #  define __r49_recursion_limit 1000 /* semi-conservative estimate; 1027 is the max on my computer */
-# endif /* !__r49_no_recursion_limit */
+# elif __r49_recursion_limit == 0
+#  undef __r49_recursion_limit /* undefine it if we dont want it */
+# endif
 #else
 # define __r49_bugfix_q(...)
 # define __r49_bugfix_replacement(old, new) old
-#endif /* __r49_bugfix */
+#endif
 
 /**************************************************************************************************
  **                                                                                              **
@@ -115,10 +143,10 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define __r49_noreturn void _Noreturn
 #else
 # define __r49_noreturn void
-#endif /* 20200L <= __R49_C_VERSION */
+#endif
 
 /* All of this functionality should be available on every platform these days. */
-#ifndef __r49_dont_define_haves
+#ifndef __r49_no_define_haves
 # define HAVE_MEMMOVE
 # define HAVE_STRERROR
 # define HAVE_STRTOUL
@@ -128,7 +156,7 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define HAVE_MKDIR
 # define HAVE_STRDUP
 # define HAVE_RANDOM
-#endif /* !__r49_dont_define_haves */
+#endif
 
 #if 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
 # define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
@@ -136,18 +164,24 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # define __r49_cast(to, from, val) ((to) (val))
 #endif
 
-
-/* implicit definitions */
 #define __r49_implicit(what) __r49_required_change_q(what)
 #define __r49_implicit_arg(type, arg) __r49_implicit(type arg;)
 #define __r49_void_return __r49_implicit(void)
-#define __r49_unchecked(new) new
+#define __r49_unchecked(new) new /* Stuff I have to check */
 #define __r49_unchecked_cast(to, from, val) (__r49_unchecked(__r49_cast(to, from, val)))
 #define __r49_cast_to_RBasic(from, ptr) (__r49_cast(struct RBasic *, struct from *, ptr))
 
 
-#ifdef __r49_declare_prototypes
-# include <stdlib.h> /* HAVE_RANDOM: initstate, random, setstate, srandom */
+
+
+/**************************************************************************************************
+ **                                                                                              **
+ **                              Stdlib `#include`s / Declarations                               **
+ **                                                                                              **
+ **************************************************************************************************/
+
+#ifndef __r49_no_use_includes
+# include <stdlib.h> /* defined(HAVE_RANDOM) && initstate, random, setstate, srandom */
 # include <stdio.h>
 # include <time.h> /* time */
 # include <string.h>
@@ -156,72 +190,63 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 # include <fcntl.h>  /* fcntl */
 # undef vfork
 # define vfork fork /* original ruby uses vfork. */
-#endif /* __r49_declare_prototypes */
-
-
-#if 0 /* these are the original funcitons, before i started doing `#include`s */
-
-#include <sys/_types/_time_t.h>
-#include <sys/_types/_uid_t.h>
-#include <sys/_types/_pid_t.h>
-#include <sys/_types/_gid_t.h>
-#include <sys/_types/_ssize_t.h>
-#include <sys/_types/_size_t.h>
-#include <sys/_types/_mode_t.h>
-
-__r49_unchecked(int fcntl(int, int, ...));
-time_t time(time_t *tloc);
-__r49_unchecked(int wait(int *));
-int mkdir(const char *, mode_t);
-ssize_t write(int, const void *, size_t);
-ssize_t read(int, void *, size_t);
-int pipe(int[2]);
-__r49_unchecked(int close(int fd));
-__r49_unchecked(int dup2(int fd, int));
-unsigned sleep(unsigned);
-int fchown(int, uid_t, gid_t);
-__r49_unchecked(int getpid(void));
-__r49_unchecked(int getppid(void));
-uid_t geteuid(void);
-int setuid(uid_t);
-pid_t getpgrp(void);
-int seteuid(uid_t);
-uid_t getuid(void);
-int chdir(const char *);
-int unlink(const char *);
+#else  /* these are the original funcitons, before i started doing `#include`s */
+# include <sys/_types/_time_t.h>
+# include <sys/_types/_uid_t.h>
+# include <sys/_types/_pid_t.h>
+# include <sys/_types/_gid_t.h>
+# include <sys/_types/_ssize_t.h>
+# include <sys/_types/_size_t.h>
+# include <sys/_types/_mode_t.h>
+__r49_noreturn void _exit(int);
+__r49_noreturn void abort(void);
+__r49_noreturn void exit(int);
 char *crypt(const char *, const char *);
-
-
-#ifndef sprintf
-int sprintf(char *, const char *, ...);
-#endif
-int strncmp(const char *, const char *, unsigned long);
-unsigned long strlen(const char *);
-void *memcpy(void *, const void *, unsigned long);
+char *index(const char *, int);
 char *strcat(char *, const char *);
 char *strcpy(char *, const char *);
-char *strncpy(char *, const char *, unsigned long);
-_Noreturn void abort(void);
-_Noreturn void exit(int);
-_Noreturn void _exit(int);
 char *strerror(int);
-void free(void *);
-int strcmp(const char *, const char *);
-int memcmp(const void *, const void *, unsigned long);
-int isatty(int);
-int vfork(void);
-int fork(void);
-char *index(const char *, int);
+char *strncpy(char *, const char *, unsigned long);
+int chdir(const char *);
+int close(int fd);
+int dup2(int, int);
+int eaccess(char *, int);
 int execl(const char *, const char *, ...);
 int execvp(const char *, char *const a[]);
-void *memset(void *, int, unsigned long);
-void *memmove(void *, const void *, unsigned long);
-void srand(unsigned int);
+int fchown(int, uid_t, gid_t);
+int fcntl(int, int, ...);
+int fork(void);
+int isatty(int);
+int memcmp(const void *, const void *, unsigned long);
+int mkdir(const char *, mode_t);
+int pipe(int[2]);
 int rand(void);
-
-int eaccess(char *path, int mode);
+int seteuid(uid_t);
+int setuid(uid_t);
+#ifndef sprintf /* my mac `#define`s this */
+int sprintf(char *, const char *, ...);
 #endif
-
+int strcmp(const char *, const char *);
+int strncmp(const char *, const char *, unsigned long);
+int unlink(const char *);
+int vfork(void);
+pid_t getpgrp(void);
+pid_t getpid(void);
+pid_t getppid(void);
+pid_t wait(int *);
+ssize_t read(int, void *, size_t);
+ssize_t write(int, const void *, size_t);
+time_t time(time_t *);
+uid_t geteuid(void);
+uid_t getuid(void);
+unsigned long strlen(const char *);
+unsigned sleep(unsigned);
+void *memcpy(void *, const void *, unsigned long);
+void *memmove(void *, const void *, unsigned long);
+void *memset(void *, int, unsigned long);
+void free(void *);
+void srand(unsigned int);
+#endif
 
 /**************************************************************************************************
  **                                                                                              **
@@ -229,7 +254,6 @@ int eaccess(char *path, int mode);
  **                                                                                              **
  **************************************************************************************************/
 
-#ifdef __r49_declare_prototypes
 struct RBasic;
 struct RClass;
 struct RString;
@@ -247,7 +271,6 @@ enum mth_scope;
 
 typedef __r49_64bit_replacement(unsigned int, uintptr_t) VALUE;
 typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
-#endif /* __r49_declare_prototypes */
 
 /**************************************************************************************************
  **                                                                                              **
@@ -255,7 +278,8 @@ typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
  **                                                                                              **
  **************************************************************************************************/
 
-#ifdef __r49_declare_prototypes
+/* This is the list of prototypes that're required to be predeclared. */
+
 /* array.c */
 __r49_void_return Init_Array(void);
 VALUE Fary_push(struct RArray *ary, VALUE item);
@@ -448,6 +472,5 @@ __r49_void_return mark_global_tbl(void);
 /* version.c */
 __r49_void_return Init_version(void);
 __r49_void_return show_version(void);
-#endif /* __r49_declare_prototypes */
 
-#endif /* !__R49_FIXES_H */
+#endif
