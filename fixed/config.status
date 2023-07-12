@@ -4,14 +4,14 @@
 # This directory was configured as follows,
 # on host Sampbook-Pro.local:
 #
-# ./configure -h
+# ./configure 
 
 for arg
 do
   case "$arg" in
     -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-    echo running ${CONFIG_SHELL-/bin/sh} ./configure -h
-    exec ${CONFIG_SHELL-/bin/sh} ./configure -h ;;
+    echo running ${CONFIG_SHELL-/bin/sh} ./configure 
+    exec ${CONFIG_SHELL-/bin/sh} ./configure  ;;
     *) echo "Usage: config.status --recheck" 2>&1; exit 1 ;;
   esac
 done
