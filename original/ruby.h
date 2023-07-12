@@ -21,62 +21,14 @@
 #define const
 #endif
 
-//#if defined(HAVE_ALLOCA_H) && !defined(__GNUC__)
+#if defined(HAVE_ALLOCA_H) && !defined(__GNUC__)
 #include <alloca.h>
-//#endif
+#endif
 
 typedef unsigned int UINT;
-typedef unsigned int VALUE;
+typedef UINT VALUE;
 typedef UINT ID;
 typedef unsigned short USHORT;
-
-void bzero(void *s, unsigned long n);
-struct RClass;
-void rb_include_module(struct RClass *, struct RClass *);
-
-int Error(char *, ...);
-int Fail(char *, ...);
-int Warning(char *, ...);
-int Fatal(char *, ...);
-int Bug(char *, ...);
-
-VALUE rb_iv_get(VALUE obj, char *name);
-VALUE obj_is_kind_of(VALUE obj, VALUE c);
-int WrongType(VALUE x, int t);
-int iterator_p(void);
-
-struct RString;
-VALUE str_new(char *ptr, UINT);
-VALUE str_new2(char *ptr);
-VALUE str_new3(struct RString *);
-VALUE str_grow(struct RString *, UINT len);
-VALUE Fstr_clone(struct RString *);
-VALUE obj_as_string(VALUE obj);
-VALUE str_cat(struct RString *, char *, UINT);
-struct RBasic;
-void obj_free(struct RBasic *);
-char *rb_class2name(struct RClass *);
-void bcopy(const void *src, void *dst, unsigned long len);
-unsigned long strlen(const char *);
-unsigned long strtoul(const char *, char **, int);
-VALUE assoc_new(VALUE elm1, VALUE elm2);
-VALUE float_new(double);
-double floor(double);
-VALUE fix2str(VALUE x, int base);
-void rb_name_class(VALUE, ID);
-void literalize(struct RBasic *);
-VALUE int2inum(int);
-
-struct RArray;
-VALUE ary_entry(struct RArray*, int);
-VALUE ary_new(void);
-VALUE ary_new4(int, VALUE *);
-
-
-
-void *memcpy(void *, const void *, unsigned long);
-void *memmove(void *, const void *, unsigned long);
-
 #ifdef __STDC__
 # include <limits.h>
 #else
@@ -164,7 +116,6 @@ extern VALUE C_Data;
 VALUE num2fix();
 int   num2int();
 
-struct RBasic *newobj(unsigned long size);
 #define NEWOBJ(obj,type) type *obj = (type*)newobj(sizeof(type))
 #define OBJSETUP(obj,c,t) {\
     RBASIC(obj)->class = (c);\
@@ -289,8 +240,6 @@ struct RBignum {
 
 #define Qnil (VALUE)0
 
-void *xmalloc(unsigned long size);
-void *xrealloc(void *ptr, unsigned long size);
 #define ALLOC_N(type,n) (type*)xmalloc(sizeof(type)*(n))
 #define ALLOC(type) (type*)xmalloc(sizeof(type))
 #define REALLOC_N(var,type,n) (var)=(type*)xrealloc((char*)(var),sizeof(type)*(n))
@@ -303,7 +252,6 @@ extern struct gc_list {
 
 #define GC_LINK { struct gc_list *_oldgc = GC_List;
 
-void *alloca(unsigned long size);
 #define GC_PRO(var) {\
     struct gc_list *_tmp = (struct gc_list*)alloca(sizeof(struct gc_list));\
     _tmp->next = GC_List;\
@@ -340,10 +288,8 @@ void rb_define_attr();
 ID rb_intern();
 char *rb_id2name();
 
-// VALUE rb_funcall();
-// int rb_scan_args();
-VALUE rb_funcall(VALUE recv, ID mid, int n, ...);
-int rb_scan_args(VALUE args, char *fmt, ...);
+VALUE rb_funcall();
+int rb_scan_args();
 
 VALUE rb_yield();
 

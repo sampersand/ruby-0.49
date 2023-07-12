@@ -2,8 +2,8 @@
  * strerror.c --- Map an integer error number into a printable string.
  */
 
-extern const int sys_nerr;
-extern const char *const sys_errlist[];
+extern int sys_nerr;
+extern char *sys_errlist[];
 
 static char msg[50];
 

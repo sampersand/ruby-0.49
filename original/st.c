@@ -335,7 +335,7 @@ char *arg;
 		ptr = ptr->next;
 		break;
 	    case ST_STOP:
-		return 0;
+		return;
 	    case ST_DELETE:
 		tmp = ptr;
 		if (last == nil(st_table_entry)) {

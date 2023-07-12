@@ -11,7 +11,6 @@
 ************************************************/
 
 #include "ruby.h"
-#include <stdarg.h>
 
 VALUE C_Array;
 
@@ -41,10 +40,12 @@ ary_new()
     return ary_new2(ARY_DEFAULT_SIZE);
 }
 
-#include <stdarg.h>
+#include <varargs.h>
 
 VALUE
-ary_new3(int n, ...)
+ary_new3(n, va_alist)
+    int n;
+    va_dcl
 {
     va_list ar;
     struct RArray* ary;
@@ -55,7 +56,7 @@ ary_new3(int n, ...)
     }
     ary = (struct RArray*)ary_new2(n<ARY_DEFAULT_SIZE?ARY_DEFAULT_SIZE:n);
 
-    va_start(ar, n);
+    va_start(ar);
     for (i=0; i<n; i++) {
 	ary->ptr[i] = va_arg(ar, VALUE);
     }
@@ -410,7 +411,6 @@ Fary_aset(ary, args)
     return arg2;
 }
 
-#include <stdio.h>
 static VALUE
 Fary_each(ary)
     struct RArray *ary;
@@ -425,8 +425,6 @@ Fary_each(ary)
     else {
 	return (VALUE)ary;
     }
-    printf("%s:%d: return qnil", __FILE__, __LINE__);
-    return Qnil;
 }
 
 static VALUE
@@ -766,7 +764,6 @@ Fary_rassoc(ary, value)
 extern VALUE C_Kernel;
 extern VALUE M_Enumerable;
 
-void
 Init_Array()
 {
     C_Array  = rb_define_class("Array", C_Object);

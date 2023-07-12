@@ -44,6 +44,7 @@ double atof();
 
 static char *toofew = "too few arguments";
 
+int strtoul();
 static void encodes();
 
 static VALUE

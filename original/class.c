@@ -302,11 +302,15 @@ rb_define_single_attr(obj, name, pub)
     rb_define_attr(rb_single_class(obj), name, pub);
 }
 
-#include <stdarg.h>
+#include <varargs.h>
 #include <ctype.h>
 
 int
-rb_scan_args(VALUE args, char *fmt, ...) {
+rb_scan_args(args, fmt, va_alist)
+    VALUE args;
+    char *fmt;
+    va_dcl
+{
     int n, i, len;
     char *p = fmt;
     VALUE *var;
@@ -320,7 +324,7 @@ rb_scan_args(VALUE args, char *fmt, ...) {
 	len = RARRAY(args)->len;
     }
 
-    va_start(vargs, args);
+    va_start(vargs);
 
     if (*p == '*') {
 	var = va_arg(vargs, VALUE*);

@@ -54,7 +54,7 @@ char *
 strdup(str)
     char *str;
 {
-    extern void *xmalloc();
+    extern char *xmalloc();
     char *tmp;
     int len = strlen(str) + 1;
 
