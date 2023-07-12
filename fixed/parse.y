@@ -1069,8 +1069,8 @@ comma		: ',' 		{ yyerrok; }
 static char *tokenbuf = NULL;
 static int   tokidx, toksiz = 0;
 
-void *xmalloc();
-void *xrealloc();
+__r49_required_replacement(char, void) *xmalloc();
+__r49_required_replacement(char, void) *xrealloc();
 VALUE newregexp();
 VALUE newstring();
 VALUE newfloat();

@@ -4,16 +4,12 @@
  * We supply this routine for those systems that aren't standard yet.
  */
 
-void *
-memmove (dst_, src_, n)
-     void *dst_;
-     const void *src_;
-     unsigned long n;
+char *
+memmove (dst, src, n)
+     char *dst, *src;
+     int n;
 {
-  char *dst = dst_;
-  char *src = src_;
   char *ret = dst;
-
 
   if (src < dst) {
     src += n;

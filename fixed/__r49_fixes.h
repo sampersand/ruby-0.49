@@ -62,14 +62,15 @@ __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`.
 #endif
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
-# define __r49_required_replacement(old, new) new
+# define __r49_required_change_nq(...)
  /* These shouldn't still exist in the codebase, but can exist without the requirements */
 __R49_WARNINGS_ERROR("int-to-pointer-cast")
 __R49_WARNINGS_ERROR("pointer-to-int-cast")
 #else
 # define __r49_required_change_q(...)
-# define __r49_required_replacement(old, new) old
+# define __r49_required_change_nq(...) __VA_ARGS__
 #endif
+# define __r49_required_replacement(old, new) __r49_required_change_nq(old) __r49_required_change_q(new)
 
 /* Changes that are required to get Ruby 0.49 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
@@ -165,6 +166,7 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # include <stdlib.h> /* defined(HAVE_RANDOM) && initstate, random, setstate, srandom */
 # include <stdio.h>
 # include <time.h> /* time */
+# include <math.h> /* floor */
 # include <string.h>
 # include <unistd.h> 
 # include <sys/stat.h> /* mkdir */
@@ -221,12 +223,14 @@ time_t time(time_t *);
 uid_t geteuid(void);
 uid_t getuid(void);
 unsigned long strlen(const char *);
+unsigned long strtoul(const char *, char **, int);
 unsigned sleep(unsigned);
 void *memcpy(void *, const void *, unsigned long);
 void *memmove(void *, const void *, unsigned long);
 void *memset(void *, int, unsigned long);
 void free(void *);
 void srand(unsigned int);
+double floor(double);
 #endif
 
 /**************************************************************************************************
@@ -250,8 +254,10 @@ struct global_entry;
 struct node;
 enum mth_scope;
 
+typedef unsigned int UINT;
 typedef __r49_64bit_replacement(unsigned int, uintptr_t) VALUE;
 typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
+typedef unsigned short USHORT;
 
 /**************************************************************************************************
  **                                                                                              **
@@ -268,9 +274,13 @@ VALUE Fary_shift(struct RArray *ary);
 VALUE Fary_sort(struct RArray *ary);
 VALUE Fary_to_s(VALUE ary);
 VALUE Fary_unshift(struct RArray *ary, __r49_implicit(VALUE) new);
+VALUE ary_new(void);
 VALUE ary_new2(__r49_implicit(int) len);
 VALUE ary_new3(int n, ...);
+VALUE ary_new4(int, VALUE *);
 VALUE ary_join(struct RArray *ary, struct RString *sep);
+VALUE ary_entry(struct RArray*, int);
+VALUE assoc_new(VALUE elm1, VALUE elm2);
 
 /* bignum.c */
 __r49_void_return Init_Bignum(void);
@@ -287,6 +297,7 @@ int big2int(struct RBignum *x);
 VALUE big2str(struct RBignum *x, int base);
 void big_2comp(struct RBignum *x);
 VALUE int2big(int n);
+VALUE int2inum(int n);
 VALUE dbl2big(double d);
 VALUE str2inum(char *str, int base);
 
@@ -298,6 +309,7 @@ VALUE rb_define_module_id(ID id);
 VALUE single_class_clone(struct RClass *class);
 VALUE class_new(struct RClass *super);
 VALUE single_class_new(struct RClass *super);
+void rb_include_module(struct RClass *class, struct RClass *module);
 
 /* comparable.c */
 __r49_void_return Init_Comparable(void);
@@ -316,8 +328,13 @@ __r49_void_return Init_DBM(void);
 __r49_void_return Init_Enumerable(void);
 
 /* error.c */
+__r49_void_return Error(char *, ...);
 __r49_noreturn Fail(char *, ...);
+__r49_void_return Warning(char *, ...);
+__r49_noreturn Fatal(char *, ...);
+__r49_noreturn Bug(char *, ...);
 __r49_noreturn rb_sys_fail(char *mesg);
+__r49_noreturn WrongType(VALUE x, int t);
 
 /* etc.c */
 __r49_void_return Init_Etc(void);
@@ -349,6 +366,9 @@ __r49_void_return sweep(void);
 void *xcalloc(unsigned long n, unsigned long size);
 void *xmalloc(unsigned long size);
 void *xrealloc(void *ptr, unsigned long size);
+__r49_void_return obj_free(struct RBasic *obj);
+__r49_void_return literalize(struct RBasic *obj);
+struct RBasic *newobj(unsigned long size);
 
 /* inits.c */
 __r49_void_return rb_call_inits(void);
@@ -369,12 +389,15 @@ struct node* rb_get_method_body(struct RClass *class, ID id, int envset, enum mt
 
 /* numeric.c */
 __r49_void_return Init_Numeric(void);
+VALUE float_new(double flt);
+VALUE fix2str(VALUE x, int base);
 
 /* object.c */
 __r49_void_return Init_Object(void);
 VALUE Fkrn_to_s(VALUE obj);
-VALUE obj_is_member_of(VALUE obj, VALUE c);
 VALUE obj_alloc(VALUE class);
+VALUE obj_is_member_of(VALUE obj, VALUE c);
+VALUE obj_is_kind_of(VALUE obj, VALUE c);
 
 /* pack.c */
 __r49_void_return Init_pack(void);
@@ -389,6 +412,7 @@ void freenode(struct node *node);
 __r49_unchecked(void yyerror(char *));
 __r49_implicit(int) yylex(void);
 char *rb_id2name(ID id);
+char *rb_class2name(struct RClass *class);
 
 /* process.c */
 __r49_void_return Init_process(void);
@@ -427,6 +451,14 @@ __r49_void_return Init_String(void);
 VALUE Fstr_plus(struct RString *str1, struct RString *str2);
 VALUE Fstr_times(struct RString *str, VALUE times);
 void str_modify(struct RString *str);
+VALUE str_new(char *ptr, UINT len);
+VALUE str_new2(char *ptr);
+VALUE str_new3(struct RString *str);
+VALUE str_grow(struct RString *str, UINT len);
+VALUE Fstr_clone(struct RString *str);
+VALUE obj_as_string(VALUE obj);
+VALUE str_cat(struct RString *str, char *ptr, UINT len);
+
 
 /* st.c */
 __r49_implicit(int) st_insert(register struct st_table *table, register char *key, char *value);
@@ -448,9 +480,11 @@ VALUE rb_ivar_get(ID id);
 VALUE rb_ivar_set(ID id, VALUE val);
 VALUE rb_const_get(ID id);
 VALUE rb_const_set(ID id, VALUE val);
+VALUE rb_iv_get(VALUE obj, char *name);
 VALUE rb_iv_set(VALUE obj, char *name, VALUE val);
 VALUE rb_mvar_get(ID id);
 VALUE rb_id2class(ID id);
+void rb_name_class(VALUE class, ID id);
 __r49_void_return mark_global_tbl(void);
 
 /* version.c */

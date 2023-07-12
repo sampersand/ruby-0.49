@@ -52,9 +52,9 @@
 #ifndef HAVE_STRDUP
 char *
 strdup(str)
-    char *str;
+    __r49_required_change_q(const) char *str;
 {
-    extern char *xmalloc();
+    extern __r49_required_replacement(char, void) *xmalloc();
     char *tmp;
     int len = strlen(str) + 1;
 

@@ -50,6 +50,7 @@ double atof();
 
 static char *toofew = "too few arguments";
 
+__r49_required_replacement(int, unsigned long) strtoul();
 static void encodes();
 
 static VALUE

@@ -25,11 +25,6 @@ static unsigned long bytes_alloc = 0, gc_threshold = 1000000;
 
 static __r49_void_return mark_tbl();
 
-void gc();
-void mark(struct RBasic *);
-void obj_free(struct RBasic *);
-
-
 void *
 xmalloc(size)
     unsigned long size;
@@ -170,7 +165,7 @@ newobj(size)
     return obj;
 }
 
-void
+__r49_void_return
 literalize(obj)
     struct RBasic *obj;
 {
@@ -236,7 +231,8 @@ unliteralize(obj)
 extern st_table *rb_global_tbl;
 extern st_table *rb_class_tbl;
 
-void gc()
+__r49_void_return
+gc()
 {
     struct gc_list *list;
     struct ENVIRON *env;
@@ -320,7 +316,8 @@ mark_dict(tbl)
     st_foreach(tbl, mark_dicentry, 0);
 }
 
-void mark(obj)
+__r49_void_return
+mark(obj)
     register struct RBasic *obj;
 {
     if (obj == Qnil) return;
@@ -423,7 +420,8 @@ freemethod(key, body)
     return ST_CONTINUE;
 }
 
-void obj_free(obj)
+__r49_void_return
+obj_free(obj)
     struct RBasic *obj;
 {
     switch (obj->flags & T_MASK) {

@@ -11,7 +11,6 @@
 ************************************************/
 
 #include "ruby.h"
-#include <stdarg.h>
 
 VALUE C_Array;
 
@@ -42,10 +41,20 @@ ary_new()
     return ary_new2(ARY_DEFAULT_SIZE);
 }
 
-#include <stdarg.h>
+#ifdef __r49_required_change
+# include <stdarg.h>
+#else
+# include <varargs.h>
+#endif
 
 VALUE
+#ifdef __r49_required_change
 ary_new3(int n, ...)
+#else
+ary_new3(n, va_alist)
+    int n;
+    va_dcl
+#endif
 {
     va_list ar;
     struct RArray* ary;
@@ -56,7 +65,11 @@ ary_new3(int n, ...)
     }
     ary = (struct RArray*)ary_new2(n<ARY_DEFAULT_SIZE?ARY_DEFAULT_SIZE:n);
 
+#ifdef __r49_required_change
     va_start(ar, n);
+#else
+    va_start(ar);
+#endif
     for (i=0; i<n; i++) {
 	ary->ptr[i] = va_arg(ar, VALUE);
     }
@@ -412,7 +425,6 @@ Fary_aset(ary, args)
     return arg2;
 }
 
-#include <stdio.h>
 static VALUE
 Fary_each(ary)
     struct RArray *ary;
@@ -423,14 +435,11 @@ Fary_each(ary)
 	for (i=0; i<ary->len; i++) {
 	    rb_yield(ary->ptr[i]);
 	}
+	__r49_required_change_q(return Qnil;)
     }
     else {
 	return (VALUE)ary;
     }
-#ifndef __r49_bugfix /* this looks like debug code that was left in the original interpreter */
-    printf("%s:%d: return qnil", __FILE__, __LINE__);
-#endif
-    return Qnil;
 }
 
 static VALUE
@@ -770,7 +779,7 @@ Fary_rassoc(ary, value)
 extern VALUE C_Kernel;
 extern VALUE M_Enumerable;
 
-void
+__r49_void_return
 Init_Array()
 {
     C_Array  = rb_define_class("Array", C_Object);

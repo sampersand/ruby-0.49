@@ -1,9 +1,10 @@
 /*
  * strerror.c --- Map an integer error number into a printable string.
  */
+#include "../__r49_fixes.h"
 
-extern const int sys_nerr;
-extern const char *const sys_errlist[];
+extern __r49_required_change_q(const) int sys_nerr;
+extern __r49_required_change_q(const) char *__r49_required_change_q(const) sys_errlist[];
 
 static char msg[50];
 

@@ -351,7 +351,7 @@ char *arg;
 		ptr = ptr->next;
 		break;
 	    case ST_STOP:
-		return 0;
+		return __r49_required_change_q(0);
 	    case ST_DELETE:
 		tmp = ptr;
 		if (last == nil(st_table_entry)) {
@@ -365,7 +365,7 @@ char *arg;
 	}
     }
 
-    __r49_validated(return 0;)
+    __r49_required_change_q(return 0;)
 }
 
 __r49_implicit_int

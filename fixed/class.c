@@ -70,9 +70,7 @@ rb_define_class_id(id, super)
     ID id;
     struct RBasic *super;
 {
-    struct RClass *cls = (struct RClass*)class_new(
-    	__r49_unchecked_cast(struct RClass *, struct RBasic *, super)
-    );
+    struct RClass *cls = (struct RClass*)class_new(__r49_unchecked_cast(struct RClass *, struct RBasic *, super));
 
     rb_name_class(cls, id);
 
@@ -250,8 +248,7 @@ rb_define_single_method(obj, name, func, argc)
     VALUE (*func)();
     int argc;
 {
-    // __r49_orig: rb_define_method(rb_single_class(obj), name, func, argc, MTH_METHOD);
-    rb_define_method(rb_single_class(obj), name, func, argc);
+    rb_define_method(rb_single_class(obj), name, func, argc __r49_required_change_nq(, MTH_METHOD));
 }
 void
 rb_define_mfunc(class, name, func, argc)
@@ -304,11 +301,23 @@ rb_define_single_attr(obj, name, pub)
     rb_define_attr(rb_single_class(obj), name, pub);
 }
 
-#include <stdarg.h>
+#ifdef __r49_required_change
+# include <stdarg.h>
+#else
+# include <varargs.h>
+#endif
 #include <ctype.h>
 
 int
-rb_scan_args(VALUE args, char *fmt, ...) {
+#ifdef __r49_required_change
+rb_scan_args(VALUE args, char *fmt, ...)
+#else
+rb_scan_args(args, fmt, va_alist)
+    VALUE args;
+    char *fmt;
+    va_dcl
+#endif
+{
     int n, i, len;
     char *p = fmt;
     VALUE *var;

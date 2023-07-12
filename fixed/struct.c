@@ -76,10 +76,20 @@ struct_add(s, mem, val)
     rb_define_single_method(s, mem, Fstruct_access, 0);
 }
 
-#include <stdarg.h>
+#ifdef __r49_required_change
+# include <stdarg.h>
+#else
+# include <varargs.h>
+#endif
 
 VALUE
+#ifdef __r49_required_change
 struct_new(char *name, ...)
+#else
+struct_new(name, va_alist)
+    char *name;
+    va_dcl
+#endif
 {
     VALUE st;
     va_list args;
@@ -87,13 +97,21 @@ struct_new(char *name, ...)
 
     GC_LINK;
     GC_PRO3(st, struct_alloc(C_Struct,name));
+#ifdef __r49_required_change
     va_start(args, name);
+#else
+    va_start(args);
+#endif
 
     while (mem = va_arg(args, char*)) {
 	struct_add(st, mem, va_arg(args, VALUE));
     }
 
-    va_end(args);
+#ifdef __r49_required_change
+    va_end(args); /* for some reason `vargs` was given, even though it's not a variable.. */
+#else
+    va_end(vargs);
+#endif
     GC_UNLINK;
 
     return st;

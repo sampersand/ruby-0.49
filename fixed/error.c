@@ -13,7 +13,11 @@
 #include "ruby.h"
 #include "env.h"
 #include <stdio.h>
-#include <stdarg.h>
+#ifdef __r49_required_change
+# include <stdarg.h>
+#else
+# include <varargs.h>
+#endif
 
 extern char *sourcefile;
 extern int   sourceline;
@@ -61,61 +65,111 @@ yyerror(msg)
 }
 
 __r49_void_return
+#ifdef __r49_required_change
 Error(char *fmt, ...)
+#else
+Error(fmt, va_alist)
+    char *fmt;
+    va_dcl
+#endif
 {
     va_list args;
 
+#ifdef __r49_required_change
     va_start(args, fmt);
+#else
+    va_start(args);
+#endif
     err_print(fmt, args);
     va_end(args);
     nerrs++;
 }
 
 __r49_void_return
+#ifdef __r49_required_change
 Warning(char *fmt, ...)
+#else
+Warning(fmt, va_alist)
+    char *fmt;
+    va_dcl
+#endif
 {
     char buf[BUFSIZ]; 
     va_list args;
 
     sprintf(buf, "warning: %s", fmt);
 
+#ifdef __r49_required_change
     va_start(args, fmt);
+#else
+    va_start(args);
+#endif
     err_print(buf, args);
     va_end(args);
 }
 
 __r49_noreturn
+#ifdef __r49_required_change
 Fatal(char *fmt, ...)
+#else
+Fatal(fmt, va_alist)
+    char *fmt;
+    va_dcl
+#endif
 {
     va_list args;
 
+#ifdef __r49_required_change
     va_start(args, fmt);
+#else
+    va_start(args);
+#endif
     err_print(fmt, args);
     va_end(args);
     rb_exit(1);
 }
 
 __r49_noreturn
+#ifdef __r49_required_change
 Bug(char *fmt, ...)
+#else
+Bug(fmt, va_alist)
+    char *fmt;
+    va_dcl
+#endif
 {
     char buf[BUFSIZ]; 
     va_list args;
 
     sprintf(buf, "[BUG] %s", fmt);
 
+#ifdef __r49_required_change
     va_start(args, fmt);
+#else
+    va_start(args);
+#endif
     err_print(buf, args);
     va_end(args);
     abort();
 }
 
 __r49_noreturn
+#ifdef __r49_required_change
 Fail(char *fmt, ...)
+#else
+Fail(fmt, va_alist)
+    char *fmt;
+    va_dcl
+#endif
 {
     va_list args;
     char buf[BUFSIZ]; 
 
+#ifdef __r49_required_change
     va_start(args, fmt);
+#else
+    va_start(args);
+#endif
     vsprintf(buf, fmt, args);
     va_end(args);
 
