@@ -7,7 +7,9 @@ Until now.
 After spending copious amounts of time fiddling with it, you can now install, compile, and play with Ruby 0.49 locally on your computer!
 
 ## Notes
-The contents of the ruby repo 
+The original code as it existed in 1994 can be viewed in [`original`](tree/master/original)
+[`original`](./original)
+[`original`](./tree/master/original)
 
 ## Compiling
 Clone this repo on your computer
