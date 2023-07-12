@@ -4,14 +4,14 @@
 # This directory was configured as follows,
 # on host Sampbook-Pro.local:
 #
-# ./configure 
+# ./configure -h
 
 for arg
 do
   case "$arg" in
     -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
-    echo running ${CONFIG_SHELL-/bin/sh} ./configure 
-    exec ${CONFIG_SHELL-/bin/sh} ./configure  ;;
+    echo running ${CONFIG_SHELL-/bin/sh} ./configure -h
+    exec ${CONFIG_SHELL-/bin/sh} ./configure -h ;;
     *) echo "Usage: config.status --recheck" 2>&1; exit 1 ;;
   esac
 done
@@ -20,17 +20,17 @@ trap 'rm -f Makefile; exit 1' 1 3 15
 PROGS='ruby'
 CC='gcc'
 CPP='gcc -E'
-DBM='-fpcc-struct-return'
+DBM=''
 STATIC=''
 YACC='bison -y'
 INSTALL='/usr/bin/install -c'
 INSTALL_PROGRAM='$(INSTALL)'
 INSTALL_DATA='$(INSTALL) -m 644'
-ALLOCA='alloca.o'
-LIBOBJS=' fileblocks.o'
-LIBS=''
+ALLOCA=''
+LIBOBJS=''
+LIBS=' -lm -ldbm'
 srcdir='.'
-DEFS=' -DHAVE_UNISTD_H=1 -DVOID_CLOSEDIR=1 -DGETGROUPS_T=int -DRETSIGTYPE=int -DTM_IN_SYS_TIME=1 -DC_ALLOCA=1 -DSTACK_DIRECTION=0 -DWORDS_BIGENDIAN=1'
+DEFS=' -DHAVE_UNISTD_H=1 -DDIRENT=1 -DGETGROUPS_T=gid_t -DRETSIGTYPE=void -DHAVE_GETOPT_LONG=1 -DHAVE_MEMMOVE=1 -DHAVE_STRERROR=1 -DHAVE_STRTOUL=1 -DHAVE_STRDUP=1 -DHAVE_STRSTR=1 -DHAVE_SETENV=1 -DHAVE_FMOD=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_SOCKET=1 -DHAVE_RANDOM=1 -DHAVE_WAIT4=1 -DHAVE_WAITPID=1 -DHAVE_ALLOCA_H=1 -DHAVE_ST_BLKSIZE=1 -DHAVE_ST_BLOCKS=1 -DHAVE_ST_RDEV=1 -DPW_CHANGE=1 -DPW_CLASSS=1 -DPW_EXPIRE=1'
 prefix=''
 exec_prefix=''
 prsub=''

@@ -14,7 +14,7 @@ You can identify all the changes I've made in [`fixed`](./fixed) via `__r49`; If
 ## Compiling
 1. Clone this repo
 2. `cd` into `fixed`
-3. Run `./configure`. The old configure file doesn't account for most modern systems, so you may have to remove the `DBM = -fpcc-struct-return` line from the generated `Makefile`
+3. Run `./configure`.
 4. Run `make`. The resulting `./ruby` executable is ruby 0.49!
 
 ### Flags
@@ -27,7 +27,6 @@ The following flags affect how the program compiles. You can disable them by add
 | `__r49_critical_bugfix` | Fixes to the sourcecode that make Ruby 0.49 bearable |
 | `__r49_bugfix`          | More minor bugfixes to the source code |
 | `__r49_recursion_limit` | How many stackframes to use; set to `0` to revert to the original behaviour of segfaulting when you stack overflow |
-| `__r49_no_define_haves` | The `HAVE_*` macros toggle matz's implementation of features that weren't available everywhere. Nowadays they are, so there's no real reason to toggle this. |
 | `__r49_no_use_includes` | Use `#include`s for stdlib prototypes, instead of explicitly declaring them. |
 
 

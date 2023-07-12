@@ -23,6 +23,8 @@
 # Ignores all args except --srcdir, --prefix, --exec-prefix, and
 # --with-PACKAGE[=VALUE] unless this script has special code to handle it.
 
+: "${__r49:=1}" # enable `__r49` unless explicitly disabled.
+
 for arg
 do
   # Handle --exec-prefix with a space before the argument.
@@ -92,7 +94,8 @@ if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 rm -f conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo > confdefs.h
-compile='${CC-cc} $CFLAGS conftest.c -o conftest $LIBS >/dev/null 2>&1'
+# __r49: added the `-w` flag here.
+compile='${CC-cc} $CFLAGS ${__r49+-w} conftest.c -o conftest $LIBS >/dev/null 2>&1'
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
@@ -218,8 +221,19 @@ rm -f conftest*
   test -n "$need_trad" && CC="$CC -traditional"
 fi
 
-if test $GCC -eq 1 ; then
-  DBM=-fpcc-struct-return
+if test $GCC -eq 1; then
+  # __r49: added this if conditional and the after it, as `-fpcc-struct-return`
+  # doesn't work on clang.
+  if test $__r49 -eq 1; then
+    echo 'int main() {}' > conftest.c
+    if ! ${CC-cc} -E conftest.c -fpcc-struct-return >/dev/null 2>&1; then
+      __r49_doesnt_have_fpcc_struct_Return=1
+    fi
+    rm -f conftest*
+  fi
+  if ! test $__r49_doesnt_have_fpcc_struct_Return -eq 1; then
+    DBM=-fpcc-struct-return
+  fi
 fi
 if test "$HOSTTYPE" = sparc; then
   if test $GCC -eq 1 ; then

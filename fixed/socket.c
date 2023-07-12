@@ -19,6 +19,8 @@
 #include <errno.h>
 #include <sys/un.h>
 
+__r49_required_change_q(in_addr_t inet_addr(const char *cp);)
+
 extern VALUE C_IO;
 VALUE C_BasicSocket;
 VALUE C_TCPsocket;
@@ -94,7 +96,13 @@ static VALUE
 Fbsock_getopt(sock, lev, optname)
     VALUE sock, lev, optname;
 {
-    int level, option, len;
+    int level, option
+#ifdef __r49_required_change
+    ; unsigned
+#else
+    ,
+#endif
+    len;
     struct RString *val;
     OpenFile *fptr;
 
@@ -116,7 +124,7 @@ Fbsock_getsockname(sock)
    VALUE sock;
 {
     char buf[1024];
-    int len = sizeof buf;
+    __r49_required_change_q(unsigned) int len = sizeof buf;
     OpenFile *fptr;
 
     GetOpenFile(sock, fptr);
@@ -130,7 +138,7 @@ Fbsock_getpeername(sock)
    VALUE sock;
 {
     char buf[1024];
-    int len = sizeof buf;
+    __r49_required_change_q(unsigned) int len = sizeof buf;
     OpenFile *fptr;
 
     GetOpenFile(sock, fptr);
@@ -252,7 +260,7 @@ sock_accept(class, fd, sockaddr, len)
     VALUE class;
     int fd;
     struct sockaddr *sockaddr;
-    int *len;
+    __r49_required_change_q(unsigned) int *len;
 {
     int fd2;
 
@@ -271,7 +279,7 @@ Ftcp_accept(sock)
 {
     OpenFile *fptr;
     struct sockaddr_in from;
-    int fromlen;
+    __r49_required_change_q(unsigned) int fromlen;
 
     GetOpenFile(sock, fptr);
     fromlen = sizeof(struct sockaddr_in);
@@ -359,7 +367,7 @@ Ftcp_addr(sock)
 {
     OpenFile *fptr;
     struct sockaddr_in addr;
-    int len = sizeof addr;
+    __r49_required_change_q(unsigned) int len = sizeof addr;
 
     GetOpenFile(sock, fptr);
     
@@ -374,7 +382,7 @@ Ftcp_peeraddr(sock)
 {
     OpenFile *fptr;
     struct sockaddr_in addr;
-    int len = sizeof addr;
+    __r49_required_change_q(unsigned) int len = sizeof addr;
 
     GetOpenFile(sock, fptr);
     
@@ -399,7 +407,7 @@ Funix_path(sock)
     GetOpenFile(sock, fptr);
     if (fptr->path == Qnil) {
 	struct sockaddr_un addr;
-	int len = sizeof(addr);
+	__r49_required_change_q(unsigned) int len = sizeof(addr);
 	if (getsockname(fileno(fptr->f), (struct sockaddr*)&addr, &len) < 0)
 	    rb_sys_fail(Qnil);
 	fptr->path = strdup(addr.sun_path);
@@ -420,7 +428,7 @@ Funix_accept(sock)
 {
     OpenFile *fptr;
     struct sockaddr_un from;
-    int fromlen;
+    __r49_required_change_q(unsigned) int fromlen;
 
     GetOpenFile(sock, fptr);
     fromlen = sizeof(struct sockaddr_un);
@@ -449,7 +457,7 @@ Funix_addr(sock)
 {
     OpenFile *fptr;
     struct sockaddr_un addr;
-    int len = sizeof addr;
+    __r49_required_change_q(unsigned) int len = sizeof addr;
 
     GetOpenFile(sock, fptr);
     
@@ -464,7 +472,7 @@ Funix_peeraddr(sock)
 {
     OpenFile *fptr;
     struct sockaddr_un addr;
-    int len = sizeof addr;
+    __r49_required_change_q(unsigned) int len = sizeof addr;
 
     GetOpenFile(sock, fptr);
     
@@ -620,7 +628,7 @@ Fsock_accept(sock)
     VALUE addr, sock2;
     int fd;
     char buf[1024];
-    int len = sizeof buf;
+    __r49_required_change_q(unsigned) int len = sizeof buf;
 
     GetOpenFile(sock, fptr);
     if ((fd = accept(fileno(fptr->f), (struct sockaddr*)buf, &len)) < 0)
@@ -668,7 +676,13 @@ Fsock_recv(sock, len, flags)
     FILE f;
     struct RString *str;
     char buf[1024];
-    int fd, alen = sizeof buf;
+    int fd 
+#ifdef __r49_required_change
+    ; unsigned
+#else
+    ,
+#endif
+    alen = sizeof buf;
     VALUE addr, result;
 
     GC_LINK;

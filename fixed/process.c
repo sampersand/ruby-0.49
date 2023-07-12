@@ -497,7 +497,7 @@ sighandle(sig)
 	Fail("trap_handler: Bad signal %d", sig);
 
 #ifndef HAVE_BSD_SIGNALS
-    signal(sig, __r49_unchecked_cast(void(*)(int), int(*)(), sighandle));
+    signal(sig, __r49_unchecked_cast(void(*)(int), RETSIGTYPE(*)(), sighandle));
 #endif
 
 #ifdef SAFE_SIGHANDLE
@@ -511,7 +511,13 @@ sighandle(sig)
     rb_trap_eval(trap_list[sig]);
 #endif
 
-    __r49_required_change_q(return 0;)
+#ifdef __r49_required_change /* use `return 0;` only if RETSIGTYPE is int. */
+# define __r49_required_change_void
+# define __r49_required_change_int return 0;
+# define __r49_ret1(U) __r49_ret2(U)
+# define __r49_ret2(U) __r49_required_change_##U
+    __r49_ret1(RETSIGTYPE)
+#endif
 }
 
 void
@@ -622,33 +628,33 @@ Ftrap(argc, argv)
     func = sighandle;
 
     if (argv[1] == Qnil) {
-	func = __r49_unchecked_cast(int(*)(), void(*)(int), SIG_IGN);
+	func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	command = Qnil;
     }
     else {
 	Check_Type(argv[1], T_STRING);
 	command = argv[1];
 	if (RSTRING(argv[1])->len == 0) {
-	    func = __r49_unchecked_cast(int(*)(), void(*)(int), SIG_IGN);
+	    func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	}
 	else if (RSTRING(argv[1])->len == 7) {
 	    if (strncmp(RSTRING(argv[1])->ptr, "SIG_IGN", 7) == 0) {
-		func = __r49_unchecked_cast(int(*)(), void(*)(int), SIG_IGN);
+		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	    }
 	    else if (strncmp(RSTRING(argv[1])->ptr, "SIG_DFL", 7) == 0) {
-		func = __r49_unchecked_cast(int(*)(), void(*)(int), SIG_DFL);
+		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL);
 	    }
 	    else if (strncmp(RSTRING(argv[1])->ptr, "DEFAULT", 7) == 0) {
-		func = __r49_unchecked_cast(int(*)(), void(*)(int), SIG_DFL);
+		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL);
 	    }
 	}
 	else if (RSTRING(argv[1])->len == 6) {
 	    if (strncmp(RSTRING(argv[1])->ptr, "IGNORE", 6) == 0) {
-		func = __r49_unchecked_cast(int(*)(), void(*)(int), SIG_IGN);
+		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	    }
 	}
     }
-    if (func == __r49_unchecked_cast(int(*)(), void(*)(int), SIG_IGN) || func == __r49_unchecked_cast(int(*)(), void(*)(int), SIG_DFL))
+    if (func == __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN) || func == __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL))
 	command = Qnil;
 
     for (i=2; i<argc; i++) {
@@ -667,7 +673,7 @@ Ftrap(argc, argv)
 	if (i < 0 || i > NSIG)
 	    Fail("Invalid signal no %d", sig);
 
-	signal(sig, __r49_unchecked_cast(void(*)(int), int(*)(), sighandle));
+	signal(sig, __r49_unchecked_cast(void(*)(int), RETSIGTYPE(*)(), sighandle));
 	trap_list[sig] = command;
 	/* enable at least specified signal. */
 	mask &= ~sigmask(sig);

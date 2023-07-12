@@ -139,19 +139,6 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # define __r49_noreturn void
 #endif
 
-/* All of this functionality should be available on every platform these days. */
-#ifndef __r49_no_define_haves
-# define HAVE_MEMMOVE
-# define HAVE_STRERROR
-# define HAVE_STRTOUL
-# define HAVE_STRFTIME
-# define HAVE_STRSTR
-# define HAVE_GETOPT_LONG
-# define HAVE_MKDIR
-# define HAVE_STRDUP
-# define HAVE_RANDOM
-#endif
-
 #if 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
 # define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #else
@@ -428,6 +415,9 @@ int research(struct RRegexp *reg, struct RString *str, int start, int ignorecase
 /* ruby.c */
 void rb_main(int argc, char **argv);
 void rb_load_file(char *fname);
+
+/* socket.c */
+__r49_void_return Init_Socket(void);
 
 /* sprintf.c */
 VALUE Fsprintf(int argc, VALUE *argv);
