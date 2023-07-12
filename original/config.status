@@ -2,7 +2,7 @@
 # Generated automatically by configure.
 # Run this file to recreate the current configuration.
 # This directory was configured as follows,
-# on host dyna:
+# on host foo:
 #
 # ./configure 
 
@@ -26,10 +26,11 @@ YACC='bison -y'
 INSTALL='/usr/bin/install -c'
 INSTALL_PROGRAM='$(INSTALL)'
 INSTALL_DATA='$(INSTALL) -m 644'
-ALLOCA=''
-LIBS=' -lm -ldbm'
+ALLOCA='alloca.o'
+LIBOBJS=' fileblocks.o'
+LIBS=''
 srcdir='.'
-DEFS=' -DHAVE_UNISTD_H=1 -DHAVE_SYSCALL_H=1 -DHAVE_A_OUT_H=1 -DDIRENT=1 -DGETGROUPS_T=gid_t -DRETSIGTYPE=void -DHAVE_GETOPT_LONG=1 -DHAVE_MEMMOVE=1 -DHAVE_STRERROR=1 -DHAVE_STRTOL=1 -DHAVE_STRTOUL=1 -DHAVE_STRDUP=1 -DHAVE_SETENV=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 -DHAVE_STRFTIME=1 -DHAVE_ALLOCA_H=1'
+DEFS=' -DHAVE_UNISTD_H=1 -DVOID_CLOSEDIR=1 -DGETGROUPS_T=int -DRETSIGTYPE=int -DTM_IN_SYS_TIME=1 -DC_ALLOCA=1 -DSTACK_DIRECTION=0 -DWORDS_BIGENDIAN=1'
 prefix=''
 exec_prefix=''
 prsub=''
@@ -62,6 +63,7 @@ s%@INSTALL@%$INSTALL%g
 s%@INSTALL_PROGRAM@%$INSTALL_PROGRAM%g
 s%@INSTALL_DATA@%$INSTALL_DATA%g
 s%@ALLOCA@%$ALLOCA%g
+s%@LIBOBJS@%$LIBOBJS%g
 s%@LIBS@%$LIBS%g
 s%@srcdir@%$srcdir%g
 s%@DEFS@%$DEFS%
