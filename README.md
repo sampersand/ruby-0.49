@@ -7,20 +7,32 @@ Until now.
 After spending copious amounts of time fiddling with it, you can now install, compile, and play with Ruby 0.49 locally on your computer!
 
 ## Notes
-The original code as it existed in 1994 can be viewed in [`original`](tree/master/original)
-[`original`](./original)
-[`original`](./tree/master/original)
+The original code as it existed in 1994 is in [`original`](./original). The code I've cleaned up lives in [`fixed`](./fixed). I've tried to stay as true to the original code as possible in my cleaned up code, only fixing things that're necessary. 
+
+You can identify all the changes I've made in [`fixed`](./fixed) via `__r49`; If it doesn't have `__r49`, I didn't touch it (and that's how the code originally looked.)
 
 ## Compiling
-Clone this repo on your computer
-Clone this on your computer, then run `./configure`. The old configure file doesn't account for most modern systems, so you have to change a single thing in the makefile:
+1. Clone this repo
+2. `cd` into `fixed`
+3. Run `./configure`. The old configure file doesn't account for most modern systems, so you may have to remove the `DBM = -fpcc-struct-return` line from the generated `Makefile`
+4. Run `make`. The resulting `./ruby` executable is ruby 0.49!
 
-Convert `DBM = -fpcc-struct-return` to `DBM = `. 
+### Flags
 
-Then you can run `make` and start playing with ruby 0.49!
+The following flags affect how the program compiles. You can disable them by adding `-D<flag>=0` to `CPPFLAGS` when you call `make`. (e.g., `CPPFLAGS='-D__r49_64bit=0 -D__r49_bugfix=0 make`.)
+|          name           | description |
+|:------------------------|-------------|
+| `__r49_required_change` | Changes that are required to compile it with modern compilers |
+| `__r49_64bit`           | Changes to allow compiling on 64 bit |
+| `__r49_critical_bugfix` | Fixes to the sourcecode that make Ruby 0.49 bearable |
+| `__r49_bugfix`          | More minor bugfixes to the source code |
+| `__r49_recursion_limit` | How many stackframes to use; set to `0` to revert to the original behaviour of segfaulting when you stack overflow |
+| `__r49_no_define_haves` | The `HAVE_*` macros toggle matz's implementation of features that weren't available everywhere. Nowadays they are, so there's no real reason to toggle this. |
+| `__r49_no_use_includes` | Use `#include`s for stdlib prototypes, instead of explicitly declaring them. |
+
 
 ## Caveats
-I haven't fixed all the 32bit <-> 64 bit compatibility issues, so random segfaults may occur. (If you call an unknown function, it'll segfault on you and give no indication as to why it failed.) I plan on fixing them in the future.
+If you disable some of the macros, you may end up with segfaults. I also haven't exhaustively tested it, so you may encounter problems. 
 
 ## Reading `CHANGELOG` and friends
 It's in EUC-JP encoding. You can convert via `iconv -f EUC-JP -t UTF-8 input_filename`; I then pasted it into Google translate to read it.

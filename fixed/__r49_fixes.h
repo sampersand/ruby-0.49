@@ -2,13 +2,7 @@
 #define __R49_FIXES_H
 
 #define __r49_dev /* define if you're working _on_ r49 */
-
 #define __r49_TODO
-
-#define __r49_64bit
-#define __r49_required_change
-#define __r49_critical_bugfix
-#define __r49_bugfix
 
 #ifdef __clang__
 # define __r49_str(x) #x
@@ -223,9 +217,9 @@ int pipe(int[2]);
 int rand(void);
 int seteuid(uid_t);
 int setuid(uid_t);
-#ifndef sprintf /* my mac `#define`s this */
+# ifndef sprintf /* my mac `#define`s this */
 int sprintf(char *, const char *, ...);
-#endif
+# endif
 int strcmp(const char *, const char *);
 int strncmp(const char *, const char *, unsigned long);
 int unlink(const char *);
