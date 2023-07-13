@@ -17,7 +17,6 @@
 # define __R49_C_VERSION 0L  /* support for non-standard C compilers (if anyone even uses them...) */
 #endif
 
-
 /**************************************************************************************************
  **                                                                                              **
  **                           Disabling unnecessary compiler warnings                            **
@@ -45,6 +44,7 @@ __R49_WARNINGS_IGNORE("int-conversion") /* There's a lot of int conversion throw
 __R49_WARNINGS_IGNORE("unused-value") /* there's a few places with unused values */
 __R49_WARNINGS_IGNORE("empty-body") /* there's a single one of these, in `sprintf.c`. */
 __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`. */
+__R49_WARNINGS_IGNORE("extra-tokens") /* there's a single one of these, in `st.h`. */
 
 /**************************************************************************************************
  **                                                                                              **
@@ -140,7 +140,9 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # define __r49_noreturn void
 #endif
 
-#if 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
+#ifndef __r49_required_change
+# define __r49_cast(to, from, val) (val)
+#elif 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
 # define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #else
 # define __r49_cast(to, from, val) ((to) (val))
@@ -149,11 +151,9 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 #define __r49_implicit(what) __r49_required_change_q(what)
 #define __r49_implicit_arg(type, arg) __r49_implicit(type arg;)
 #define __r49_void_return __r49_implicit(void)
-#define __r49_unchecked(new) new /* Stuff I have to check */
-#define __r49_unchecked_cast(to, from, val) (__r49_unchecked(__r49_cast(to, from, val)))
 #define __r49_cast_to_RBasic(from, ptr) (__r49_cast(struct RBasic *, struct from *, ptr))
-
-
+#define __r49_cast_to_charp(from, ptr) (__r49_cast(char *, from *, ptr))
+#define __r49_cast_to_charpp(from, ptr) (__r49_cast(char **, from *, ptr))
 
 
 /**************************************************************************************************
@@ -161,7 +161,7 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
  **                              Stdlib `#include`s / Declarations                               **
  **                                                                                              **
  **************************************************************************************************/
-
+#define __r49_no_use_includes
 #ifndef __r49_no_use_includes
 # include <stdlib.h> /* defined(HAVE_RANDOM) && initstate, random, setstate, srandom */
 # include <stdio.h>
@@ -181,9 +181,9 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # include <sys/_types/_ssize_t.h>
 # include <sys/_types/_size_t.h>
 # include <sys/_types/_mode_t.h>
-__r49_noreturn void _exit(int);
-__r49_noreturn void abort(void);
-__r49_noreturn void exit(int);
+__r49_noreturn _exit(int);
+__r49_noreturn abort(void);
+__r49_noreturn exit(int);
 char *crypt(const char *, const char *);
 char *index(const char *, int);
 char *strcat(char *, const char *);
@@ -205,10 +205,13 @@ int mkdir(const char *, mode_t);
 int pipe(int[2]);
 int rand(void);
 int seteuid(uid_t);
+void bzero(void *, unsigned long);
+void bcopy(const void *, void *, size_t);
 int setuid(uid_t);
 # ifndef sprintf /* my mac `#define`s this */
 int sprintf(char *, const char *, ...);
 # endif
+int setenv(const char *, const char *, int);
 int strcmp(const char *, const char *);
 int strncmp(const char *, const char *, unsigned long);
 int unlink(const char *);
@@ -217,6 +220,7 @@ pid_t getpgrp(void);
 pid_t getpid(void);
 pid_t getppid(void);
 pid_t wait(int *);
+pid_t waitpid(pid_t, int *, int);
 ssize_t read(int, void *, size_t);
 ssize_t write(int, const void *, size_t);
 time_t time(time_t *);
@@ -231,6 +235,13 @@ void *memset(void *, int, unsigned long);
 void free(void *);
 void srand(unsigned int);
 double floor(double);
+
+char *initstate(unsigned, char *, size_t);
+long random(void);
+char *setstate(const char *);
+void srandom(unsigned);
+long strtol(const char *, char **, int);
+
 #endif
 
 /**************************************************************************************************
@@ -268,14 +279,14 @@ typedef unsigned short USHORT;
 /* This is the list of prototypes that're required to be predeclared. */
 
 /* array.c */
-__r49_void_return Init_Array(void);
+void Init_Array(void);
 VALUE Fary_push(struct RArray *ary, VALUE item);
 VALUE Fary_shift(struct RArray *ary);
 VALUE Fary_sort(struct RArray *ary);
 VALUE Fary_to_s(VALUE ary);
-VALUE Fary_unshift(struct RArray *ary, __r49_implicit(VALUE) new);
+VALUE Fary_unshift(struct RArray *ary, VALUE new);
 VALUE ary_new(void);
-VALUE ary_new2(__r49_implicit(int) len);
+VALUE ary_new2(int len);
 VALUE ary_new3(int n, ...);
 VALUE ary_new4(int, VALUE *);
 VALUE ary_join(struct RArray *ary, struct RString *sep);
@@ -283,7 +294,7 @@ VALUE ary_entry(struct RArray*, int);
 VALUE assoc_new(VALUE elm1, VALUE elm2);
 
 /* bignum.c */
-__r49_void_return Init_Bignum(void);
+void Init_Bignum(void);
 VALUE Fbig_and(struct RBignum *x, struct RBignum *y);
 VALUE Fbig_clone(struct RBignum *x);
 VALUE Fbig_lshift(struct RBignum *x, VALUE y);
@@ -312,35 +323,35 @@ VALUE single_class_new(struct RClass *super);
 void rb_include_module(struct RClass *class, struct RClass *module);
 
 /* comparable.c */
-__r49_void_return Init_Comparable(void);
+void Init_Comparable(void);
 
 /* dict.c */
-__r49_void_return Init_Dict(void);
+void Init_Dict(void);
 VALUE Fdic_aset(struct RDict *dic, VALUE key, VALUE val);
 
 /* dir.c */
-__r49_void_return Init_Dir(void);
+void Init_Dir(void);
 
 /* dbm.c */
-__r49_void_return Init_DBM(void);
+void Init_DBM(void);
 
 /* enumerable.c */
-__r49_void_return Init_Enumerable(void);
+void Init_Enumerable(void);
 
 /* error.c */
-__r49_void_return Error(char *, ...);
+void Error(char *, ...);
 __r49_noreturn Fail(char *, ...);
-__r49_void_return Warning(char *, ...);
+void Warning(char *, ...);
 __r49_noreturn Fatal(char *, ...);
 __r49_noreturn Bug(char *, ...);
 __r49_noreturn rb_sys_fail(char *mesg);
 __r49_noreturn WrongType(VALUE x, int t);
 
 /* etc.c */
-__r49_void_return Init_Etc(void);
+void Init_Etc(void);
 
 /* eval.c */
-__r49_void_return Init_load(void);
+void Init_load(void);
 __r49_noreturn rb_exit(int status);
 __r49_noreturn rb_fail(VALUE mesg);
 __r49_noreturn rb_break(void);
@@ -348,38 +359,38 @@ VALUE rb_iterate(VALUE (*it_proc)(), char *data1, VALUE (*bl_proc)(), char *data
 void rb_trap_eval(VALUE cmd);
 VALUE rb_resque(VALUE (*b_proc)(), char *data1, VALUE (*r_proc)(), char *data2);
 VALUE TopLevel(char *script, int argc, char **argv);
-__r49_implicit(int) iterator_p(void);
+int iterator_p(void);
 
 /* file.c */
-__r49_void_return Init_File(void);
+void Init_File(void);
 VALUE file_open(char *fname, char *mode);
 int eaccess(char *path, int mode);
 
 /* gc.c */
-__r49_void_return Init_GC(void);
+void Init_GC(void);
 void rb_global_variable(VALUE *var);
 void unliteralize(struct RBasic *obj);
 void gc(void);
 void obj_free(struct RBasic *);
 void mark(register struct RBasic *obj);
-__r49_void_return sweep(void);
+void sweep(void);
 void *xcalloc(unsigned long n, unsigned long size);
 void *xmalloc(unsigned long size);
 void *xrealloc(void *ptr, unsigned long size);
-__r49_void_return obj_free(struct RBasic *obj);
-__r49_void_return literalize(struct RBasic *obj);
+void obj_free(struct RBasic *obj);
+void literalize(struct RBasic *obj);
 struct RBasic *newobj(unsigned long size);
 
 /* inits.c */
-__r49_void_return rb_call_inits(void);
+void rb_call_inits(void);
 
 /* io.c */
-__r49_void_return Init_IO(void);
-__r49_implicit(int) io_mode_flags(char *mode);
+void Init_IO(void);
+int io_mode_flags(char *mode);
 void io_ctl(VALUE obj, VALUE req, struct RString *arg, int io_p);
 
 /* math.c */
-__r49_void_return Init_Math(void);
+void Init_Math(void);
 
 /* methods.c */
 void rb_clear_cache2(struct RClass *class);
@@ -388,48 +399,48 @@ void rb_alias(struct RClass *class, ID name, ID def);
 struct node* rb_get_method_body(struct RClass *class, ID id, int envset, enum mth_scope scope);
 
 /* numeric.c */
-__r49_void_return Init_Numeric(void);
+void Init_Numeric(void);
 VALUE float_new(double flt);
 VALUE fix2str(VALUE x, int base);
 
 /* object.c */
-__r49_void_return Init_Object(void);
+void Init_Object(void);
 VALUE Fkrn_to_s(VALUE obj);
 VALUE obj_alloc(VALUE class);
 VALUE obj_is_member_of(VALUE obj, VALUE c);
 VALUE obj_is_kind_of(VALUE obj, VALUE c);
 
 /* pack.c */
-__r49_void_return Init_pack(void);
+void Init_pack(void);
 
 /* parse.y */
-__r49_void_return Init_sym(void);
-__r49_void_return lex_setsrc(char *src, char *ptr, int len);
+void Init_sym(void);
+void lex_setsrc(char *src, char *ptr, int len);
 void yyappend_print(void);
 void yywhole_loop(int chop, int split);
 int yyparse(void);
 void freenode(struct node *node);
-__r49_unchecked(void yyerror(char *));
-__r49_implicit(int) yylex(void);
+void yyerror(char *msg);
+int yylex(void);
 char *rb_id2name(ID id);
 char *rb_class2name(struct RClass *class);
 
 /* process.c */
-__r49_void_return Init_process(void);
+void Init_process(void);
 void rb_trap_exit(void);
 void rb_syswait(int pid);
 void mark_trap_list(void);
-__r49_implicit(int) rb_proc_exec(char *str);
+int rb_proc_exec(char *str);
 
 /* random.c */
-__r49_void_return Init_Random(void);
+void Init_Random(void);
 
 /* range.c */
-__r49_void_return Init_Range(void);
+void Init_Range(void);
 VALUE range_new(VALUE class, VALUE start, VALUE end);
 
 /* re.c */
-__r49_void_return Init_Regexp(void);
+void Init_Regexp(void);
 VALUE re_last_match(ID id);
 VALUE regexp_new(char *s, int len);
 void reg_free(struct Regexp *rp);
@@ -441,13 +452,13 @@ void rb_main(int argc, char **argv);
 void rb_load_file(char *fname);
 
 /* socket.c */
-__r49_void_return Init_Socket(void);
+void Init_Socket(void);
 
 /* sprintf.c */
 VALUE Fsprintf(int argc, VALUE *argv);
 
 /* string.c */
-__r49_void_return Init_String(void);
+void Init_String(void);
 VALUE Fstr_plus(struct RString *str1, struct RString *str2);
 VALUE Fstr_times(struct RString *str, VALUE times);
 void str_modify(struct RString *str);
@@ -461,18 +472,18 @@ VALUE str_cat(struct RString *str, char *ptr, UINT len);
 
 
 /* st.c */
-__r49_implicit(int) st_insert(register struct st_table *table, register char *key, char *value);
-__r49_implicit(int) st_lookup(struct st_table *table, register char *key, char **value);
+int st_insert(register struct st_table *table, register char *key, char *value);
+int st_lookup(struct st_table *table, register char *key, char **value);
 
 /* struct.c */
-__r49_void_return Init_Struct(void);
+void Init_Struct(void);
 VALUE struct_new(char *name, ...);
 
 /* time.c */
-__r49_void_return Init_Time(void);
+void Init_Time(void);
 
 /* variable.c */
-__r49_void_return Init_var_tables(void);
+void Init_var_tables(void);
 VALUE rb_gvar_get(struct global_entry *entry);
 VALUE rb_gvar_set(struct global_entry *entry, VALUE val);
 VALUE rb_gvar_set2(char *name, VALUE val);
@@ -485,10 +496,10 @@ VALUE rb_iv_set(VALUE obj, char *name, VALUE val);
 VALUE rb_mvar_get(ID id);
 VALUE rb_id2class(ID id);
 void rb_name_class(VALUE class, ID id);
-__r49_void_return mark_global_tbl(void);
+void mark_global_tbl(void);
 
 /* version.c */
-__r49_void_return Init_version(void);
-__r49_void_return show_version(void);
+void Init_version(void);
+void show_version(void);
 
 #endif

@@ -416,7 +416,11 @@ freemethod(key, body)
     ID key;
     char *body;
 {
-    freenode(__r49_unchecked_cast(struct node *, char *, body));
+#if defined(__r49_bugfix) && defined(__r49_required_change)
+    freenode(__r49_cast(struct RMethod *, char *, body)->node);
+#else
+    freenode(body);
+#endif
     return ST_CONTINUE;
 }
 

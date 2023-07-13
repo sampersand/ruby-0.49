@@ -584,7 +584,7 @@ Ffix_plus(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_plus(__r49_unchecked_cast(struct RBignum *, VALUE, big1), __r49_unchecked_cast(struct RBignum *, VALUE, big2));
+		r = Fbig_plus(__r49_cast(struct RBignum *, VALUE, big1), __r49_cast(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;
@@ -617,7 +617,7 @@ Ffix_minus(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_minus(__r49_unchecked_cast(struct RBignum *, VALUE, big1), __r49_unchecked_cast(struct RBignum *, VALUE, big2));
+		r = Fbig_minus(__r49_cast(struct RBignum *, VALUE, big1), __r49_cast(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;
@@ -646,7 +646,7 @@ Ffix_mul(x, y)
 		GC_LINK;
 		GC_PRO3(big1, int2big(a));
 		GC_PRO3(big2, int2big(b));
-		r = Fbig_mul(__r49_unchecked_cast(struct RBignum *, VALUE, big1), __r49_unchecked_cast(struct RBignum *, VALUE, big2));
+		r = Fbig_mul(__r49_cast(struct RBignum *, VALUE, big1), __r49_cast(struct RBignum *, VALUE, big2));
 		GC_UNLINK;
 	    }
 	    return r;

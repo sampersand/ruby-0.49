@@ -54,7 +54,4 @@ st_table *st_copy();
 
 int st_strhash();
 
-__R49_WARNINGS_PUSH()
-__R49_WARNINGS_IGNORE("extra-tokens")
 #endif ST_INCLUDED
-__R49_WARNINGS_POP()

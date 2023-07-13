@@ -70,7 +70,9 @@ rb_define_class_id(id, super)
     ID id;
     struct RBasic *super;
 {
-    struct RClass *cls = (struct RClass*)class_new(__r49_unchecked_cast(struct RClass *, struct RBasic *, super));
+    /* __r49: While casting from `RBasic*` to `RClass*` is unsound, every single invocation
+     * (including from `rb_define_class`) actually passes an `RClass *`. */
+    struct RClass *cls = (struct RClass*)class_new(__r49_cast(struct RClass *, struct RBasic *, super));
 
     rb_name_class(cls, id);
 
@@ -170,7 +172,7 @@ rb_add_method(class, mid, node, scope)
     OBJSETUP(mth, C_Method, T_METHOD);
 
     if (class == Qnil) class = (struct RClass*)C_Object;
-    if (st_lookup(class->m_tbl, mid, __r49_unchecked_cast(char **, struct RMethod **, &body))) {
+    if (st_lookup(class->m_tbl, mid, __r49_cast_to_charpp(struct RMethod *, &body))) {
 	if (verbose) {
 	    Warning("redefine %s", rb_id2name(mid));
 	}
@@ -185,7 +187,7 @@ rb_add_method(class, mid, node, scope)
     mth->id = mid;
     mth->scope = scope;
     literalize(__r49_cast_to_RBasic(RMethod, mth));
-    st_insert(class->m_tbl, mid, __r49_unchecked_cast(char *, struct RMethod *, mth));
+    st_insert(class->m_tbl, mid, __r49_cast_to_charp(struct RMethod, mth));
 }
 
 void
@@ -331,7 +333,11 @@ rb_scan_args(args, fmt, va_alist)
 	len = RARRAY(args)->len;
     }
 
-    __r49_unchecked(__r49_warnings_ignore_q("varargs", va_start(vargs, args)));
+#ifdef __r49_required_change
+    va_start(vargs, fmt);
+#else
+    va_start(vargs);
+#endif
 
     if (*p == '*') {
 	var = va_arg(vargs, VALUE*);

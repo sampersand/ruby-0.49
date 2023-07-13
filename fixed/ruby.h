@@ -70,13 +70,13 @@ typedef unsigned short USHORT;
 
 /* In 64bit, everything is posfixable and negfixable. */
 #ifdef __r49_64bit
-# define __r49_64bit_ignore_tautological_constant_out_of_range_compare(...) \
+# define __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare(...) \
 	__r49_warnings_ignore_q("tautological-constant-out-of-range-compare", __VA_ARGS__)
 #else
-# define __r49_64bit_ignore_tautological_constant_out_of_range_compare(...) __VA_ARGS__
+# define __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare(...) __VA_ARGS__
 #endif
-#define POSFIXABLE(f) __r49_64bit_ignore_tautological_constant_out_of_range_compare((f) <= FIXNUM_MAX)
-#define NEGFIXABLE(f) __r49_64bit_ignore_tautological_constant_out_of_range_compare((f) >= FIXNUM_MIN)
+#define POSFIXABLE(f) __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare((f) <= FIXNUM_MAX)
+#define NEGFIXABLE(f) __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare((f) >= FIXNUM_MIN)
 
 #define FIXABLE(f) (POSFIXABLE(f) && NEGFIXABLE(f))
 

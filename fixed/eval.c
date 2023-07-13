@@ -25,14 +25,14 @@ extern NODE *eval_tree;
 struct ENVIRON *the_env, *top_env;
 
 #ifdef __r49_recursion_limit /* add support for recursion limits */
-unsigned __r48_recursion_size;
+unsigned __r49_recursion_size;
 #endif
 
 #ifdef __r49_recursion_limit
 # define __R49_RECURSION_PUSH() \
-	do { if (__r48_recursion_size++ >= __r49_recursion_limit) \
+	do { if (__r49_recursion_size++ >= __r49_recursion_limit) \
 		Fail("recursion limit of %d reached",  __r49_recursion_limit); }while(0)
-# define __R49_RECURSION_POP() do { --__r48_recursion_size; } while(0)
+# define __R49_RECURSION_POP() do { --__r49_recursion_size; } while(0)
 #else
 # define __R49_RECURSION_PUSH() do {} while(0)
 # define __R49_RECURSION_POP() do{} while(0)
@@ -621,7 +621,7 @@ rb_eval(node)
       case NODE_REDO:
 	JUMP_TAG(TAG_REDO);
 	break;
-#endif /* defined(__r49_bugfix) */
+#endif
 
       case NODE_RETURN:
 	if (node->nd_stts) last_val = rb_eval(node->nd_stts);

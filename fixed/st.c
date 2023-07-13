@@ -1,11 +1,5 @@
 /* This is a general purpose hash table package written by Peter Moore @ UCB. */
 #include "__r49_fixes.h"
-__r49_unchecked(__R49_WARNINGS_IGNORE("pointer-to-int-cast"))
-#ifdef __r49_TODO
-# define __r49_validated(x) x
-# define __r49_implicit_int int
-#endif
-
 
 static	char	sccsid[] = "@(#) st.c 5.1 89/12/14 Crucible";
 #ifndef lint
@@ -41,8 +35,8 @@ static __r49_void_return rehash();
 /*#define do_hash(key, table) (*table->hash)(key, table->num_bins)*/
 
 #define do_hash(key, table)\
-    ((table->hash == ST_PTRHASH) ? (((int) (key) >> 2) % table->num_bins) :\
-	(table->hash == ST_NUMHASH) ? ((int) (key) % table->num_bins) :\
+    ((table->hash == ST_PTRHASH) ? (((__r49_64bit_replacement(int, intptr_t)) (key) >> 2) % table->num_bins) :\
+	(table->hash == ST_NUMHASH) ? ((__r49_64bit_replacement(int, intptr_t)) (key) % table->num_bins) :\
 	(*table->hash)((key), table->num_bins))
 
 st_table *st_init_table_with_params(compare, hash, size, density, grow_factor,
@@ -79,7 +73,7 @@ int (*hash)();
 				     ST_DEFAULT_REORDER_FLAG);
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_free_table(table)
 st_table *table;
 {
@@ -96,7 +90,7 @@ st_table *table;
     }
     free((char *) table->bins);
     free((char *) table);
-    __r49_validated(return 0;)
+    __r49_required_change_q(return 0;) /* even though the return value is never used, we need one */
 }
 
 #define PTR_NOT_EQUAL(table, ptr, key)\
@@ -119,7 +113,7 @@ if (PTR_NOT_EQUAL(table, ptr, key)) {\
     }\
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_lookup(table, key, value)
 st_table *table;
 register char *key;
@@ -156,7 +150,7 @@ char **value;
     table->num_entries++;\
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_insert(table, key, value)
 register st_table *table;
 register char *key;
@@ -179,7 +173,7 @@ char *value;
     }
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_add_direct(table, key, value)
 st_table *table;
 char *key;
@@ -190,10 +184,10 @@ char *value;
     
     hash_val = do_hash(key, table);
     ADD_DIRECT(table, key, value, hash_val, tbl);
-    __r49_validated(return 0;)
+    __r49_required_change_q(return 0;)
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_find_or_add(table, key, slot)
 st_table *table;
 char *key;
@@ -288,7 +282,7 @@ st_table *old_table;
     return new_table;
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_delete(table, key, value)
 register st_table *table;
 register char **key;
@@ -331,7 +325,7 @@ char **value;
     return 0;
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_foreach(table, func, arg)
 st_table *table;
 enum st_retval (*func)();
@@ -368,7 +362,7 @@ char *arg;
     __r49_required_change_q(return 0;)
 }
 
-__r49_implicit_int
+__r49_implicit(int)
 st_strhash(string, modulus)
 register char *string;
 int modulus;
@@ -381,5 +375,4 @@ int modulus;
     }
 
     return ((val < 0) ? -val : val)%modulus;
-    __r49_validated(return 0;)
 }

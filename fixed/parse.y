@@ -14,8 +14,6 @@
 
 #define YYDEBUG 1
 #include "__r49_fixes.h"
-__R49_WARNINGS_IGNORE("incompatible-pointer-types")
-__R49_WARNINGS_IGNORE("non-literal-null-conversion")
 #include "ruby.h"
 #include "env.h"
 #include "node.h"
@@ -2156,7 +2154,7 @@ call_op(recv, id, narg, arg1)
 	arg_data.id = id;
 	arg_data.narg = narg;
 	if (narg == 1) arg_data.arg = arg1->nd_lit;
-	result = NEW_LIT(rb_resque(call_lit, __r49_unchecked_cast(char *, struct call_arg *, &arg_data), except_lit, Qnil));
+	result = NEW_LIT(rb_resque(call_lit, __r49_cast_to_charp(struct call_arg, &arg_data), except_lit, Qnil));
 	freenode(recv);
 	if (narg == 1) freenode(arg1);
 	return result;
@@ -2470,7 +2468,7 @@ rb_intern(name)
     int id;
     int last;
 
-    if (st_lookup(sym_tbl, name, &id))
+    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(int, &id)))
 	return id;
 
     id = ++last_id;

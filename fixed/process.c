@@ -53,7 +53,7 @@ rb_waitpid(pid, flags)
 #ifdef HAVE_WAIT4
     result = wait4(pid, &st, flags, NULL);
 #else
-    if (pid_tbl && st_lookup(pid_tbl, pid, __r49_unchecked_cast(char **, int *, &st))) {
+    if (pid_tbl && st_lookup(pid_tbl, pid, __r49_cast_to_charpp(int, &st))) {
 	status = INT2FIX(st);
 	st_delete(pid_tbl, &pid, NULL);
 	return pid;
@@ -207,9 +207,6 @@ void
 rb_syswait(pid)
     int pid;
 {
-    __r49_unchecked(__R49_WARNINGS_PUSH())
-    __r49_unchecked(__R49_WARNINGS_IGNORE("incompatible-function-pointer-types"))
-
     RETSIGTYPE (*hfunc)(), (*ifunc)(), (*qfunc)();
 
     hfunc = signal(SIGHUP, SIG_IGN);
@@ -221,8 +218,6 @@ rb_syswait(pid)
     signal(SIGHUP, hfunc);
     signal(SIGINT, ifunc);
     signal(SIGQUIT, qfunc);
-
-    __r49_unchecked(__R49_WARNINGS_POP())
 }
 
 static VALUE
@@ -497,7 +492,7 @@ sighandle(sig)
 	Fail("trap_handler: Bad signal %d", sig);
 
 #ifndef HAVE_BSD_SIGNALS
-    signal(sig, __r49_unchecked_cast(void(*)(int), RETSIGTYPE(*)(), sighandle));
+    signal(sig, __r49_cast(void(*)(int), RETSIGTYPE(*)(), sighandle));
 #endif
 
 #ifdef SAFE_SIGHANDLE
@@ -512,10 +507,10 @@ sighandle(sig)
 #endif
 
 #ifdef __r49_required_change /* use `return 0;` only if RETSIGTYPE is int. */
-# define __r49_required_change_void
-# define __r49_required_change_int return 0;
+# define __r49_sighandle_replacementeturn_void
+# define __r49_sighandle_replacementeturn_int return 0;
 # define __r49_ret1(U) __r49_ret2(U)
-# define __r49_ret2(U) __r49_required_change_##U
+# define __r49_ret2(U) __r49_sighandle_replacementeturn_##U
     __r49_ret1(RETSIGTYPE)
 #endif
 }
@@ -628,33 +623,33 @@ Ftrap(argc, argv)
     func = sighandle;
 
     if (argv[1] == Qnil) {
-	func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
+	func = __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	command = Qnil;
     }
     else {
 	Check_Type(argv[1], T_STRING);
 	command = argv[1];
 	if (RSTRING(argv[1])->len == 0) {
-	    func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
+	    func = __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	}
 	else if (RSTRING(argv[1])->len == 7) {
 	    if (strncmp(RSTRING(argv[1])->ptr, "SIG_IGN", 7) == 0) {
-		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
+		func = __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	    }
 	    else if (strncmp(RSTRING(argv[1])->ptr, "SIG_DFL", 7) == 0) {
-		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL);
+		func = __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL);
 	    }
 	    else if (strncmp(RSTRING(argv[1])->ptr, "DEFAULT", 7) == 0) {
-		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL);
+		func = __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL);
 	    }
 	}
 	else if (RSTRING(argv[1])->len == 6) {
 	    if (strncmp(RSTRING(argv[1])->ptr, "IGNORE", 6) == 0) {
-		func = __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
+		func = __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN);
 	    }
 	}
     }
-    if (func == __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN) || func == __r49_unchecked_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL))
+    if (func == __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_IGN) || func == __r49_cast(RETSIGTYPE(*)(), void(*)(int), SIG_DFL))
 	command = Qnil;
 
     for (i=2; i<argc; i++) {
@@ -673,7 +668,7 @@ Ftrap(argc, argv)
 	if (i < 0 || i > NSIG)
 	    Fail("Invalid signal no %d", sig);
 
-	signal(sig, __r49_unchecked_cast(void(*)(int), RETSIGTYPE(*)(), sighandle));
+	signal(sig, __r49_cast(void(*)(int), RETSIGTYPE(*)(), __r49_bugfix_replacement(sighandle, func)));
 	trap_list[sig] = command;
 	/* enable at least specified signal. */
 	mask &= ~sigmask(sig);

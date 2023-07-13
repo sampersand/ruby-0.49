@@ -11,8 +11,7 @@
 ************************************************/
 
 #include "ruby.h"
-
-#define __r49_unchecked_cast_to_iter(ptr) (__r49_unchecked((VALUE (*)()) ptr))
+#define __r49_iter(ty, ptr) (__r49_cast(VALUE (*)(), void(*)ty, ptr))
 
 VALUE M_Enumerable;
 static ID id_each, id_match, id_equal, id_cmp;
@@ -48,7 +47,7 @@ Fenum_grep(obj, pat)
     __r49_implicit_arg(VALUE, pat)
 {
     if (iterator_p()) {
-	rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_grep2), pat);
+	rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,VALUE), enum_grep2), pat);
 	return obj;
     }
     else {
@@ -58,7 +57,7 @@ Fenum_grep(obj, pat)
 	GC_LINK;
 	GC_PRO(tmp);
 
-	rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_grep), __r49_cast(char *, VALUE *, &arg[0]));
+	rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE, VALUE*), enum_grep), __r49_cast_to_charp(VALUE, &arg[0]));
 
 	GC_UNLINK;
 	return tmp;
@@ -83,7 +82,7 @@ Fenum_find(obj)
     int enum_found;
 
     enum_found = FALSE;
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_find), __r49_cast(char *, int *, &enum_found));
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,int*), enum_find), __r49_cast_to_charp(int, &enum_found));
     return enum_found;
 }
 
@@ -106,7 +105,7 @@ Fenum_find_all(obj)
     GC_LINK;
     GC_PRO3(tmp, ary_new());
 
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_find_all), Qnil);
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,VALUE), enum_find_all), Qnil);
 
     GC_UNLINK;
     return tmp;
@@ -138,7 +137,7 @@ Fenum_collect(obj)
     GC_LINK;
     GC_PRO3(tmp, ary_new());
 
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_collect), tmp);
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,VALUE), enum_collect), tmp);
 
     GC_UNLINK;
     return tmp;
@@ -160,7 +159,7 @@ Fenum_reverse(obj)
     GC_LINK;
     GC_PRO3(tmp, ary_new());
 
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_reverse), tmp);
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,VALUE), enum_reverse), tmp);
 
     GC_UNLINK;
     return tmp;
@@ -181,7 +180,7 @@ Fenum_to_a(obj)
 
     GC_LINK;
     GC_PRO3(ary, ary_new());
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_all), ary);
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,VALUE), enum_all), ary);
     GC_UNLINK;
 
     return ary;
@@ -223,7 +222,7 @@ Fenum_min(obj)
 
     GC_LINK;
     GC_PRO2(min);
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_min), __r49_cast(char *, VALUE *, &min));
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,VALUE*), enum_min), __r49_cast_to_charp(VALUE, &min));
     GC_UNLINK;
     return min;
 }
@@ -251,7 +250,7 @@ Fenum_max(obj)
 
     GC_LINK;
     GC_PRO2(max);
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_max), __r49_cast(char *, VALUE *, &max));
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,VALUE*), enum_max), __r49_cast_to_charp(VALUE, &max));
     GC_UNLINK;
     return max;
 }
@@ -286,7 +285,7 @@ Fenum_index(obj, val)
     iv.i = 0;
     iv.v = val;
     iv.found = 0;
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_index), __r49_cast(char *, struct i_v_pair *, &iv));
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,struct i_v_pair*), enum_index), __r49_cast_to_charp(struct i_v_pair, &iv));
     if (iv.found) return INT2FIX(iv.i);
     return Qnil;		/* not found */
 }
@@ -311,7 +310,7 @@ Fenum_includes(obj, val)
 
     iv.i = 0;
     iv.v = val;
-    rb_iterate(__r49_unchecked_cast_to_iter(rb_each), obj, __r49_unchecked_cast_to_iter(enum_includes), __r49_cast(char *, struct i_v_pair *, &iv));
+    rb_iterate(__r49_iter((VALUE), rb_each), obj, __r49_iter((VALUE,struct i_v_pair*), enum_includes), __r49_cast_to_charp(struct i_v_pair, &iv));
     if (iv.i) return TRUE;
     return FALSE;
 }

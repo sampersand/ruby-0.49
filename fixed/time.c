@@ -251,11 +251,8 @@ static VALUE
 Ftime_coerce(time1, time2)
     VALUE time1, time2;
 {
-#ifdef __r49_required_change /* The original code has an extra parameter */
-    return time_new(CLASS_OF(time1), NUM2INT(time2));
-#else
-    return time_new(CLASS_OF(time1), NUM2INT(time2), 0);
-#endif
+    /* __r49: The original code has an extra parameter */
+    return time_new(CLASS_OF(time1), NUM2INT(time2) __r49_required_change_nq(, 0));
 }
 
 static VALUE

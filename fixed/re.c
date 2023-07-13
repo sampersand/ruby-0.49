@@ -332,7 +332,7 @@ Freg_new(re, src)
 {
     switch (TYPE(src)) {
       case T_STRING:
-	return regexp_new_1(re, __r49_unchecked_cast(char *, Regexp*, RREGEXP(src)->ptr), RREGEXP(src)->len);
+	return regexp_new_1(re, __r49_cast_to_charp(Regexp, RREGEXP(src)->ptr), RREGEXP(src)->len);
 
       case T_REGEXP:
 	return regexp_new_1(re, RREGEXP(src)->str, RREGEXP(src)->len);

@@ -1245,8 +1245,9 @@ re_compile_pattern (pattern, size, bufp)
                        BUFPUSH (set_number_at);
 		       GET_BUFFER_SPACE (2);
 #ifdef __r49_bugfix
-		       /* In older C compilers this looks to have been legal. However, modern ones
-		        * handle it differently, so I had to edit it. I'm 85% sure it works now. */
+		       /* __r49: In older C compilers this looks to have been legal. However, modern
+		        * ones handle it differently, so I had to edit it. I'm 85% sure it works now.
+		        */
 		       *b++ = -5;
 		       *b++ = -1;
 #else
@@ -1839,7 +1840,7 @@ re_compile_fastmap (bufp)
 	    size = EXTRACT_UNSIGNED (&p[-2]);
 	    /* In 0.69 this was corrected to use 0x80; assigning 0x8000 to an unsigned char wraps it
 	     * to 0x00. I presume this was a bug that wasn't caught until later. */
-	    __r49_warnings_ignore_q("constant-conversion", c = __r49_bugfix_replacement(0x8000, 0x80));
+	    c = __r49_bugfix_replacement(__r49_warnings_ignore_q("constant-conversion", 0x8000), 0x80);
 	    for (j = 0; j < size; j++) {
 	      for (beg = (unsigned char) p[j*4 + 0]; c < beg; c++)
 		if (ismbchar (c))
@@ -2153,10 +2154,9 @@ struct register_info
 
 #define POP_FAILURE_POINT()						\
   {									\
-    int temp;								\
+    __r49_64bit_replacement(int, uintptr_t) temp;			\
     stackp -= 2;		/* Remove failure points.  */		\
-__r49_warnings_ignore_q(__r49_unchecked("pointer-to-int-cast"),\
-    temp = (int) *--stackp;)	/* How many regs pushed.  */	        \
+    temp = (__r49_64bit_replacement(int, uintptr_t)) *--stackp;	/* How many regs pushed.  */	        \
     temp *= NUM_REG_ITEMS;	/* How much to take off the stack.  */	\
     stackp -= temp; 		/* Remove the register info.  */	\
   }

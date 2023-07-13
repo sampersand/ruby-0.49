@@ -504,7 +504,7 @@ Fstr_index(str, args)
 
     switch (TYPE(sub)) {
       case T_REGEXP:
-	pos = research(__r49_unchecked_cast(struct RRegexp *, struct RString *, sub), str, pos, ignorecase);
+	pos = research(__r49_cast(struct RRegexp *, struct RString *, sub), str, pos, ignorecase);
 	break;
 
       case T_STRING:
