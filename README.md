@@ -19,7 +19,7 @@ You can identify all the changes I've made in [`fixed`](./fixed) via `__r49`; If
 
 ### Flags
 
-The following flags affect how the program compiles. You can disable them by adding `-D<flag>=0` to `CPPFLAGS` when you call `make`. (e.g., `CPPFLAGS='-D__r49_64bit=0 -D__r49_bugfix=0 make`.)
+The following flags affect how the program compiles. You can disable them by adding `-D<__r49_no_<flag>` to `CPPFLAGS` when you call `make`. (e.g., `CPPFLAGS='-D__r49_no_64bit -D__r49_no_bugfix make`.)
 |          name           | description |
 |:------------------------|-------------|
 | `__r49_required_change` | Changes that are required to compile it with modern compilers |

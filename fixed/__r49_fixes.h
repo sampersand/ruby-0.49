@@ -2,7 +2,6 @@
 #define __R49_FIXES_H
 
 #define __r49_dev /* define if you're working _on_ r49 */
-#define __r49_TODO
 
 #ifdef __clang__
 # define __r49_str(x) #x
@@ -55,10 +54,10 @@ __R49_WARNINGS_IGNORE("extra-tokens") /* there's a single one of these, in `st.h
 /* Changes that are required to even compile it. In ruby 0.49, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
  * compiler from accepting the code. */
-#if defined(__r49_required_change) && __r49_required_change == 0
-# undef __r49_required_change /* You can disable things via `-D__r49_64bit=0` */
-#else
-# define __r49_required_change
+
+#define __r49_required_change
+#ifdef __r49_no_required_change
+# undef __r49_required_change
 #endif
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
@@ -75,10 +74,9 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 /* Changes that are required to get Ruby 0.49 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
  * it'll only compile on 32 bit machines. */
-#if defined(__r49_64bit) && __r49_64bit == 0
+#define __r49_64bit
+#ifdef __r49_no_64bit
 # undef __r49_64bit
-#else
-# define __r49_64bit
 #endif
 #ifdef __r49_64bit
 # define __r49_64bit_q(...) __VA_ARGS__
@@ -92,11 +90,11 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
  * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
  * consider the intended value. */
-#if defined(__r49_critical_bugfix) && __r49_critical_bugfix == 0
+#define __r49_critical_bugfix
+#ifdef __r49_no_critical_bugfix
 # undef __r49_critical_bugfix
-#else
-# define __r49_critical_bugfix
 #endif
+
 #ifdef __r49_critical_bugfix
 # define __r49_critical_bugfix_q(...) __VA_ARGS__
 # define __r49_critical_bugfix_replacement(old, new) new
@@ -107,10 +105,9 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 
 /* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, even though
  * it's references in a lot of places internally), but won't preclude normal operation. */
-#if defined(__r49_bugfix) && __r49_bugfix == 0
+#define __r49_bugfix
+#ifdef __r49_no_bugfix
 # undef __r49_bugfix
-#else
-# define __r49_bugfix
 #endif
 #ifdef __r49_bugfix
 # define __r49_bugfix_q(...) __VA_ARGS__
@@ -139,6 +136,9 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 #else
 # define __r49_noreturn void
 #endif
+
+// struct x { int x, y; };
+// _Noreturn struct x foo();
 
 #ifndef __r49_required_change
 # define __r49_cast(to, from, val) (val)
@@ -235,13 +235,11 @@ void *memset(void *, int, unsigned long);
 void free(void *);
 void srand(unsigned int);
 double floor(double);
-
 char *initstate(unsigned, char *, size_t);
 long random(void);
 char *setstate(const char *);
 void srandom(unsigned);
 long strtol(const char *, char **, int);
-
 #endif
 
 /**************************************************************************************************
