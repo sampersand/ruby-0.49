@@ -1662,7 +1662,8 @@ retry:
       case '%':
 	if (lex_state == EXPR_BEG || lex_state == EXPR_MID) {
 #ifdef __r49_bugfix /* fix `%` being parsed as a constant when it shouldnt be */
-	    int __r49_is_constant = isalnum(nextc()); pushback();
+	    int __r49_is_constant = isalnum(nextc());
+	    pushback();
 	    if (!__r49_is_constant) goto __r49_not_a_constant;
 #endif
 	    /* class constant */

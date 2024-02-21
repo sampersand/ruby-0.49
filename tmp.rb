@@ -1,16 +1,19 @@
-x = "abc"
-print($; = "")
-print(x.split._inspect)
+"a".sub(".", "&&")
 __END__
+def self.a 
+  3
+end
+
 def one_upto(max)
   for x in 1..max
-    yield(x)
+    yield x
   end for
 end def
 
 do one_upto(10) using i
   print("in here: ", i, "\n")
 end do
+print(a())
   
 __END__
 $\="\n"

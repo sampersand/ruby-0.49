@@ -122,8 +122,8 @@ Frng_to_s(obj)
     beg = rb_iv_get(obj, "start");
     end = rb_iv_get(obj, "end");
 
-/* If you convert a range of anything other than integers to a string, it segfaults.
- * Not critical because it's not a common codepath. */
+/* __r49: If you convert a range of anything other than integers to a string,
+ * it segfaults. Not critical because it's not a common codepath. */
 #ifdef __r49_bugfix
     if (!FIXNUM_P(beg) || !FIXNUM_P(end)) {
     	GC_LINK;

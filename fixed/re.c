@@ -365,6 +365,7 @@ re_regsub(str)
     GC_LINK;
     GC_PRO2(val);
     while (s < e) {
+	__r49_bugfix_q(char *ss = s;) /* Backported from ruby 0.50 */
 	c = *s++;
 	if (c == '&')
 	    no = 0;
@@ -375,10 +376,10 @@ re_regsub(str)
 
 	if (no >= 0 || c == '\\') {
 	    if (val == Qnil) {
-		val = str_new(p, s-p-2);
+		val = str_new(p, __r49_bugfix_replacement(s-p-2, ss-p));
 	    }
 	    else {
-		str_cat(val, p, s-p-2);
+		str_cat(val, p, __r49_bugfix_replacement(s-p-2, ss-p));
 	    }
 	    p = s;
 	}
