@@ -755,6 +755,8 @@ Fary_assoc(ary, key)
 	    && RARRAY(*p)->len == 2
 	    && rb_funcall(RARRAY(*p)->ptr[0], eq, 1, key))
 	    return *p;
+
+	__r49_bugfix_q(++p;)
     }
     return Qnil;
 }

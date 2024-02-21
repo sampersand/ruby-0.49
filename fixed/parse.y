@@ -786,11 +786,11 @@ expr2		: IF expr2 then
 		    }
 		| expr2 AND expr2
 		    {
-			$$ = NEW_AND(cond($1), cond($3));
+			$$ = NEW_AND(cond($1), __r49_bugfix_replacement(cond,)($3));
 		    }
 		| expr2 OR expr2
 		    {
-			$$ = NEW_OR(cond($1), cond($3));
+			$$ = NEW_OR(cond($1), __r49_bugfix_replacement(cond,)($3));
 		    }
 		|primary
 		    {

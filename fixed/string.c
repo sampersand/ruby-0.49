@@ -1424,6 +1424,7 @@ Fstr_chop(str)
 
     str_modify(str);
 
+    __r49_bugfix_q(if (!str->len) return (VALUE)str;)
     str->len--;
     str->ptr[str->len] = '\0';
 
