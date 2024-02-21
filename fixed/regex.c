@@ -1840,7 +1840,11 @@ re_compile_fastmap (bufp)
 	    size = EXTRACT_UNSIGNED (&p[-2]);
 	    /* In 0.69 this was corrected to use 0x80; assigning 0x8000 to an unsigned char wraps it
 	     * to 0x00. I presume this was a bug that wasn't caught until later. */
-	    c = __r49_bugfix_replacement(__r49_warnings_ignore_q("constant-conversion", 0x8000), 0x80);
+#ifdef __r49_bugfix
+	    c = 0x80;
+#else
+	    __r49_warnings_ignore_q("constant-conversion", c = 0x8000;)
+#endif
 	    for (j = 0; j < size; j++) {
 	      for (beg = (unsigned char) p[j*4 + 0]; c < beg; c++)
 		if (ismbchar (c))

@@ -1041,8 +1041,6 @@ Init_File()
     rb_define_single_method(C_File, "umask", Ffile_umask, -1);
     rb_define_single_method(C_File, "truncate", Ffile_truncate, 2);
 
-	printf("%d\n", (_Generic((GETGROUPS_T) 0, gid_t: 1, int: 2)));
-
     rb_define_method(C_File, "stat",  Ffile_stat2, 0);
     rb_define_method(C_File, "lstat",  Ffile_lstat2, 0);
 

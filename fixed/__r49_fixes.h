@@ -1,3 +1,6 @@
+/**
+ * Fixes to make ruby 0.49 workable
+ */
 #ifndef __R49_FIXES_H
 #define __R49_FIXES_H
 
@@ -54,7 +57,6 @@ __R49_WARNINGS_IGNORE("extra-tokens") /* there's a single one of these, in `st.h
 /* Changes that are required to even compile it. In ruby 0.49, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
  * compiler from accepting the code. */
-
 #define __r49_required_change
 #ifdef __r49_no_required_change
 # undef __r49_required_change
@@ -240,7 +242,7 @@ long random(void);
 char *setstate(const char *);
 void srandom(unsigned);
 long strtol(const char *, char **, int);
-#endif
+#endif /* !__r49_no_use_includes */
 
 /**************************************************************************************************
  **                                                                                              **
@@ -468,7 +470,6 @@ VALUE Fstr_clone(struct RString *str);
 VALUE obj_as_string(VALUE obj);
 VALUE str_cat(struct RString *str, char *ptr, UINT len);
 
-
 /* st.c */
 int st_insert(register struct st_table *table, register char *key, char *value);
 int st_lookup(struct st_table *table, register char *key, char **value);
@@ -500,4 +501,4 @@ void mark_global_tbl(void);
 void Init_version(void);
 void show_version(void);
 
-#endif
+#endif /* !__R49_FIXES_H */
