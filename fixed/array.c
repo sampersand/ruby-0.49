@@ -258,6 +258,7 @@ ary_subseq(ary, beg, len)
     }
     if (beg + len > ary->len) {
 	len = ary->len - beg;
+	__r49_bugfix_q(if (len < 0) len = 0;)
     }
 
     ary2 = (struct RArray*)ary_new2(len);

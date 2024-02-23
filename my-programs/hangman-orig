@@ -43,31 +43,17 @@ def func words_from_file(file)
   words
 end
 
-module loopable
-  def loop
-    unless iterator_p()
-      fail("must pass an iterator to `loop`")
-    end
-
-    while %TRUE
-      yield nil # You _need_ to yield something, even if you're not going to use it.
-    end
-  end
-end
-
 # Classes could be lower-case.
 class game
-  include loopable # includes act like they do in modern ruby
-
   def play
     # true and false were actually constants--`%TRUE` and `%FALSE`. Because `nil` was _the_ only
     # falsey thing in ruby 0.49, `%FALSE` was actually an alias for it, and `%TRUE` was simply `1`.
-    do loop()
+    while %TRUE
       # More examples of needed `()`s when called like a function.
       reset()
 
       # `until` has always existed!
-      until has_won() || has_lost()
+      until has_won()
         take_turn()
       end
 
@@ -79,68 +65,44 @@ end
 
 # Inheritance was done via `:` (maybe inspired from C++??) instead of `<`.
 class hangman : game
-  # It was convention to do instance methods on the class n ame iself.,
-  # Also, keyword args were passed as tuples, hence the `*opts`.
+
   def hangman.from_file(file, *opts)
     new(words_from_file(file), *opts)
   end
 
-  # Object#new didn't automatically call `initialize` (which was called `init` back then).
-  # Also, the convention was to have `init` return `self`.
   def hangman.new(*args)
     super.init(*args)
   end
 
-  # Equivalent to modern-day `attr_reader :secret`. The `attr` function still exists but is
-  # deprecated.
-  attr("secret")
+  attr("secret", %TRUE)
 
-  # Instead of `initialize`, Ruby 0.49 used `init` by convention. However, you'd need to make
-  # a custom `new` function that'd call `init` (which then would also have to return `self`)
   def init(words, *options)
     @words = words
 
-    # Keyword arguments were passed in as tuples of `[key, value]`. So, to get the value of it,
-    # you'd need to use the `Array#assoc` function (which still exists today!)
-    if (guesses = options.assoc(\guesses))
+    unless (guesses = options.assoc(\guesses)).is_nil
       @extra_guesses = guesses[1]
     end
 
     reset()
 
-    self # You need to return `self` from `init`s by convention.
+    self
   end
 
-  def reset
-    @secret = @words[rand(@words.length)].split("")
+  def reset()
+    self.secret = @words[rand(@words.length)].split("")
     @guesses = []
   end
 
-  # Private functions started with an `@` sign, just like instance variables. (Fun fact: You could
-  # do `@1` for varialbe names if you wanted)
-  def @word_string
-    str = ''
-
-    for letter in @secret
-      str.concat(if @guesses.includes(letter) then letter else '_' end)
-    end for
-
-    str
-  end
-
-  def @incorrect_guesses
-    bad = []
-
-    for c in @guesses
-      if !@secret.includes(c) then bad << c end
-    end
-
-    bad
+  def @guessed(letter)
+    @guesses.includes(letter)
   end
 
   def has_won
-    # There was no `String#includes?`.
-    @word_string() !~ /_/
+    w = @word_string()
+    do w.each_byte using c
+      if c == ?_ then return %FALSE end
+    end
+    %TRUE
   end
 
   def take_turn
@@ -148,7 +110,8 @@ class hangman : game
       print()
       $stdout.flush
 
-      (letter = gets().chop.lc) =~ /[a-z]/ || next
+      letter = gets().chop.lc
+      letter =~ /[a-z]/ || next
 
       unless guess(letter)
         $stderr.print(sprintf("Character '%s' isn't was already guessed; try again\n", letter))
@@ -160,11 +123,29 @@ class hangman : game
   end
 
   def guess(letter)
-    if @guesses.includes(letter)
+    if @guessed(letter)
       return %FALSE
     end
 
     @guesses << letter
+  end
+
+  def @word_string
+    str = []
+
+    ß self.secret.each using letter
+      str << if @guessed(letter) then letter else '_' end
+    end do
+
+    str.join('')
+  end
+
+  def @incorrect_guesses
+    bad = []
+    for c in @guesses
+      if !self.secret.includes(c) then bad << c end
+    end
+    bad
   end
 
   def to_s

@@ -1410,8 +1410,8 @@ Fstr_each_byte(str)
 {
     int i;
 
-    for (i=0; str->len; i++) {
-	rb_yield(str->ptr[i] & 0xff);
+    for (i=0; __r49_bugfix_q(i < ) str->len; i++) {
+	rb_yield(__r49_bugfix_replacement(str->ptr[i] & 0xff,INT2FIX(str->ptr[i] & 0xff)));
     }
     return (VALUE)str;
 }
@@ -1424,7 +1424,7 @@ Fstr_chop(str)
 
     str_modify(str);
 
-    __r49_bugfix_q(if (!str->len) return (VALUE)str;)
+    __r49_bugfix_q(if (!str->len) return (VALUE) str;)
     str->len--;
     str->ptr[str->len] = '\0';
 
