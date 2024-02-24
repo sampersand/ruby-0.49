@@ -111,11 +111,11 @@ class hangman : game
       $stdout.flush
 
       letter = gets().chop.lc
-      letter =~ /[a-z]/ || next
+      letter =~ /[a-z]/ || continue
 
       unless guess(letter)
         $stderr.print(sprintf("Character '%s' isn't was already guessed; try again\n", letter))
-        next
+        continue
       end
 
       return

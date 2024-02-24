@@ -1,4 +1,7 @@
-gs = TCPserver.new(1234)
+gs = TCPserver.open('127.0.0.1', 1234)
+continue
+# print(gs)
+# exit()
 while %TRUE
   gses=[gs]
   nsock = select([gs])

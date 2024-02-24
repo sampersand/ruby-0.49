@@ -121,7 +121,7 @@ class hangman : game
 
       unless guess(letter)
         $stderr.print(sprintf("Character '%s' isn't was already guessed; try again\n", letter))
-        next
+        continue
       end
 
       break
