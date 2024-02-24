@@ -1,10 +1,16 @@
-gs = TCPserver.open('127.0.0.1', 1234)
-continue
+# gs = TCPserver.open('127.0.0.1:1234')
+gs = TCPserver.open(1234)
+
+print(select([gs]))
+print(gs.accept)
+# printf("server port is on %d\n", gs.port)
+
 # print(gs)
 # exit()
 while %TRUE
   gses=[gs]
   nsock = select([gs])
+  exit()
   if nsock == nil
     print("nil\n")
     continue

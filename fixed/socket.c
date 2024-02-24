@@ -180,6 +180,7 @@ open_inet(class, h, serv, server)
     servent = NULL;
     if (FIXNUM_P(serv)) {
 	servport = FIX2UINT(serv);
+	__r49_bugfix_q(servport = htons(servport);)
 	goto setup_servent;
     }
     Check_Type(serv, T_STRING);
