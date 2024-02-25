@@ -2091,6 +2091,25 @@ void freenode(node)
       case NODE_INC:
       case NODE_NIL:
 	break;
+
+/* __r49: It looks like `load()` wasn't terribly well tested, as a lot of node
+          types didn't have any `frees` corresponding to them. */
+#ifdef __r49_critical_bugfix
+      case NODE_CASGN:
+      case NODE_UNLESS:
+      case NODE_MASGN:
+      case NODE_ZSUPER:
+      case NODE_REDO:
+      case NODE_CVAR:
+      case NODE_ALIAS:
+      case NODE_UNDEF:
+      case NODE_DOT3:
+      case NODE_ATTRSET:
+      case NODE_SELF:
+      case NODE_HASH:
+	break; /* __r49: Leak memory lol, better than `Bug`ging. */
+#endif
+
       default:
 	Bug("freenode: unknown node type %d", node->type);
 	break;

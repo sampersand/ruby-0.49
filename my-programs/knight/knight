@@ -1,0 +1,9 @@
+#!ruby 
+$LOAD_PATH << Dir.pwd
+
+load('parse.rb')
+load('function.rb')
+load('value.rb')
+
+def p(x) print(x._inspect, "\n"); x end
+kn.parse("  #hello\nD + 12  34").run

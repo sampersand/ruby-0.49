@@ -150,6 +150,19 @@ Bug(fmt, va_alist)
 #endif
     err_print(buf, args);
     va_end(args);
+/* __r49: Without this there's no way to see the content of errors when `load`ing files. */
+#ifdef __r49_critical_bugfix
+    extern VALUE errstr;
+    if (errstr != Qnil) {
+	Check_Type(errstr, T_STRING);
+	struct RString *s = (struct RString *) errstr;
+
+	fwrite(s->ptr, s->len, 1, stderr);
+	if (s->ptr[s->len] != '\n') fputc('\n', stderr);
+	fflush(stderr);
+    }
+#endif
+
     abort();
 }
 
