@@ -6,16 +6,16 @@ Until now.
 
 After spending copious amounts of time fiddling with it, you can now install, compile, and play with Ruby 0.49 locally on your computer!
 
-## Notes
-The original code as it existed in 1994 is in [`original`](./original). The code I've cleaned up lives in [`fixed`](./fixed). I've tried to stay as true to the original code as possible in my cleaned up code, only fixing things that're necessary. 
-
-You can identify all the changes I've made in [`fixed`](./fixed) via `__r49`; If it doesn't have `__r49`, I didn't touch it (and that's how the code originally looked.)
-
-## Compiling
+## Compiling, tl;dr
 1. Clone this repo
 2. `cd` into `fixed`
 3. Run `./configure`.
 4. Run `make`. The resulting `./ruby` executable is ruby 0.49!
+
+## Notes
+The original code as it existed in 1994 is in [`original`](./original). The code I've cleaned up lives in [`fixed`](./fixed). I've tried to stay as true to the original code as possible in my cleaned up code, only fixing things that're necessary. 
+
+You can identify all the changes I've made in [`fixed`](./fixed) via `__r49`; If it doesn't have `__r49`, I didn't touch it (and that's how the code originally looked.)
 
 ### Flags
 
