@@ -249,10 +249,10 @@ Init_Dir()
 
     rb_define_single_method(C_Dir,"chdir", Fdir_chdir, -2);
     rb_define_single_method(C_Dir,"getwd", Fdir_getwd, 0);
-    rb_define_alias(__r49_bugfix_replacement(C_Dir, rb_single_class(C_Dir)), "pwd", "getwd");
+    rb_define_alias(__r49_bugfix_r(C_Dir, rb_single_class(C_Dir)), "pwd", "getwd");
     rb_define_single_method(C_Dir,"chroot", Fdir_chroot, 1);
     rb_define_single_method(C_Dir,"mkdir", Fdir_mkdir, -2);
     rb_define_single_method(C_Dir,"rmdir", Fdir_rmdir, 1);
-    rb_define_alias(__r49_bugfix_replacement(C_Dir, rb_single_class(C_Dir)), "delete", "rmdir");
-    rb_define_alias(__r49_bugfix_replacement(C_Dir, rb_single_class(C_Dir)), "unlink", "rmdir");
+    rb_define_alias(__r49_bugfix_r(C_Dir, rb_single_class(C_Dir)), "delete", "rmdir");
+    rb_define_alias(__r49_bugfix_r(C_Dir, rb_single_class(C_Dir)), "unlink", "rmdir");
 }

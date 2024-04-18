@@ -668,7 +668,7 @@ Ftrap(argc, argv)
 	if (i < 0 || i > NSIG)
 	    Fail("Invalid signal no %d", sig);
 
-	signal(sig, __r49_cast(void(*)(int), RETSIGTYPE(*)(), __r49_bugfix_replacement(sighandle, func)));
+	signal(sig, __r49_cast(void(*)(int), RETSIGTYPE(*)(), __r49_bugfix_r(sighandle, func)));
 	trap_list[sig] = command;
 	/* enable at least specified signal. */
 	mask &= ~sigmask(sig);
@@ -716,7 +716,7 @@ Fproc_getpgrp(obj, args)
     }
 
     /* __r49: I'm not positive this is the right replacement; but getpgrp doesnt take a pid */
-    pgrp = __r49_required_replacement(getpgrp(pid), getpgrp());
+    pgrp = __r49_required_change_r(getpgrp(pid), getpgrp());
     return INT2FIX(pgrp);
 }
 
@@ -730,7 +730,7 @@ Fproc_setpgrp(obj, pid, pgrp)
     ipgrp = NUM2INT(pgrp);
 
     /* __r49: I'm not positive this is the right replacement; but getpgrp doesnt take a pid */
-    if (__r49_required_replacement(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(Qnil);
+    if (__r49_required_change_r(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(Qnil);
 
     return Qnil;
 }

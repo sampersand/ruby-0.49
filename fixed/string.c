@@ -1412,7 +1412,7 @@ Fstr_each_byte(str)
     int i;
 
     for (i=0; __r49_bugfix_q(i < ) str->len; i++) {
-	rb_yield(__r49_bugfix_replacement(str->ptr[i] & 0xff,INT2FIX(str->ptr[i] & 0xff)));
+	rb_yield(__r49_bugfix_r(str->ptr[i] & 0xff,INT2FIX(str->ptr[i] & 0xff)));
     }
     return (VALUE)str;
 }

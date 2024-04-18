@@ -55,7 +55,7 @@ Fstruct_access(s)
     return struct_find(s, the_env->last_func);
 }
 
-static __r49_required_replacement(VALUE, __r49_void_return) /* the return type is given, but never used */
+static __r49_required_change_r(VALUE, __r49_void_return) /* the return type is given, but never used */
 struct_add(s, mem, val)
     struct RStruct *s;
     char *mem;
@@ -151,7 +151,7 @@ Fstruct_new(class, args)
     return st;
 }
 
-static __r49_required_replacement(VALUE, __r49_void_return) /* the return type is given, but never used */
+static __r49_required_change_r(VALUE, __r49_void_return) /* the return type is given, but never used */
 Fstruct_each(s)
     struct RStruct *s;
 {

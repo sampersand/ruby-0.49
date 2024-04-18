@@ -97,7 +97,7 @@ __R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, a
 # define __r49_required_change_nq(...) __VA_ARGS__
 #endif
 
-#define __r49_required_replacement(old, new) __r49_required_change_nq(old) __r49_required_change_q(new)
+#define __r49_required_change_r(old, new) __r49_required_change_nq(old) __r49_required_change_q(new)
 
 /* Changes that are required to get Ruby 0.49 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
@@ -109,13 +109,13 @@ __R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, a
 
 #ifdef __r49_64bit
 # define __r49_64bit_q(...) __VA_ARGS__
-# define __r49_64bit_replacement(old, new) new
+# define __r49_64bit_r(old, new) new
 #else
 # define __r49_64bit_q(...)
-# define __r49_64bit_replacement(old, new) old
+# define __r49_64bit_r(old, new) old
 #endif
 
-#define __r49_64bit_int_to_value __r49_64bit_replacement(int, VALUE)
+#define __r49_64bit_int_to_value __r49_64bit_r(int, VALUE)
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
  * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
@@ -127,10 +127,10 @@ __R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, a
 
 #ifdef __r49_critical_bugfix
 # define __r49_critical_bugfix_q(...) __VA_ARGS__
-# define __r49_critical_bugfix_replacement(old, new) new
+# define __r49_critical_bugfix_r(old, new) new
 #else
 # define __r49_critical_bugfix_q(...)
-# define __r49_critical_bugfix_replacement(old, new) old
+# define __r49_critical_bugfix_r(old, new) old
 #endif
 
 /* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, even though
@@ -142,7 +142,7 @@ __R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, a
  
 #ifdef __r49_bugfix
 # define __r49_bugfix_q(...) __VA_ARGS__
-# define __r49_bugfix_replacement(old, new) new
+# define __r49_bugfix_r(old, new) new
 # ifndef __r49_recursion_limit  /* ruby 0.49 segfaults if you recurse too deep; this fixes that */
 #  define __r49_recursion_limit 1000 /* semi-conservative estimate; 1027 is the max on my computer */
 # elif __r49_recursion_limit == 0
@@ -150,7 +150,7 @@ __R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, a
 # endif
 #else
 # define __r49_bugfix_q(...)
-# define __r49_bugfix_replacement(old, new) old
+# define __r49_bugfix_r(old, new) old
 #endif
 
 /* UB is fixing behaviour which is now considered undefined behaviour by the C standard */
@@ -161,10 +161,10 @@ __R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, a
 
 #ifdef __r49_ubfix
 # define __r49_ubfix_q(...) __VA_ARGS__
-# define __r49_ubfix_replacement(old, new) new
+# define __r49_ubfix_r(old, new) new
 #else
 # define __r49_ubfix_q(...)
-# define __r49_ubfix_replacement(old, new) old
+# define __r49_ubfix_r(old, new) old
 #endif
 
 /**************************************************************************************************
@@ -306,8 +306,8 @@ struct node;
 enum mth_scope;
 
 typedef unsigned int UINT;
-typedef __r49_64bit_replacement(unsigned int, uintptr_t) VALUE;
-typedef __r49_64bit_replacement(unsigned int, VALUE) ID;
+typedef __r49_64bit_r(unsigned int, uintptr_t) VALUE;
+typedef __r49_64bit_r(unsigned int, VALUE) ID;
 typedef unsigned short USHORT;
 
 /**************************************************************************************************

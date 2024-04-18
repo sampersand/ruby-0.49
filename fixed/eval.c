@@ -1164,7 +1164,7 @@ rb_yield(val)
 	    the_env->flags |= DURING_ITERATE;
 	    /* __r49: The replacement allows us to actually use iterators */
 	    result = (*block->body->nd_cfnc)(val, block->body->
-	    	__r49_critical_bugfix_replacement(nd_argc, nd_value));
+	    	__r49_critical_bugfix_r(nd_argc, nd_value));
 	}
 	else {
 	    result = rb_eval(block->body);
@@ -1377,7 +1377,7 @@ rb_undefined(obj, id)
     }
     Fail("undefined method `%s' for \"%s\"(%s)",
 	 /* __r49: the `NUM2INT(id)` causes segfaults, but `id` doesn't. */
-	 rb_id2name(__r49_critical_bugfix_replacement(NUM2INT(id), id)),
+	 rb_id2name(__r49_critical_bugfix_r(NUM2INT(id), id)),
 	 RSTRING(desc)->ptr,
 	 rb_class2name(CLASS_OF(obj)));
 }

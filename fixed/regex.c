@@ -2158,9 +2158,9 @@ struct register_info
 
 #define POP_FAILURE_POINT()						\
   {									\
-    __r49_64bit_replacement(int, uintptr_t) temp;			\
+    __r49_64bit_r(int, uintptr_t) temp;			\
     stackp -= 2;		/* Remove failure points.  */		\
-    temp = (__r49_64bit_replacement(int, uintptr_t)) *--stackp;	/* How many regs pushed.  */	        \
+    temp = (__r49_64bit_r(int, uintptr_t)) *--stackp;	/* How many regs pushed.  */	        \
     temp *= NUM_REG_ITEMS;	/* How much to take off the stack.  */	\
     stackp -= temp; 		/* Remove the register info.  */	\
   }

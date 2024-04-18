@@ -56,7 +56,7 @@ typedef unsigned short USHORT;
 # define FIXNUM_MIN RSHIFT((long)LONG_MIN,1)
 
 #define FIXNUM_FLAG 0x01
-#define INT2FIX(i) (VALUE)(((__r49_required_replacement(int, VALUE))(i))<<1 | FIXNUM_FLAG)
+#define INT2FIX(i) (VALUE)(((__r49_required_change_r(int, VALUE))(i))<<1 | FIXNUM_FLAG)
 
 #if (-1==(((-1)<<1)&FIXNUM_FLAG)>>1)
 # define RSHIFT(x,y) ((x)>>y)

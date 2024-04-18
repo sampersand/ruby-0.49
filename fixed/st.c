@@ -35,8 +35,8 @@ static __r49_void_return rehash();
 /*#define do_hash(key, table) (*table->hash)(key, table->num_bins)*/
 
 #define do_hash(key, table)\
-    ((table->hash == ST_PTRHASH) ? (((__r49_64bit_replacement(int, intptr_t)) (key) >> 2) % table->num_bins) :\
-	(table->hash == ST_NUMHASH) ? ((__r49_64bit_replacement(int, intptr_t)) (key) % table->num_bins) :\
+    ((table->hash == ST_PTRHASH) ? (((__r49_64bit_r(int, intptr_t)) (key) >> 2) % table->num_bins) :\
+	(table->hash == ST_NUMHASH) ? ((__r49_64bit_r(int, intptr_t)) (key) % table->num_bins) :\
 	(*table->hash)((key), table->num_bins))
 
 st_table *st_init_table_with_params(compare, hash, size, density, grow_factor,

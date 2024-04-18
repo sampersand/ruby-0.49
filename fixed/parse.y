@@ -786,11 +786,11 @@ expr2		: IF expr2 then
 		    }
 		| expr2 AND expr2
 		    {
-			$$ = NEW_AND(cond($1), __r49_bugfix_replacement(cond,)($3));
+			$$ = NEW_AND(cond($1), __r49_bugfix_r(cond,)($3));
 		    }
 		| expr2 OR expr2
 		    {
-			$$ = NEW_OR(cond($1), __r49_bugfix_replacement(cond,)($3));
+			$$ = NEW_OR(cond($1), __r49_bugfix_r(cond,)($3));
 		    }
 		|primary
 		    {
@@ -1067,8 +1067,8 @@ comma		: ',' 		{ yyerrok; }
 static char *tokenbuf = NULL;
 static int   tokidx, toksiz = 0;
 
-__r49_required_replacement(char, void) *xmalloc();
-__r49_required_replacement(char, void) *xrealloc();
+__r49_required_change_r(char, void) *xmalloc();
+__r49_required_change_r(char, void) *xrealloc();
 VALUE newregexp();
 VALUE newstring();
 VALUE newfloat();
@@ -1886,7 +1886,7 @@ read_escape(flag)
 		/* For some reason there was an int cast here, which no longer is guaranteed to
 		 * work in 64 bit
 		 */
-		else if (__r49_64bit_replacement((int),) index("abcdefABCDEF", (c = nextc()))) {
+		else if (__r49_64bit_r((int),) index("abcdefABCDEF", (c = nextc()))) {
 		    i *= 16;
 		    i += toupper(c) - 'A' + 10;
 		}
@@ -2489,10 +2489,10 @@ rb_intern(name)
     char *name;
 {
     static ID last_id = LAST_TOKEN;
-    __r49_critical_bugfix_replacement(int, ID) id;
+    __r49_critical_bugfix_r(int, ID) id;
     int last;
 
-    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(__r49_critical_bugfix_replacement(int, ID), &id)))
+    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(__r49_critical_bugfix_r(int, ID), &id)))
 	return id;
 
     id = ++last_id;

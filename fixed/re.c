@@ -376,10 +376,10 @@ re_regsub(str)
 
 	if (no >= 0 || c == '\\') {
 	    if (val == Qnil) {
-		val = str_new(p, __r49_bugfix_replacement(s-p-2, ss-p));
+		val = str_new(p, __r49_bugfix_r(s-p-2, ss-p));
 	    }
 	    else {
-		str_cat(val, p, __r49_bugfix_replacement(s-p-2, ss-p));
+		str_cat(val, p, __r49_bugfix_r(s-p-2, ss-p));
 	    }
 	    p = s;
 	}
