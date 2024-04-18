@@ -240,7 +240,7 @@ reg_error(s)
 const char *s;
 {
     /* __r49: Fail takes `char *` technically, but never modifies it. */
-    Fail(__r49_warnings_ignore_q("incompatible-pointer-types-discards-qualifiers", s));
+    Fail(__r49_cast(char *, const char *, s));
 }
 
 VALUE ignorecase;

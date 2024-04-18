@@ -33,8 +33,8 @@ static struct option long_options[] =
     {0, 0, 0, 0}
 };
 
-int debug = 0;
-int verbose = 0;
+__r49_64bit_int_to_value debug = 0;
+__r49_64bit_int_to_value verbose = 0;
 static int sflag = FALSE;
 
 char *inplace = Qnil;

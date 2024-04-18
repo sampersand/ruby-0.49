@@ -1,44 +1,25 @@
-print("ABCDEF".split("")[7,4]._inspect)
-
-__END__
-#ruby -s
-
-class hangman
-  def hangman.new(words, *opts)
-    super.init("paniconograph", *opts)
-  end
-
-  attr("secret")
-
-  def init(secret, *options)
-    @secret = secret
-    @guesses = []
-    self
-  end
-
-
-  def guess(letter)
-    # if @guesses.includes(letter)
-    #   return %FALSE
-    # end
-    @guesses << letter
-  end
-
-  def word_string
-    str = []
-
-    do @secret.each_byte using letter
-      print(letter.a)
-      # str << if @guesses.includes(letter) then letter.chr else '_' end
-    end
-    
-    # print(str._inspect)
-  end
+class Value
 end
 
-srand(0)
-hm = hangman.new("paniconograph")
-print(hm.secret, "\n")
-hm.guess(?p)
-print(hm.word_string, "\n")
-print(hm)
+for i in 0..1000
+  x=("
+class Bool"+i+": Value
+  def _inspect; sprintf('Bool"+i+"(%s)', self) end
+  $t = new()
+  $f = new()
+  # def Bool"+i+".new(value) fail('"+i+"') end
+  def Bool"+i+".new(value) if value then $t else $f end end
+end
+  def $t.a; "+i+" end
+  def $f.a; 0 end
+
+  printf('["+i+"] %s-%s-%s\n', $t.id, $f.id, Bool"+i+".new(1).id)
+")
+  if i == 203
+    print(x)
+    # exit()
+  end
+  eval(x)
+# printf("%s\n%s\n", $t.id, $f.id)
+# Bool1.new(1).a
+end

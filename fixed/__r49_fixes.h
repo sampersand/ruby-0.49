@@ -6,17 +6,38 @@
 
 // #define __r49_dev /* define if you're working _on_ r49 */
 
-#ifdef __clang__
-# define __r49_str(x) #x
-# define __R49_PRAGMA(...) _Pragma(__r49_str(__VA_ARGS__))
-#else
-# define __R49_PRAGMA(...) /* todo: support gcc and friends? */
-#endif
-
 #ifdef __STDC_VERSION__
 # define __R49_C_VERSION __STDC_VERSION__
 #else
 # define __R49_C_VERSION 0L  /* support for non-standard C compilers (if anyone even uses them...) */
+#endif
+
+/**************************************************************************************************
+ **                                                                                              **
+ **                                Compiler-specific extensions                                  **
+ **                                                                                              **
+ **************************************************************************************************/
+
+/* Define pragmas */
+#if defined(__clang__) || defined(__GNUC__)
+# define __r49_to_str(x) #x
+# define __R49_PRAGMA(x) _Pragma(__r49_to_str(x))
+# ifdef __clang__
+#  define __R49_PRAGMA_PREFIX clang
+# else
+#  define __R49_PRAGMA_PREFIX GCC
+# endif /* define __R49_PRAGMA_PREFIX */
+# define __R49_PRAGMA_DIAGNOSTICS(...) __R49_PRAGMA(__R49_PRAGMA_PREFIX diagnostic __VA_ARGS__)
+# define __R49_PRAGMA_DIAGNOSTICS_ERROR(diag) __R49_PRAGMA_DIAGNOSTICS(error __r49_to_str(-W##diag))
+# define __R49_PRAGMA_DIAGNOSTICS_IGNORE(diag) __R49_PRAGMA_DIAGNOSTICS(ignored __r49_to_str(-W##diag))
+# define __R49_PRAGMA_DIAGNOSTICS_PUSH() __R49_PRAGMA_DIAGNOSTICS(push)
+# define __R49_PRAGMA_DIAGNOSTICS_POP() __R49_PRAGMA_DIAGNOSTICS(pop)
+#else
+# define __R49_PRAGMA(...) /* todo: support msvc and friends? */
+# define __R49_PRAGMA_DIAGNOSTICS_ERROR(...)
+# define __R49_PRAGMA_DIAGNOSTICS_IGNORE(...)
+# define __R49_PRAGMA_DIAGNOSTICS_PUSH()
+# define __R49_PRAGMA_DIAGNOSTICS_POP()
 #endif
 
 /**************************************************************************************************
@@ -26,28 +47,30 @@
  **************************************************************************************************/
 
 #ifdef __r49_dev
-# define __R49_WARNINGS_ERROR(diag) __R49_PRAGMA(clang diagnostic error "-W" diag)
+# define __R49_WARNINGS_ERROR(...) __R49_PRAGMA_DIAGNOSTICS_ERROR(__VA_ARGS__)
 #else
-# define __R49_WARNINGS_ERROR(diag) __R49_PRAGMA(clang diagnostic ignored "-W" diag)
-#endif
-#define __R49_WARNINGS_PUSH() __R49_PRAGMA(clang diagnostic push)
-#define __R49_WARNINGS_POP() __R49_PRAGMA(clang diagnostic pop)
-#define __R49_WARNINGS_IGNORE(diag) __R49_PRAGMA(clang diagnostic ignored "-W" diag)
-#define __r49_warnings_ignore_q(diag, ...) \
-	__R49_WARNINGS_PUSH() \
-	__R49_WARNINGS_IGNORE(diag) \
+# define __R49_WARNINGS_ERROR(...) __R49_PRAGMA_DIAGNOSTICS_IGNORE(__VA_ARGS__)
+#endif /* __r49_dev */
+
+#define __r49_diagnostics_ignore_q(diag, ...) \
+	__R49_PRAGMA_DIAGNOSTICS_PUSH() \
+	__R49_PRAGMA_DIAGNOSTICS_IGNORE(diag) \
 	__VA_ARGS__ \
-	__R49_WARNINGS_POP()
+	__R49_PRAGMA_DIAGNOSTICS_POP()
 
 /* Never going to fix these, they retain the essence of the wild west of early Ruby */
-__R49_WARNINGS_IGNORE("parentheses") /* there's a lot of `if (foo = bar)` in the source code */
-__R49_WARNINGS_IGNORE("non-literal-null-conversion") /* Qnil is used instead of NULL/0 a lot. */
-__R49_WARNINGS_IGNORE("int-conversion") /* There's a lot of int conversion thrown around */
-__R49_WARNINGS_IGNORE("unused-value") /* there's a few places with unused values */
-__R49_WARNINGS_IGNORE("empty-body") /* there's a single one of these, in `sprintf.c`. */
-__R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`. */
-__R49_WARNINGS_IGNORE("extra-tokens") /* there's a single one of these, in `st.h`. */
-__R49_WARNINGS_IGNORE("deprecated-declarations") /* vsprintf, sprintf, and friends. */
+__R49_PRAGMA_DIAGNOSTICS_IGNORE(parentheses) /* there's a lot of `if (foo = bar)` in the source code */
+__R49_PRAGMA_DIAGNOSTICS_IGNORE(int-conversion) /* There's a lot of int conversion thrown around */
+__R49_PRAGMA_DIAGNOSTICS_IGNORE(unused-value) /* there's a few places with unused values */
+__R49_PRAGMA_DIAGNOSTICS_IGNORE(empty-body) /* there's a single one of these, in `sprintf.c`. */
+__R49_PRAGMA_DIAGNOSTICS_IGNORE(comment) /* there's a single one of these, in `regex.c`. */
+__R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, and friends. */
+#ifdef __clang__
+	__R49_PRAGMA_DIAGNOSTICS_IGNORE(non-literal-null-conversion) /* Qnil is used instead of NULL/0 a lot. */
+	__R49_PRAGMA_DIAGNOSTICS_IGNORE(extra-tokens) /* there's a single one of these, in `st.h`. */
+#elif defined(__GNUC__)
+	__R49_PRAGMA_DIAGNOSTICS_IGNORE(endif-labels)
+#endif /* __clang__ diagnostics */
 
 /**************************************************************************************************
  **                                                                                              **
@@ -62,17 +85,19 @@ __R49_WARNINGS_IGNORE("deprecated-declarations") /* vsprintf, sprintf, and frien
 #ifdef __r49_no_required_change
 # undef __r49_required_change
 #endif
+
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_change_nq(...)
  /* These shouldn't still exist in the codebase, but can exist without the requirements */
-__R49_WARNINGS_ERROR("int-to-pointer-cast")
-__R49_WARNINGS_ERROR("pointer-to-int-cast")
+ __R49_WARNINGS_ERROR(int-to-pointer-cast)
+ __R49_WARNINGS_ERROR(pointer-to-int-cast)
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_change_nq(...) __VA_ARGS__
 #endif
-# define __r49_required_replacement(old, new) __r49_required_change_nq(old) __r49_required_change_q(new)
+
+#define __r49_required_replacement(old, new) __r49_required_change_nq(old) __r49_required_change_q(new)
 
 /* Changes that are required to get Ruby 0.49 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
@@ -81,6 +106,7 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 #ifdef __r49_no_64bit
 # undef __r49_64bit
 #endif
+
 #ifdef __r49_64bit
 # define __r49_64bit_q(...) __VA_ARGS__
 # define __r49_64bit_replacement(old, new) new
@@ -88,6 +114,7 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # define __r49_64bit_q(...)
 # define __r49_64bit_replacement(old, new) old
 #endif
+
 #define __r49_64bit_int_to_value __r49_64bit_replacement(int, VALUE)
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
@@ -112,6 +139,7 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 #ifdef __r49_no_bugfix
 # undef __r49_bugfix
 #endif
+ 
 #ifdef __r49_bugfix
 # define __r49_bugfix_q(...) __VA_ARGS__
 # define __r49_bugfix_replacement(old, new) new
@@ -154,9 +182,6 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # define __r49_noreturn void
 #endif
 
-// struct x { int x, y; };
-// _Noreturn struct x foo();
-
 #ifndef __r49_required_change
 # define __r49_cast(to, from, val) (val)
 #elif 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
@@ -186,7 +211,7 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # include <string.h>
 # include <unistd.h> 
 # include <sys/stat.h> /* mkdir */
-# include <fcntl.h>  /* fcntl */
+# include <fcntl.h> /* fcntl */
 # include <stdint.h> /* uintptr_t */
 # undef vfork
 # define vfork fork /* original ruby uses vfork. */

@@ -1,3 +1,8 @@
+a = "123abc"
+/^(\d+)/ =~ a
+print($~)
+exit()
+
 class parser
   def parser.new(source)
     super.init(source)
@@ -9,6 +14,10 @@ class parser
   end
 
   def each
+    @source.sub(/\A +/, '')
+    case @source
+    end
+
     yield 3
   end
 end

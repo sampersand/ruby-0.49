@@ -1936,7 +1936,7 @@ static NODE*
 block_append(head, tail)
     NODE *head, *tail;
 {
-    extern int verbose;
+    extern __r49_64bit_int_to_value verbose;
 
     if (tail == Qnil) return head;
     if (head == Qnil) return tail;

@@ -67,6 +67,10 @@ def kn.head(val)
   val.run.to_a[0]
 end
 
+def kn.tail(val)
+  val.run.to_a[1]
+end
+
 __END__
 
     register '[' do

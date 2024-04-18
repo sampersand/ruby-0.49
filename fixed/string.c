@@ -634,6 +634,7 @@ static void
 str_replace2(str, beg, end, val)
     struct RString *str, *val;
     int beg;
+    __r49_implicit_arg(int, end)
 {
     int len;
 
