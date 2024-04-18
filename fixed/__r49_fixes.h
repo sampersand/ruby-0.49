@@ -4,7 +4,7 @@
 #ifndef __R49_FIXES_H
 #define __R49_FIXES_H
 
-#define __r49_dev /* define if you're working _on_ r49 */
+// #define __r49_dev /* define if you're working _on_ r49 */
 
 #ifdef __clang__
 # define __r49_str(x) #x
@@ -47,6 +47,7 @@ __R49_WARNINGS_IGNORE("unused-value") /* there's a few places with unused values
 __R49_WARNINGS_IGNORE("empty-body") /* there's a single one of these, in `sprintf.c`. */
 __R49_WARNINGS_IGNORE("comment") /* there's a single one of these, in `regex.c`. */
 __R49_WARNINGS_IGNORE("extra-tokens") /* there's a single one of these, in `st.h`. */
+__R49_WARNINGS_IGNORE("deprecated-declarations") /* vsprintf, sprintf, and friends. */
 
 /**************************************************************************************************
  **                                                                                              **
@@ -124,6 +125,20 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # define __r49_bugfix_replacement(old, new) old
 #endif
 
+/* UB is fixing behaviour which is now considered undefined behaviour by the C standard */
+#define __r49_ubfix
+#ifdef __r49_no_ubfix
+# undef __r49_ubfix
+#endif
+
+#ifdef __r49_ubfix
+# define __r49_ubfix_q(...) __VA_ARGS__
+# define __r49_ubfix_replacement(old, new) new
+#else
+# define __r49_ubfix_q(...)
+# define __r49_ubfix_replacement(old, new) old
+#endif
+
 /**************************************************************************************************
  **                                                                                              **
  **                                  Miscellaneous definitions                                   **
@@ -163,7 +178,6 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
  **                              Stdlib `#include`s / Declarations                               **
  **                                                                                              **
  **************************************************************************************************/
-#define __r49_no_use_includes
 #ifndef __r49_no_use_includes
 # include <stdlib.h> /* defined(HAVE_RANDOM) && initstate, random, setstate, srandom */
 # include <stdio.h>
@@ -496,6 +510,8 @@ VALUE rb_mvar_get(ID id);
 VALUE rb_id2class(ID id);
 void rb_name_class(VALUE class, ID id);
 void mark_global_tbl(void);
+void rb_define_variable(char *name, VALUE *var, VALUE (*get_hook)(), VALUE (*set_hook)());
+
 
 /* version.c */
 void Init_version(void);

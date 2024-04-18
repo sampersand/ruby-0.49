@@ -1,5 +1,4 @@
 if youre curious, oh, there are so, so many differences from ruby
-if youre curious, oh, there are so, so many differences from ruby
 identifiers:
 - you cant use `?` or `!` at the end of functions (`^is_`—or in one instance (`iterator_p`) `_p$`— are used)
 - you can define `..` and `::` functions

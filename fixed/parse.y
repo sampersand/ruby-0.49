@@ -1132,7 +1132,11 @@ tokadd(c)
     tokenbuf[tokidx++] = c;
 }
 
-#define LAST(v) ((v)-1 + sizeof(v)/sizeof(v[0]))
+#ifdef __r49_ubfix
+# define LAST(v) (&v[-1 + sizeof(v)/sizeof(v[0])])
+#else
+# define LAST(v) ((v)-1 + sizeof(v)/sizeof(v[0]))
+#endif /* __r49_ubfix */
 
 static struct kwtable {
     char *name;
@@ -2485,10 +2489,10 @@ rb_intern(name)
     char *name;
 {
     static ID last_id = LAST_TOKEN;
-    int id;
+    __r49_critical_bugfix_replacement(int, ID) id;
     int last;
 
-    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(int, &id)))
+    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(__r49_critical_bugfix_replacement(int, ID), &id)))
 	return id;
 
     id = ++last_id;

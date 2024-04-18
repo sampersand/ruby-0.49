@@ -367,12 +367,12 @@ st_strhash(string, modulus)
 register char *string;
 int modulus;
 {
-    register int val = 0;
+    register __r49_bugfix_q(unsigned) int val = 0;
     register int c;
     
     while ((c = *string++) != '\0') {
 	val = val*997 + c;
     }
 
-    return ((val < 0) ? -val : val)%modulus;
+    return ((__r49_bugfix_q((int)) val < 0) ? -__r49_bugfix_q((int)) val : val)%modulus;
 }

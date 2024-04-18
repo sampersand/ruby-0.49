@@ -416,7 +416,7 @@ Init_Regexp()
 {
     (void) re_set_syntax(reg_syntax);
 
-    rb_define_variable("$~", last_match_data, Qnil, store_match_data);
+    rb_define_variable("$~", __r49_bugfix_q(&)last_match_data, Qnil, store_match_data);
 
     rb_define_variable("$&", Qnil, re_last_match, rb_readonly_hook);
 

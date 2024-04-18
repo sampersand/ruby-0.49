@@ -1145,6 +1145,18 @@ Fio_defset(obj, val)
 extern VALUE M_Enumerable;
 VALUE rb_readonly_hook();
 
+#ifdef __r49_dev
+/* these are extern'd so i can use them elsewhere */
+extern VALUE __r49_Fdump(VALUE obj, VALUE val) {
+    static unsigned long long num = 0;
+    printf("value #%llu = %p (%llu)\n", num++, (void *) val, (unsigned long long) val);
+    return val;
+}
+extern VALUE __r49_Fclassof(VALUE obj, VALUE val) {
+	return CLASS_OF(val);
+}
+#endif /* __r49_dev */
+
 __r49_void_return
 Init_IO()
 {
@@ -1152,6 +1164,10 @@ Init_IO()
 
     rb_define_func(C_Kernel, "open", Fopen, -2);
     rb_define_func(C_Kernel, "printf", Fprintf, -1);
+#ifdef __r49_dev
+    rb_define_method(C_Kernel, "__r49_dump", __r49_Fdump, 1);
+    rb_define_method(C_Kernel, "__r49_classof", __r49_Fclassof, 1);
+#endif /* __r49_dev */
     rb_define_method(C_Kernel, "print", Fprint, -1);
     rb_define_func(C_Kernel, "gets", Fgets, 0);
     rb_define_func(C_Kernel, "eof", Feof, 0);
