@@ -187,6 +187,7 @@ __R49_WARNINGS_ERROR("pointer-to-int-cast")
 # include <unistd.h> 
 # include <sys/stat.h> /* mkdir */
 # include <fcntl.h>  /* fcntl */
+# include <stdint.h> /* uintptr_t */
 # undef vfork
 # define vfork fork /* original ruby uses vfork. */
 #else  /* these are the original funcitons, before i started doing `#include`s */
