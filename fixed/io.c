@@ -1150,10 +1150,14 @@ VALUE rb_readonly_hook();
 extern VALUE __r49_Fdump(VALUE obj, VALUE val) {
     static unsigned long long num = 0;
     printf("value #%llu = %p (%llu)\n", num++, (void *) val, (unsigned long long) val);
+    fflush(stdout);
     return val;
 }
 extern VALUE __r49_Fclassof(VALUE obj, VALUE val) {
 	return CLASS_OF(val);
+}
+extern VALUE __r49_Fp2v(VALUE obj, VALUE val) {
+	return (VALUE) (val >> 1);
 }
 #endif /* __r49_dev */
 
@@ -1167,6 +1171,7 @@ Init_IO()
 #ifdef __r49_dev
     rb_define_method(C_Kernel, "__r49_dump", __r49_Fdump, 1);
     rb_define_method(C_Kernel, "__r49_classof", __r49_Fclassof, 1);
+    rb_define_method(C_Kernel, "__r49_p2v", __r49_Fp2v, 1);
 #endif /* __r49_dev */
     rb_define_method(C_Kernel, "print", Fprint, -1);
     rb_define_func(C_Kernel, "gets", Fgets, 0);

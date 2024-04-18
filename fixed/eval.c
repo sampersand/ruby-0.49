@@ -381,6 +381,7 @@ rb_eval(node)
 	{
 	    VALUE val;
 
+	    __r49_bugfix_q(result = Qnil;) /* make sure result is default-init */
 	    GC_LINK;
 	    GC_PRO3(val, rb_eval(node->nd_head));
 
