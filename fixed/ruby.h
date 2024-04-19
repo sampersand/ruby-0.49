@@ -69,9 +69,9 @@ typedef unsigned short USHORT;
 #define FIXNUM_P(f) (((__r49_64bit_int_to_value)(f))&FIXNUM_FLAG)
 
 /* In 64bit, everything is posfixable and negfixable. */
-#if defined(__r49_64bit) && defined(__clang__)
+#ifdef __r49_64bit
 # define __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare(...) \
-	__r49_diagnostics_ignore_q(tautological-constant-out-of-range-compare, __VA_ARGS__)
+	__r49_diagnostics_ignore_clang_q(tautological-constant-out-of-range-compare, __VA_ARGS__)
 #else
 # define __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare(...) __VA_ARGS__
 #endif

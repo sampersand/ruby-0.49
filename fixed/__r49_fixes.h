@@ -46,31 +46,39 @@
  **                                                                                              **
  **************************************************************************************************/
 
-#ifdef __r49_dev
-# define __R49_WARNINGS_ERROR(...) __R49_PRAGMA_DIAGNOSTICS_ERROR(__VA_ARGS__)
-#else
-# define __R49_WARNINGS_ERROR(...) __R49_PRAGMA_DIAGNOSTICS_IGNORE(__VA_ARGS__)
-#endif /* __r49_dev */
-
-#define __r49_diagnostics_ignore_q(diag, ...) \
+/* Never going to fix these, they retain the essence of the wild west of early Ruby */
+#ifdef __clang__
+# pragma clang diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
+# pragma clang diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
+# pragma clang diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
+# pragma clang diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
+# pragma clang diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
+# pragma clang diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
+# pragma clang diagnostic ignored "-Wnon-literal-null-conversion" /* Qnil is used instead of NULL/0 a lot. */
+# pragma clang diagnostic ignored "-Wextra-tokens" /* there's a single one of these, in `st.h`. */
+# define __r49_diagnostics_ignore_clang_q(diag, ...) \
 	__R49_PRAGMA_DIAGNOSTICS_PUSH() \
 	__R49_PRAGMA_DIAGNOSTICS_IGNORE(diag) \
 	__VA_ARGS__ \
 	__R49_PRAGMA_DIAGNOSTICS_POP()
+#else
+# define __r49_diagnostics_ignore_clang_q(diag, ...) __VA_ARGS__
+#endif /* __clang__ */
 
-/* Never going to fix these, they retain the essence of the wild west of early Ruby */
-__R49_PRAGMA_DIAGNOSTICS_IGNORE(parentheses) /* there's a lot of `if (foo = bar)` in the source code */
-__R49_PRAGMA_DIAGNOSTICS_IGNORE(int-conversion) /* There's a lot of int conversion thrown around */
-__R49_PRAGMA_DIAGNOSTICS_IGNORE(unused-value) /* there's a few places with unused values */
-__R49_PRAGMA_DIAGNOSTICS_IGNORE(empty-body) /* there's a single one of these, in `sprintf.c`. */
-__R49_PRAGMA_DIAGNOSTICS_IGNORE(comment) /* there's a single one of these, in `regex.c`. */
-__R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, and friends. */
-#ifdef __clang__
-	__R49_PRAGMA_DIAGNOSTICS_IGNORE(non-literal-null-conversion) /* Qnil is used instead of NULL/0 a lot. */
-	__R49_PRAGMA_DIAGNOSTICS_IGNORE(extra-tokens) /* there's a single one of these, in `st.h`. */
-#elif defined(__GNUC__)
-	__R49_PRAGMA_DIAGNOSTICS_IGNORE(endif-labels)
-#endif /* __clang__ diagnostics */
+#if defined(__GNUC__) && !defined(__clang__) /* clang defines __GNUC__ */
+# pragma GCC diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
+# pragma GCC diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
+# pragma GCC diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
+# pragma GCC diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
+# pragma GCC diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
+# pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
+#endif /* __GNUC__ */
+
+#ifdef _MSVC
+
+#endif /* defined(_MSVC) */
+
 
 /**************************************************************************************************
  **                                                                                              **
@@ -89,9 +97,15 @@ __R49_PRAGMA_DIAGNOSTICS_IGNORE(deprecated-declarations) /* vsprintf, sprintf, a
 #ifdef __r49_required_change
 # define __r49_required_change_q(...) __VA_ARGS__
 # define __r49_required_change_nq(...)
- /* These shouldn't still exist in the codebase, but can exist without the requirements */
- __R49_WARNINGS_ERROR(int-to-pointer-cast)
- __R49_WARNINGS_ERROR(pointer-to-int-cast)
+# ifdef __r49_dev /* These shouldn't still exist in the codebase, but can exist without the requirements */
+#  ifdef __GNUC__  /* clang also defines __GNUC__ */
+#   pragma GCC diagnostic error "-Wint-to-pointer-cast"
+#   pragma GCC diagnostic error "-Wpointer-to-int-cast"
+#  endif /* __GNUC__ */
+# elif defined(__GNUC__)
+#   pragma GCC diagnostic ignored "-Wint-to-pointer-cast"
+#   pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+# endif /* __r49_dev */
 #else
 # define __r49_required_change_q(...)
 # define __r49_required_change_nq(...) __VA_ARGS__
