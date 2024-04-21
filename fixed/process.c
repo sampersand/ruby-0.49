@@ -536,7 +536,8 @@ rb_trap_exec()
     }
 }
 
-#ifdef HAVE_SYSCALL_H
+/* __r49: Removed `#ifdef HAVE_SYSCALL_H`, and added this, to not redefine builtins */
+#if defined(HAVE_SYSCALL_H) && !defined(__r49_redefine_builtins)
 #include <syscall.h>
 
 #ifdef SYS_read

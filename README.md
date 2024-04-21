@@ -29,6 +29,7 @@ The following flags affect how the program compiles. You can disable them by add
 | `__r49_ubfix`           | Fix behaviours which are now undefined in modern C |
 | `__r49_recursion_limit` | How many stackframes to use; set to `0` to revert to the original behaviour of segfaulting when you stack overflow |
 | `__r49_no_use_includes` | Use `#include`s for stdlib prototypes, instead of explicitly declaring them. |
+| `__r49_redefine_builtins` | Enable ruby's definition of builtins (such as `read`, `wait`, `sigpause`, etc) |
 
 
 ## Caveats

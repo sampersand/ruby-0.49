@@ -720,10 +720,13 @@ Fprint(argc, argv)
     }
     else {
 	for (i=1; i<argc; i++) {
+	    __r49_bugfix_q(if (OFS && i>1) obj_print(OFS);)
 	    obj_print(argv[i]);
+#ifndef __r49_bugfix /* __r49: was an off-by-one bug. */
 	    if (OFS && i>1) {
 		obj_print(OFS);
 	    }
+#endif /* __r49_bugfix */
 	}
     }
     if (ORS) {

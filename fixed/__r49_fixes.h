@@ -75,9 +75,9 @@
 # pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
 #endif /* __GNUC__ */
 
-#ifdef _MSVC
+#ifdef _MSVC_VER
 
-#endif /* defined(_MSVC) */
+#endif /* defined(_MSVC_VER) */
 
 
 /**************************************************************************************************
@@ -130,6 +130,7 @@
 #endif
 
 #define __r49_64bit_int_to_value __r49_64bit_r(int, VALUE)
+#define __r49_64bit_int_to_signed_value __r49_64bit_r(int, __r49_sVALUE)
 
 /* Critical bugfixes are fixes to bugs that are (as far as I can tell) present in the original code,
  * but cause segfaults when the source code isn't used properly. The bugfixes change it to be what I
@@ -321,6 +322,7 @@ enum mth_scope;
 
 typedef unsigned int UINT;
 typedef __r49_64bit_r(unsigned int, uintptr_t) VALUE;
+typedef __r49_64bit_r(int, intptr_t) __r49_sVALUE;
 typedef __r49_64bit_r(unsigned int, VALUE) ID;
 typedef unsigned short USHORT;
 

@@ -63,7 +63,7 @@ typedef unsigned short USHORT;
 #else
 # define RSHIFT(x,y) (((x)<0) ? ~((~(x))>>y) : (x)>>y)
 #endif
-#define FIX2INT(x) RSHIFT((__r49_64bit_int_to_value)x,1)
+#define FIX2INT(x) RSHIFT((__r49_64bit_int_to_signed_value)x,1)
 
 #define FIX2UINT(f) ((unsigned int)(f)>>1)
 #define FIXNUM_P(f) (((__r49_64bit_int_to_value)(f))&FIXNUM_FLAG)

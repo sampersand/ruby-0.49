@@ -205,6 +205,11 @@ re_last_match(id)
 #define CONCAT(a,b) a/**/b
 #endif
 
+#if defined(__r49_required_change) && !defined(__STDC__)
+# undef CONCAT
+# define CONCAT(a,b) a##b /* MSVC is silly */
+#endif
+
 #define GET_MATCH(n) CONCAT(get_macth,n)
 #define GET_MATCH_FUNC(n) __r49_implicit(VALUE) GET_MATCH(n)(id) ID id; { return nth_match(n); }
 
