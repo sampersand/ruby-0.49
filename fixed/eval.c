@@ -1893,7 +1893,7 @@ Init_load()
 
     rb_define_variable("$LOAD_PATH", &rb_load_path, Qnil, rb_check_str);
     rb_load_path = ary_new();
-    rb_define_variable("$LOAD_FILES", &rb_load_path, Qnil, rb_readonly_hook);
+    rb_define_variable("$LOAD_FILES", &__r49_bugfix_r(rb_load_path, rb_loadfiles), Qnil, rb_readonly_hook);
     rb_loadfiles = ary_new();
     addpath(getenv("RUBYLIB"));
     addpath(RUBY_LIB);
