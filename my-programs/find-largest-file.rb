@@ -18,5 +18,9 @@ do find('.') using x
   $print && print(x, File.s(x))
 end
 
-print(files._inspect)
-print(files.max)
+max = files.max
+do files.each_pair using x
+  unless x[1] == max then continue end
+  print(x[0])
+  break
+end
