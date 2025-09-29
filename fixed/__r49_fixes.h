@@ -47,6 +47,11 @@
  **************************************************************************************************/
 
 /* If `__r49_dev` is not defined, then just ignore everything */
+#if defined(__GNUC__) && !defined(__clang__)
+# pragma GCC diagnostic ignored "-Wint-conversion"
+# pragma GCC diagnostic ignored "-Wendif-labels"
+#endif
+
 #ifndef __r49_dev
 # ifdef __clang__
 #  pragma clang diagnostic ignored "-Weverything"
