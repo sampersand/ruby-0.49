@@ -57,8 +57,9 @@
 #  pragma clang diagnostic ignored "-Weverything"
 # elif defined(__GNUC__)
 #  pragma GCC diagnostic ignored "-Wint-conversion"
-# elif defined(_MSVC_VER)
-	/* TODO */
+# elif defined(_MSC_VER)
+#  pragma warning( disable: 4047 )
+#  pragma warning( disable: 4024 )
 # endif /* compiler-specific ignores */
 #else /* ie, if __r49_dev is defined */
 # ifdef __clang__ /* Never going to fix, they retain the essence of the wild west of early Ruby */
@@ -83,8 +84,9 @@
 #  pragma GCC diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
 #  pragma GCC diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
 #  pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
-# elif defined(_MSVC_VER)
-	/* TODO */
+# elif defined(_MSC_VER)
+#  pragma warning( disable: 4047 )
+#  pragma warning( disable: 4024 )
 # endif /* compiler-specific warnings */
 #endif /* compiler warnings */
 
@@ -206,6 +208,8 @@
 # define __r49_noreturn void [[noreturn]]
 #elif 201112L <= __R49_C_VERSION
 # define __r49_noreturn void _Noreturn
+#elif defined(_MSC_VER)
+# define __r49_noreturn void __declspec(noreturn)
 #else
 # define __r49_noreturn void
 #endif

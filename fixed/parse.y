@@ -709,6 +709,7 @@ expr2		: IF expr2 then
 		    }
 		| '+' expr2		       %prec UPLUS
 		    {
+		    	// __r49: BUG: `print(+34 - 3000)`
 			$$ = call_op($2, UPLUS, 0);
 
 		    }
@@ -1467,6 +1468,7 @@ retry:
 	    c = nextc();
 	    pushback();
 	    if (isdigit(c)) {
+		__r49_bugfix_q(c = nextc();) /* __r49: without this, leading digit is repeated */
 		goto start_num;
 	    }
 	}
