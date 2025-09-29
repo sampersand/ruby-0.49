@@ -1,10 +1,10 @@
 /**
- * Fixes to make ruby 0.49 workable
+ * Fixes to make Ruby 0.49 workable
  */
 #ifndef __R49_FIXES_H
 #define __R49_FIXES_H
 
-// #define __r49_dev /* define if you're working _on_ r49 */
+// #define __r49_dev /* uncomment if you're working _on_ r49 */
 
 #ifdef __STDC_VERSION__
 # define __R49_C_VERSION __STDC_VERSION__
@@ -42,43 +42,51 @@
 
 /**************************************************************************************************
  **                                                                                              **
- **                           Disabling unnecessary compiler warnings                            **
+ **                                      Compiler Warnings                                       **
  **                                                                                              **
  **************************************************************************************************/
 
-/* Never going to fix these, they retain the essence of the wild west of early Ruby */
-#ifdef __clang__
-# pragma clang diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
-# pragma clang diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
-# pragma clang diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
-# pragma clang diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
-# pragma clang diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
-# pragma clang diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
-# pragma clang diagnostic ignored "-Wnon-literal-null-conversion" /* Qnil is used instead of NULL/0 a lot. */
-# pragma clang diagnostic ignored "-Wextra-tokens" /* there's a single one of these, in `st.h`. */
-# define __r49_diagnostics_ignore_clang_q(diag, ...) \
+/* If `__r49_dev` is not defined, then just ignore everything */
+#ifndef __r49_dev
+# ifdef __clang__
+#  pragma clang diagnostic ignored "-Weverything"
+# elif defined(__GNUC__)
+#  pragma GCC diagnostic ignored "-w"
+# elif defined(_MSVC_VER)
+	/* TODO */
+# endif /* compiler-specific ignores */
+#else /* ie, if __r49_dev is defined */
+# ifdef __clang__ /* Never going to fix, they retain the essence of the wild west of early Ruby */
+#  pragma clang diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
+#  pragma clang diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
+#  pragma clang diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
+#  pragma clang diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
+#  pragma clang diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
+#  pragma clang diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
+#  pragma clang diagnostic ignored "-Wnon-literal-null-conversion" /* Qnil is used instead of NULL/0 a lot. */
+#  pragma clang diagnostic ignored "-Wextra-tokens" /* there's a single one of these, in `st.h`. */
+#  define __r49_diagnostics_ignore_clang_q(diag, ...) \
 	__R49_PRAGMA_DIAGNOSTICS_PUSH() \
 	__R49_PRAGMA_DIAGNOSTICS_IGNORE(diag) \
 	__VA_ARGS__ \
 	__R49_PRAGMA_DIAGNOSTICS_POP()
-#else
+# elif defined(__GNUC__)
+#  pragma GCC diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
+#  pragma GCC diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
+#  pragma GCC diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
+#  pragma GCC diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
+#  pragma GCC diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
+#  pragma GCC diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
+#  pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
+# elif defined(_MSVC_VER)
+	/* TODO */
+# endif /* compiler-specific warnings */
+#endif /* compiler warnings */
+
+/* If not otherwise defined, define `__r49_diagnostics_ignore_clang_q` as a no-op */
+#ifndef __r49_diagnostics_ignore_clang_q
 # define __r49_diagnostics_ignore_clang_q(diag, ...) __VA_ARGS__
-#endif /* __clang__ */
-
-#if defined(__GNUC__) && !defined(__clang__) /* clang defines __GNUC__ */
-# pragma GCC diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
-# pragma GCC diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
-# pragma GCC diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
-# pragma GCC diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
-# pragma GCC diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
-# pragma GCC diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
-# pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
-#endif /* __GNUC__ */
-
-#ifdef _MSVC_VER
-
-#endif /* defined(_MSVC_VER) */
-
+#endif
 
 /**************************************************************************************************
  **                                                                                              **
@@ -86,7 +94,7 @@
  **                                                                                              **
  **************************************************************************************************/
 
-/* Changes that are required to even compile it. In ruby 0.49, things like missing parameters or
+/* Changes that are required to even compile it. In Ruby 0.49, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
  * compiler from accepting the code. */
 #define __r49_required_change
@@ -199,7 +207,7 @@
 
 #ifndef __r49_required_change
 # define __r49_cast(to, from, val) (val)
-#elif 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
+#elif defined(__r49_dev) && 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
 # define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #else
 # define __r49_cast(to, from, val) ((to) (val))
@@ -229,8 +237,8 @@
 # include <fcntl.h> /* fcntl */
 # include <stdint.h> /* uintptr_t */
 # undef vfork
-# define vfork fork /* original ruby uses vfork. */
-#else  /* these are the original funcitons, before i started doing `#include`s */
+# define vfork fork /* Ruby 0.49 used vfork. */
+#else  /* these are the original functions, before i started doing `#include`s */
 # include <sys/_types/_time_t.h>
 # include <sys/_types/_uid_t.h>
 # include <sys/_types/_pid_t.h>
@@ -553,7 +561,6 @@ VALUE rb_id2class(ID id);
 void rb_name_class(VALUE class, ID id);
 void mark_global_tbl(void);
 void rb_define_variable(char *name, VALUE *var, VALUE (*get_hook)(), VALUE (*set_hook)());
-
 
 /* version.c */
 void Init_version(void);
