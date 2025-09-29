@@ -1251,7 +1251,7 @@ re_compile_pattern (pattern, size, bufp)
 		       *b++ = -5;
 		       *b++ = -1;
 #else
-                       __r49_clang_diagnostics_ignore_q(constant-conversion, STORE_NUMBER_AND_INCR (b, -5));
+                       __r49_clang_diagnostics_ignore_q("constant-conversion", STORE_NUMBER_AND_INCR (b, -5));
 #endif
                        STORE_NUMBER_AND_INCR (b, upper_bound - 1);
                      }
@@ -1843,7 +1843,7 @@ re_compile_fastmap (bufp)
 #ifdef __r49_bugfix
 	    c = 0x80;
 #else
-	    __r49_clang_diagnostics_ignore_q(constant-conversion, c = 0x8000;)
+	    __r49_clang_diagnostics_ignore_q("constant-conversion", c = 0x8000;)
 #endif
 	    for (j = 0; j < size; j++) {
 	      for (beg = (unsigned char) p[j*4 + 0]; c < beg; c++)

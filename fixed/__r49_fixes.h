@@ -53,83 +53,61 @@
  **                                                                                              **
  **************************************************************************************************/
 
-#ifdef __clang__
-# pragma clang diagnostic ignored "-Wdeprecated-non-prototype" // TODO!
-# pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare" // ALSO TODO!
 
+/* Disable GCC-specific compiler warnings */
+#if defined(__GNUC__) && !defined(__clang__) /* (not for clang, which defines __GNUC__) */
+# pragma GCC diagnostic ignored "-Wparentheses" /* Lot of `if (foo = bar)` in the source code */
+# pragma GCC diagnostic ignored "-Wint-conversion" /* Lots of int conversion thrown around */
+# pragma GCC diagnostic ignored "-Wunused-value" /* Few places with unused values */
+# pragma GCC diagnostic ignored "-Wempty-body" /* Single one of these, in `sprintf.c`. */
+# pragma GCC diagnostic ignored "-Wcomment" /* Single instance, in regex.c. */
+# pragma GCC diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
+# pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
+#endif /* defined(__GNUC__) && !defined(__clang__) */
+
+/* Disable clang-specific compiler warningxs */
+#ifdef __clang__
 # define __R49_CLANG_PRAGMA(string) _Pragma(#string)
 # define __R49_CLANG_DIAGNOSTICS(...)               __R49_CLANG_PRAGMA(clang diagnostic __VA_ARGS__)
 # define __R49_CLANG_DIAGNOSTICS_ERROR(diagnostic)  __R49_CLANG_DIAGNOSTICS(error "-W" diagnostic)
 # define __R49_CLANG_DIAGNOSTICS_IGNORE(diagnostic) __R49_CLANG_DIAGNOSTICS(ignored "-W" diagnostic)
 # define __R49_CLANG_DIAGNOSTICS_PUSH()             __R49_CLANG_DIAGNOSTICS(push)
 # define __R49_CLANG_DIAGNOSTICS_POP()              __R49_CLANG_DIAGNOSTICS(pop)
-
-# pragma clang diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
-# pragma clang diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
-# pragma clang diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
-# pragma clang diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
-# pragma clang diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
-# pragma clang diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
-# pragma clang diagnostic ignored "-Wnon-literal-null-conversion" /* Qnil is used instead of NULL/0 a lot. */
-# pragma clang diagnostic ignored "-Wextra-tokens" /* there's a single one of these, in `st.h`. */
 # define __r49_clang_diagnostics_ignore_q(diagnostic, ...) \
 	__R49_CLANG_DIAGNOSTICS_PUSH() \
 	__R49_CLANG_DIAGNOSTICS_IGNORE(diagnostic) \
 	__VA_ARGS__ \
 	__R49_CLANG_DIAGNOSTICS_POP()
+
+# pragma clang diagnostic ignored "-Wdeprecated-non-prototype" // TODO!
+# pragma clang diagnostic ignored "-Wparentheses" /* Lot of `if (foo = bar)` in the source code */
+# pragma clang diagnostic ignored "-Wint-conversion" /* Lots of int conversion thrown around */
+# pragma clang diagnostic ignored "-Wunused-value" /* Few places with unused values */
+# pragma clang diagnostic ignored "-Wempty-body" /* Single one of these, in `sprintf.c`. */
+# pragma clang diagnostic ignored "-Wcomment" /* Single instance, in regex.c. */
+# pragma clang diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
+# pragma clang diagnostic ignored "-Wextra-tokens" /* Single one, in `st.h`. */
+# pragma clang diagnostic ignored "-Wnon-literal-null-conversion" /* Qnil is used instead of NULL/0 a lot. */
 #else
 # define __r49_clang_diagnostics_ignore_q(diagnostic, ...) __VA_ARGS__
 #endif /* defined(__clang__) */
 
-/* If `__r49_dev` is not defined, then just ignore everything */
-#if defined(__GNUC__) && !defined(__clang__)
-# pragma GCC diagnostic ignored "-Wint-conversion"
-# pragma GCC diagnostic ignored "-Wendif-labels"
-#endif
+#ifdef _MSC_VER
+# pragma warning( disable: 4047 )
+# pragma warning( disable: 4024 )
+# pragma warning( disable: 4553 )
+# pragma warning( disable: 4090 )
+# pragma warning( disable: 4005 )
+# pragma warning( disable: 4312 )
+# pragma warning( disable: 4311 )
+#endif /* defined(_MSC_VER) */
 
-#ifndef __r49_dev
-# ifdef __clang__
-// #  pragma clang diagnostic ignored "-Weverything"
-# elif defined(__GNUC__)
-#  pragma GCC diagnostic ignored "-Wint-conversion"
-# elif defined(_MSC_VER)
-#  pragma warning( disable: 4047 )
-#  pragma warning( disable: 4024 )
-#  pragma warning( disable: 4553 )
-#  pragma warning( disable: 4090 )
-#  pragma warning( disable: 4005 )
-#  pragma warning( disable: 4312 )
-#  pragma warning( disable: 4311 )
-# endif /* compiler-specific ignores */
-#else /* ie, if __r49_dev is defined */
-# ifdef __clang__ /* Never going to fix, they retain the essence of the wild west of early Ruby */
-# elif defined(__GNUC__)
-#  pragma GCC diagnostic ignored "-Wparentheses" /* there's a lot of `if (foo = bar)` in the source code */
-#  pragma GCC diagnostic ignored "-Wint-conversion" /* There's a lot of int conversion thrown around */
-#  pragma GCC diagnostic ignored "-Wunused-value" /* there's a few places with unused values */
-#  pragma GCC diagnostic ignored "-Wempty-body" /* there's a single one of these, in `sprintf.c`. */
-#  pragma GCC diagnostic ignored "-Wcomment" /* there's a single one of these, in `regex.c`. */
-#  pragma GCC diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
-#  pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
-# elif defined(_MSC_VER)
-#  pragma warning( disable: 4047 )
-#  pragma warning( disable: 4024 )
-#  define __r49_diagnostics_ignore_msc_q(diag, ...) \
-	__R49_PRAGMA_MSC_PUSH() \
-	__R49_PRAGMA_MSC_IGNORE(diag) \
-	__VA_ARGS__ \
-	__R49_PRAGMA_MSC_POP()
-# endif /* compiler-specific warnings */
-#endif /* compiler warnings */
 
 /* If not otherwise defined, define `__r49_clang_diagnostics_ignore_q` as a no-op */
 #ifndef __r49_clang_diagnostics_ignore_q
 # define __r49_clang_diagnostics_ignore_q(diag, ...) __VA_ARGS__
 #endif
 
-#ifndef __r49_diagnostics_ignore_msc_q
-# define __r49_diagnostics_ignore_msc_q(diag, ...) __VA_ARGS__
-#endif
 
 /**************************************************************************************************
  **                                                                                              **
