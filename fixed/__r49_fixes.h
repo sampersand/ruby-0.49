@@ -23,6 +23,7 @@
 #if __R49_C_VERSION >= 202311L
 # warning K&R functions were formally removed in C23, and compilers may refuse to compile. Try C17.
 #endif
+
 /**************************************************************************************************
  **                                                                                              **
  **                                      Compiler Warnings                                       **
@@ -53,7 +54,8 @@
 	__R49_CLANG_DIAGNOSTICS_IGNORE(diagnostic) \
 	__VA_ARGS__ \
 	__R49_CLANG_DIAGNOSTICS_POP()
-# pragma clang diagnostic ignored "-Wdeprecated-non-prototype" // TODO!
+# define __R49_CLANG_IGNORE(...) __R49_CLANG_DIAGNOSTICS_IGNORE(__VA_ARGS__)
+# pragma clang diagnostic ignored "-Wdeprecated-non-prototype" // TODO
 # pragma clang diagnostic ignored "-Wparentheses" /* Lot of `if (foo = bar)` in the source code */
 # pragma clang diagnostic ignored "-Wint-conversion" /* Lots of int conversion thrown around */
 # pragma clang diagnostic ignored "-Wunused-value" /* Few places with unused values */
