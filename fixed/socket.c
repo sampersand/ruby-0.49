@@ -96,7 +96,7 @@ static VALUE
 Fbsock_getopt(sock, lev, optname)
     VALUE sock, lev, optname;
 {
-    int level, option __r49_required_change_nq(, )__r49_required_change_q(; unsigned) len;
+    int level, option __r49_required_change_nq(,) __r49_required_change_q(; unsigned) len;
     struct RString *val;
     OpenFile *fptr;
 
@@ -671,7 +671,7 @@ Fsock_recv(sock, len, flags)
     FILE f;
     struct RString *str;
     char buf[1024];
-    int fd __r49_required_change_nq(, )__r49_required_change_q(; unsigned) alen = sizeof buf;
+    int fd __r49_required_change_nq(,) __r49_required_change_q(; unsigned) alen = sizeof buf;
     VALUE addr, result;
 
     GC_LINK;
