@@ -4,6 +4,8 @@
 #ifndef __R49_FIXES_H
 #define __R49_FIXES_H
 
+#define __r49
+
 // #define __r49_dev /* uncomment if you're working _on_ r49 */
 
 #ifdef __STDC_VERSION__
@@ -12,39 +14,15 @@
 # define __R49_C_VERSION 0L  /* support for non-standard C compilers (if anyone even uses them...) */
 #endif
 
-/**************************************************************************************************
- **                                                                                              **
- **                                Compiler-specific extensions                                  **
- **                                                                                              **
- **************************************************************************************************/
-
-/* Define pragmas */
-#if defined(__clang__) || defined(__GNUC__)
-# define __r49_to_str(x) #x
-# define __R49_PRAGMA(x) _Pragma(__r49_to_str(x))
-# ifdef __clang__
-#  define __R49_PRAGMA_PREFIX clang
-# else
-#  define __R49_PRAGMA_PREFIX GCC
-# endif /* define __R49_PRAGMA_PREFIX */
-# define __R49_PRAGMA_DIAGNOSTICS(...) __R49_PRAGMA(__R49_PRAGMA_PREFIX diagnostic __VA_ARGS__)
-# define __R49_PRAGMA_DIAGNOSTICS_IGNORE(diag) __R49_PRAGMA_DIAGNOSTICS(ignored __r49_to_str(-W##diag))
-# define __R49_PRAGMA_DIAGNOSTICS_PUSH() __R49_PRAGMA_DIAGNOSTICS(push)
-# define __R49_PRAGMA_DIAGNOSTICS_POP() __R49_PRAGMA_DIAGNOSTICS(pop)
-#elif defined(_MSC_VER) /* TODO: actually test these */
-# define __R49_PRAGMA(...) _Pragma(__r49_to_str(x))
-# define __R49_PRAGMA_MSC(...) __R49_PRAGMA(warning( disable: __VA_ARGS__ ))
-# define __R49_PRAGMA_MSC_ERROR(...) /* TODO */
-# define __R49_PRAGMA_MSC_IGNORE(...)
-# define __R49_PRAGMA_MSC_PUSH() __R49_PRAGMA(warning( push ))
-# define __R49_PRAGMA_MSC_POP() __R49_PRAGMA(warning( pop ))
-#else
-# define __R49_PRAGMA(...) /* todo: support msvc and friends? */
-# define __R49_PRAGMA_DIAGNOSTICS_ERROR(...)
-# define __R49_PRAGMA_DIAGNOSTICS_PUSH()
-# define __R49_PRAGMA_DIAGNOSTICS_POP()
+/** Warn if compiling with a newer C version, as K&R functions (which is how all of the functions
+ * in Ruby 0.49 are written) were formally removed.
+ *
+ * Most compilers still support them, though, and you can change the version of C they're compiling
+ * for with flags (eg `CPPFLAGS='-std=c17' make -B` for gnu and clang)
+ **/
+#if __R49_C_VERSION >= 202311L
+# warning K&R functions were formally removed in C23, and compilers may refuse to compile. Try C17.
 #endif
-
 /**************************************************************************************************
  **                                                                                              **
  **                                      Compiler Warnings                                       **
@@ -84,6 +62,7 @@
 # pragma clang diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
 # pragma clang diagnostic ignored "-Wextra-tokens" /* Single one, in `st.h`. */
 # pragma clang diagnostic ignored "-Wnon-literal-null-conversion" /* Qnil is used instead of NULL/0 a lot. */
+# pragma clang diagnostic ignored "-Wmacro-redefined" /* lots at the top of `pack.c` */
 #else
 # define __r49_clang_diagnostics_ignore_q(diagnostic, ...) __VA_ARGS__
 #endif /* defined(__clang__) */

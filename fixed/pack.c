@@ -20,14 +20,6 @@
 			+(((x)&0x0000FF00)<<8)	\
 			+(((x)&0x00FF0000)>>8)	)
 
-__R49_PRAGMA_DIAGNOSTICS_PUSH() /* these macros may have previously defined by `sys/types.h */
-#if __clang__
-	__R49_PRAGMA_DIAGNOSTICS_IGNORE(macro-redefined)
-#elif defined(__GNUC__)
-# pragma GCC diagnostic ignored "-Wbuiltin-macro-redefined"
-	__R49_PRAGMA_DIAGNOSTICS_IGNORE(builtin-macro-redefined)
-#endif
-
 #ifdef WORDS_BIGENDIAN
 #define ntohs(x) (x)
 #define ntohl(x) (x)
@@ -47,7 +39,6 @@ __R49_PRAGMA_DIAGNOSTICS_PUSH() /* these macros may have previously defined by `
 #define vtohs(x) (x)
 #define vtohl(x) (x)
 #endif
-__R49_PRAGMA_DIAGNOSTICS_POP()
 
 extern VALUE C_String, C_Array;
 double atof();
