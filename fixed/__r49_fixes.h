@@ -51,7 +51,7 @@
 # ifdef __clang__
 #  pragma clang diagnostic ignored "-Weverything"
 # elif defined(__GNUC__)
-#  pragma GCC diagnostic ignored "-w"
+#  pragma GCC diagnostic ignored "-Wint-conversion"
 # elif defined(_MSVC_VER)
 	/* TODO */
 # endif /* compiler-specific ignores */
@@ -226,19 +226,29 @@
  **                              Stdlib `#include`s / Declarations                               **
  **                                                                                              **
  **************************************************************************************************/
-#ifndef __r49_no_use_includes
+#define __r49_use_includes
+#ifdef __r49_no_use_includes
+# undef __r49_use_includes
+#endif /* __r49_no_use_includes */
+
+#ifdef __r49_use_includes
 # include <stdlib.h> /* defined(HAVE_RANDOM) && initstate, random, setstate, srandom */
 # include <stdio.h>
 # include <time.h> /* time */
 # include <math.h> /* floor */
 # include <string.h>
-# include <unistd.h> 
+# ifdef HAVE_UNISTD_H
+#  include <unistd.h>
+# else
+#  warning __unix__ not defined, not sure what to do on windows for these!
+# endif /* HAVE_UNISTD_H */
 # include <sys/stat.h> /* mkdir */
 # include <fcntl.h> /* fcntl */
 # include <stdint.h> /* uintptr_t */
 # undef vfork
 # define vfork fork /* Ruby 0.49 used vfork. */
 #else  /* these are the original functions, before i started doing `#include`s */
+/* TODO: Figure out alternative imports for these */
 # include <sys/_types/_time_t.h>
 # include <sys/_types/_uid_t.h>
 # include <sys/_types/_pid_t.h>
@@ -305,7 +315,7 @@ long random(void);
 char *setstate(const char *);
 void srandom(unsigned);
 long strtol(const char *, char **, int);
-#endif /* !__r49_no_use_includes */
+#endif /* !__r49_use_includes */
 
 /**************************************************************************************************
  **                                                                                              **
