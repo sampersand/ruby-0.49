@@ -28,7 +28,6 @@
 #  define __R49_PRAGMA_PREFIX GCC
 # endif /* define __R49_PRAGMA_PREFIX */
 # define __R49_PRAGMA_DIAGNOSTICS(...) __R49_PRAGMA(__R49_PRAGMA_PREFIX diagnostic __VA_ARGS__)
-# define __R49_PRAGMA_DIAGNOSTICS_ERROR(diag) __R49_PRAGMA_DIAGNOSTICS(error __r49_to_str(-W##diag))
 # define __R49_PRAGMA_DIAGNOSTICS_IGNORE(diag) __R49_PRAGMA_DIAGNOSTICS(ignored __r49_to_str(-W##diag))
 # define __R49_PRAGMA_DIAGNOSTICS_PUSH() __R49_PRAGMA_DIAGNOSTICS(push)
 # define __R49_PRAGMA_DIAGNOSTICS_POP() __R49_PRAGMA_DIAGNOSTICS(pop)
@@ -42,7 +41,6 @@
 #else
 # define __R49_PRAGMA(...) /* todo: support msvc and friends? */
 # define __R49_PRAGMA_DIAGNOSTICS_ERROR(...)
-# define __R49_PRAGMA_DIAGNOSTICS_IGNORE(...)
 # define __R49_PRAGMA_DIAGNOSTICS_PUSH()
 # define __R49_PRAGMA_DIAGNOSTICS_POP()
 #endif
@@ -65,11 +63,10 @@
 # pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
 #endif /* defined(__GNUC__) && !defined(__clang__) */
 
-/* Disable clang-specific compiler warningxs */
+/* Disable clang-specific compiler warnings */
 #ifdef __clang__
 # define __R49_CLANG_PRAGMA(string) _Pragma(#string)
 # define __R49_CLANG_DIAGNOSTICS(...)               __R49_CLANG_PRAGMA(clang diagnostic __VA_ARGS__)
-# define __R49_CLANG_DIAGNOSTICS_ERROR(diagnostic)  __R49_CLANG_DIAGNOSTICS(error "-W" diagnostic)
 # define __R49_CLANG_DIAGNOSTICS_IGNORE(diagnostic) __R49_CLANG_DIAGNOSTICS(ignored "-W" diagnostic)
 # define __R49_CLANG_DIAGNOSTICS_PUSH()             __R49_CLANG_DIAGNOSTICS(push)
 # define __R49_CLANG_DIAGNOSTICS_POP()              __R49_CLANG_DIAGNOSTICS(pop)
@@ -78,7 +75,6 @@
 	__R49_CLANG_DIAGNOSTICS_IGNORE(diagnostic) \
 	__VA_ARGS__ \
 	__R49_CLANG_DIAGNOSTICS_POP()
-
 # pragma clang diagnostic ignored "-Wdeprecated-non-prototype" // TODO!
 # pragma clang diagnostic ignored "-Wparentheses" /* Lot of `if (foo = bar)` in the source code */
 # pragma clang diagnostic ignored "-Wint-conversion" /* Lots of int conversion thrown around */
@@ -92,6 +88,7 @@
 # define __r49_clang_diagnostics_ignore_q(diagnostic, ...) __VA_ARGS__
 #endif /* defined(__clang__) */
 
+/* Disable Microsoft's msvc warnings */
 #ifdef _MSC_VER
 # pragma warning( disable: 4047 )
 # pragma warning( disable: 4024 )
@@ -101,13 +98,6 @@
 # pragma warning( disable: 4312 )
 # pragma warning( disable: 4311 )
 #endif /* defined(_MSC_VER) */
-
-
-/* If not otherwise defined, define `__r49_clang_diagnostics_ignore_q` as a no-op */
-#ifndef __r49_clang_diagnostics_ignore_q
-# define __r49_clang_diagnostics_ignore_q(diag, ...) __VA_ARGS__
-#endif
-
 
 /**************************************************************************************************
  **                                                                                              **

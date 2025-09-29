@@ -24,6 +24,7 @@ __R49_PRAGMA_DIAGNOSTICS_PUSH() /* these macros may have previously defined by `
 #if __clang__
 	__R49_PRAGMA_DIAGNOSTICS_IGNORE(macro-redefined)
 #elif defined(__GNUC__)
+# pragma GCC diagnostic ignored "-Wbuiltin-macro-redefined"
 	__R49_PRAGMA_DIAGNOSTICS_IGNORE(builtin-macro-redefined)
 #endif
 
