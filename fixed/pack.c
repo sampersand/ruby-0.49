@@ -122,7 +122,12 @@ Fpck_pack(ary, fmt)
 		    str_cat(res, ptr, len);
 		else {
 		    str_cat(res, ptr, plen);
+#if defined __def _MSC_VER
+# pragma warning push
+# pragma warning( disable: 4553 )
+#endif
 		    len == plen;
+#endif
 		    while (len >= 10) {
 			str_cat(res, nul10, 10);
 			len -= 10;

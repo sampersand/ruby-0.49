@@ -32,6 +32,13 @@
 # define __R49_PRAGMA_DIAGNOSTICS_IGNORE(diag) __R49_PRAGMA_DIAGNOSTICS(ignored __r49_to_str(-W##diag))
 # define __R49_PRAGMA_DIAGNOSTICS_PUSH() __R49_PRAGMA_DIAGNOSTICS(push)
 # define __R49_PRAGMA_DIAGNOSTICS_POP() __R49_PRAGMA_DIAGNOSTICS(pop)
+#elif defined(_MSC_VER) /* TODO: actually test these */
+# define __R49_PRAGMA(...) _Pragma(__r49_to_str(x))
+# define __R49_PRAGMA_MSC(...) __R49_PRAGMA(warning( disable: __VA_ARGS__ ))
+# define __R49_PRAGMA_MSC_ERROR(...) /* TODO */
+# define __R49_PRAGMA_MSC_IGNORE(...)
+# define __R49_PRAGMA_MSC_PUSH() __R49_PRAGMA(warning( push ))
+# define __R49_PRAGMA_MSC_POP() __R49_PRAGMA(warning( pop ))
 #else
 # define __R49_PRAGMA(...) /* todo: support msvc and friends? */
 # define __R49_PRAGMA_DIAGNOSTICS_ERROR(...)
@@ -60,6 +67,11 @@
 # elif defined(_MSC_VER)
 #  pragma warning( disable: 4047 )
 #  pragma warning( disable: 4024 )
+#  pragma warning( disable: 4553 )
+#  pragma warning( disable: 4090 )
+#  pragma warning( disable: 4005 )
+#  pragma warning( disable: 4312 )
+#  pragma warning( disable: 4311 )
 # endif /* compiler-specific ignores */
 #else /* ie, if __r49_dev is defined */
 # ifdef __clang__ /* Never going to fix, they retain the essence of the wild west of early Ruby */
@@ -87,12 +99,21 @@
 # elif defined(_MSC_VER)
 #  pragma warning( disable: 4047 )
 #  pragma warning( disable: 4024 )
+#  define __r49_diagnostics_ignore_msc_q(diag, ...) \
+	__R49_PRAGMA_MSC_PUSH() \
+	__R49_PRAGMA_MSC_IGNORE(diag) \
+	__VA_ARGS__ \
+	__R49_PRAGMA_MSC_POP()
 # endif /* compiler-specific warnings */
 #endif /* compiler warnings */
 
 /* If not otherwise defined, define `__r49_diagnostics_ignore_clang_q` as a no-op */
 #ifndef __r49_diagnostics_ignore_clang_q
 # define __r49_diagnostics_ignore_clang_q(diag, ...) __VA_ARGS__
+#endif
+
+#ifndef __r49_diagnostics_ignore_msc_q
+# define __r49_diagnostics_ignore_msc_q(diag, ...) __VA_ARGS__
 #endif
 
 /**************************************************************************************************
