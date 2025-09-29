@@ -71,7 +71,7 @@ typedef unsigned short USHORT;
 /* In 64bit, everything is posfixable and negfixable. */
 #ifdef __r49_64bit
 # define __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare(...) \
-	__r49_diagnostics_ignore_clang_q(tautological-constant-out-of-range-compare, __VA_ARGS__)
+	__r49_clang_diagnostics_ignore_q("tautological-constant-out-of-range-compare", __VA_ARGS__)
 #else
 # define __r49_64bit_ignore_tautological_constant_out_of_replacementange_compare(...) __VA_ARGS__
 #endif

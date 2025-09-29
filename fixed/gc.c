@@ -419,7 +419,7 @@ freemethod(key, body)
 #if defined(__r49_bugfix) && defined(__r49_required_change)
     freenode(__r49_cast(struct RMethod *, char *, body)->node);
 #else
-    __r49_diagnostics_ignore_clang_q(incompatible-pointer-types, freenode(body));
+    __r49_clang_diagnostics_ignore_q(incompatible-pointer-types, freenode(body));
 #endif
     return ST_CONTINUE;
 }
