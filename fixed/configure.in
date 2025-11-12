@@ -60,4 +60,5 @@ AC_COMPILE_CHECK([pw_expire in struct passwd], [#include <pwd.h>],
 AC_HAVE_LIBRARY(m, [LIBS="$LIBS -lm"])
 AC_HAVE_LIBRARY(dbm, [LIBS="$LIBS -ldbm"])
 AC_HAVE_LIBRARY(socket, [LIBS="$LIBS -lsocket"])
+AC_HAVE_LIBRARY(crypt, [LIBS="$LIBS -lcrypt"]) dnl __r49: added crypt
 AC_OUTPUT(Makefile)

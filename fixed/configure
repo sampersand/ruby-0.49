@@ -223,7 +223,7 @@ rm -f conftest*
   test -n "$need_trad" && CC="$CC -traditional"
 fi
 
-if test $GCC -eq 1; then
+if test $GCC -eq 1 ; then
   # __r49: added this if conditional and the after it, as `-fpcc-struct-return`
   # doesn't work on clang.
   if test $__r49 -eq 1; then
