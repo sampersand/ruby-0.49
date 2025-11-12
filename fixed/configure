@@ -93,8 +93,11 @@ if test "${LANG+set}"   = 'set' ; then LANG=C;   export LANG;   fi
 rm -f conftest* confdefs.h
 # AIX cpp loses on an empty file, so make sure it contains at least a newline.
 echo > confdefs.h
-# __r49: added the `-w` flag here.
-compile='${CC-cc} $CFLAGS ${__r49+-w} conftest.c -o conftest $LIBS >/dev/null 2>&1'
+if [ -n "${__r49-}" ]; then # add this in so `exit(0)` is defined for other tests
+  echo 'extern void exit(int);' >> confdefs.h
+  CFLAGS="${CFLAGS-} -w" # no warnings when compiling
+fi
+compile='${CC-cc} $CFLAGS conftest.c -o conftest $LIBS >/dev/null 2>&1'
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
@@ -309,7 +312,7 @@ test -n "$verbose" && echo "	setting INSTALL_PROGRAM to $INSTALL_PROGRAM"
 INSTALL_DATA=${INSTALL_DATA-'$(INSTALL)'}
 test -n "$verbose" && echo "	setting INSTALL_DATA to $INSTALL_DATA"
 
-for hdr in unistd.h syscall.h a.out.h ndbm.h # __r49: `ndbm.h` was added
+for hdr in unistd.h syscall.h ndbm.h a.out.h # __r49: `ndbm.h` was added
 do
 trhdr=HAVE_`echo $hdr | tr '[a-z]./' '[A-Z]__'`
 echo checking for ${hdr}

@@ -21,7 +21,7 @@ fi
 AC_SUBST(STATIC)dnl
 AC_PROG_YACC
 AC_PROG_INSTALL
-AC_HAVE_HEADERS(unistd.h syscall.h a.out.h)
+AC_HAVE_HEADERS(unistd.h syscall.h ndbm.h a.out.h) dnl __r49: added ndbm.h
 AC_DIR_HEADER
 AC_GETGROUPS_T
 AC_RETSIGTYPE
