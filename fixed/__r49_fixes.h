@@ -505,6 +505,10 @@ void rb_trap_exit(void);
 void rb_syswait(int pid);
 void mark_trap_list(void);
 int rb_proc_exec(char *str);
+#ifdef SAFE_SIGHANDLE
+	void rb_trap_exec(void);
+#endif /* SAFE_SIGHANDLE */
+
 
 /* random.c */
 void Init_Random(void);

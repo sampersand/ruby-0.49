@@ -523,6 +523,7 @@ rb_trap_exit()
 }
 
 #if defined(SAFE_SIGHANDLE)
+__r49_void_return
 rb_trap_exec()
 {
     int i;

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #ifdef __r49_required_change
 # include <stdarg.h>
+# include <errno.h>
 #else
 # include <varargs.h>
 #endif
@@ -194,7 +195,7 @@ rb_sys_fail(mesg)
     char *mesg;
 {
     char buf[BUFSIZ];
-    extern int errno;
+    __r49_required_change_nq(extern int errno;)
 
     if (mesg == Qnil)
 	sprintf(buf, "%s.\n", strerror(errno));
