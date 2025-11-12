@@ -225,7 +225,7 @@ fi
 
 if test $GCC -eq 1 ; then
   # __r49: added this if conditional and the after it, as `-fpcc-struct-return`
-  # doesn't work on clang.
+  # doesn't work on clang; if rebuilt with a new `autoconf` this goes away
   if test $__r49 -eq 1; then
     echo 'int main() {}' > conftest.c
     if ! ${CC-cc} -E conftest.c -fpcc-struct-return >/dev/null 2>&1; then
@@ -233,7 +233,7 @@ if test $GCC -eq 1 ; then
     fi
     rm -f conftest*
   fi
-  if ! test $__r49_doesnt_have_fpcc_struct_Return -eq 1; then
+  if ! test "$__r49_doesnt_have_fpcc_struct_Return" -eq 1; then
     DBM=-fpcc-struct-return
   fi
 fi
@@ -1353,6 +1353,29 @@ if test -n "${have_lib}"; then
    :; LIBS="$LIBS -lsocket"
 else
    :; 
+fi
+
+LIBS_save="${LIBS}"
+LIBS="${LIBS} -lcrypt"
+have_lib=""
+echo checking for -lcrypt
+cat > conftest.c <<EOF
+#include "confdefs.h"
+
+int main() { exit(0); }
+int t() { main(); }
+EOF
+if eval $compile; then
+  rm -rf conftest*
+  have_lib="1"
+
+fi
+rm -f conftest*
+LIBS="${LIBS_save}"
+if test -n "${have_lib}"; then
+   :; LIBS="$LIBS -lcrypt"
+else
+   :;
 fi
 
 # Set default prefixes.

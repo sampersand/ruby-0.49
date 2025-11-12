@@ -501,13 +501,11 @@ char *rb_class2name(struct RClass *class);
 
 /* process.c */
 void Init_process(void);
+void rb_trap_exec(void);
 void rb_trap_exit(void);
 void rb_syswait(int pid);
 void mark_trap_list(void);
 int rb_proc_exec(char *str);
-#ifdef SAFE_SIGHANDLE
-	void rb_trap_exec(void);
-#endif /* SAFE_SIGHANDLE */
 
 
 /* random.c */
