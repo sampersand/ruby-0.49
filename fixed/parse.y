@@ -2491,10 +2491,10 @@ rb_intern(name)
     char *name;
 {
     static ID last_id = LAST_TOKEN;
-    __r49_critical_bugfix_r(int, ID) id;
+    __r49_required_change_r(int, ID) id;
     int last;
 
-    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(__r49_critical_bugfix_r(int, ID), &id)))
+    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(__r49_required_change_r(int, ID), &id)))
 	return id;
 
     id = ++last_id;
