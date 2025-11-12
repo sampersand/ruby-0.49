@@ -1,4 +1,4 @@
 *.o
 ruby
 fixed/Makefile
-fixed/configure.status
+fixed/config.status

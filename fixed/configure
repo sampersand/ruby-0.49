@@ -309,7 +309,7 @@ test -n "$verbose" && echo "	setting INSTALL_PROGRAM to $INSTALL_PROGRAM"
 INSTALL_DATA=${INSTALL_DATA-'$(INSTALL)'}
 test -n "$verbose" && echo "	setting INSTALL_DATA to $INSTALL_DATA"
 
-for hdr in unistd.h syscall.h a.out.h
+for hdr in unistd.h syscall.h a.out.h ndbm.h # __r49: `ndbm.h` was added
 do
 trhdr=HAVE_`echo $hdr | tr '[a-z]./' '[A-Z]__'`
 echo checking for ${hdr}

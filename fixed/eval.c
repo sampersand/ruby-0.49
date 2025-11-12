@@ -318,7 +318,9 @@ rb_eval(node)
     {
 	extern int trap_pending;
 
+	__r49_required_change(extern rb_trap_exec(void);)
 	if (trap_pending) {
+	    rb_trap_exec();
 	    rb_trap_exec();
 	}
     }

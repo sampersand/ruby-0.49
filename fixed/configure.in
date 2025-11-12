@@ -1,4 +1,4 @@
-
+dnl __r49: DO NOT USE THIS! This file uses an ancient version of `autoconf`; I've made changes to `configure`  directly.
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ruby.h)
 PROGS="ruby"

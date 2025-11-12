@@ -28,6 +28,11 @@
 /* define USE_DBM to use dbm class. */
 #define USE_DBM
 
+// 
+#if defined(__r49_required_change) && !defined(HAVE_NDBM_H)
+# undef USE_DBM
+#endif
+
 #ifdef HAVE_SYSCALL_H
 /* define SAFE_SIGHANDLE to override syscall for trap. */
 #define SAFE_SIGHANDLE
