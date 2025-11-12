@@ -1136,6 +1136,7 @@ tokadd(c)
 #ifdef __r49_ubfix
 # define LAST(v) (&v[-1 + sizeof(v)/sizeof(v[0])])
 #else
+# warning what
 # define LAST(v) ((v)-1 + sizeof(v)/sizeof(v[0]))
 #endif /* __r49_ubfix */
 
