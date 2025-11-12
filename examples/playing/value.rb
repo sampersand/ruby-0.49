@@ -4,4 +4,4 @@ def takes_keywords(*kw)
   34
 end
 
-takes_keywords('a'::34, 'b'::45)
+takes_keywords('a' :: 34, 'b' :: 45)
