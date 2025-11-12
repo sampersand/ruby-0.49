@@ -931,8 +931,11 @@ Fsystem2(obj, str)
 struct timeval *time_timeval();
 
 #ifdef __linux__
-#   warning __r49: _gptr doesnt exist on some linux distros (so this might not work?)
 #   define READ_PENDING(fp) ((fp)->_gptr < (fp)->_egptr > 0)
+#   if defined(__r49_required_change) && !defined(__R49_USE_OLD_FILE_GPTR)
+#      undef READ_PENDING
+#      define READ_PENDING(fp) ((fp)->_IO_read_ptr < (fp)->_IO_read_end > 0)
+#   endif /* __r49_required_change && !__R49_USE_OLD_FILE_GPTR */
 #else
 # ifdef __SLBF
 #   define READ_PENDING(fp) ((fp)->_r > 0)
