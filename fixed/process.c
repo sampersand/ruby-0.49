@@ -20,6 +20,11 @@
 #include "st.h"
 VALUE rb_readonly_hook();
 
+#ifdef __r49_required_change
+pid_t wait(int *);
+pid_t waitpid(pid_t pid, int *wstatus, int options);
+#endif
+
 static VALUE
 get_pid()
 {
@@ -537,15 +542,14 @@ rb_trap_exec()
     }
 }
 
-/* __r49: Removed `#ifdef HAVE_SYSCALL_H`, and added this, to not redefine builtins */
-#if defined(HAVE_SYSCALL_H) && !defined(__r49_redefine_builtins)
+#ifdef HAVE_SYSCALL_H
 #include <syscall.h>
-
 #ifdef SYS_read
-int
+__r49_required_change_r(int, ssize_t)
 read(fd, buf, nbytes)
-    int fd, nbytes;
-    char *buf;
+    int fd __r49_required_change_nq(, nbytes);
+    __r49_required_change_q(size_t nbytes;)
+    __r49_required_change_r(char, void) *buf;
 {
     int res;
 
@@ -558,7 +562,7 @@ read(fd, buf, nbytes)
 
 #ifdef SYS_wait
 int
-wait(status) // __r49: todo 
+wait(status) // __r49: todo
     union wait *status;
 {
     int res;

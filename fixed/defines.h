@@ -28,7 +28,7 @@
 /* define USE_DBM to use dbm class. */
 #define USE_DBM
 
-// 
+/* __r49: Ruby unconditionally did `USE_DBM` previously; here we check for it */
 #if defined(__r49_required_change) && !defined(HAVE_NDBM_H)
 # undef USE_DBM
 #endif
