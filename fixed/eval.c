@@ -26,20 +26,17 @@ struct ENVIRON *the_env, *top_env;
 
 #ifdef __r49_recursion_limit /* add support for recursion limits */
 unsigned __r49_recursion_size;
-#endif
-
-#ifdef __r49_recursion_limit
 # define __R49_RECURSION_PUSH() \
 	do { if (__r49_recursion_size++ >= __r49_recursion_limit) \
 		Fail("recursion limit of %d reached",  __r49_recursion_limit); }while(0)
 # define __R49_RECURSION_POP() do { --__r49_recursion_size; } while(0)
 #else
 # define __R49_RECURSION_PUSH() do {} while(0)
-# define __R49_RECURSION_POP() do{} while(0)
+# define __R49_RECURSION_POP() do {} while(0)
 #endif
 
 #define PUSH_ENV() {\
-    __R49_RECURSION_PUSH(); \
+    __R49_RECURSION_PUSH();\
     struct ENVIRON _this;\
     if (the_env) _this = *the_env; else bzero(&_this, sizeof(_this));\
     _this.prev = the_env;\

@@ -29,10 +29,6 @@ extern struct ENVIRON {
     struct ENVIRON *prev;
 } *the_env;
 
-#ifdef __r49_recursion_limit /* add support for recursion limits */
-extern unsigned __r49_recursion_size;
-#endif
-
 #define ITERATOR_P() (the_env->iterator > 0 && the_env->iterator < 3)
 #define Qself the_env->self
 #define the_class the_env->current_module
