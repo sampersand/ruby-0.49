@@ -7,6 +7,10 @@
 #define __r49
 
 // #define __r49_dev /* uncomment if you're working _on_ r49 */
+#ifdef __r49_dev
+# define __r49_log(...) (fprintf(stderr, "%s:%d (%s) ", __FILE__, __LINE__, __FUNCTION__), \
+	fprintf(stderr, __VA_ARGS__), fputs("\n", stderr), fflush(stderr))
+#endif
 
 #ifdef __STDC_VERSION__
 # define __R49_C_VERSION __STDC_VERSION__

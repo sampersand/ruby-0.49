@@ -1846,6 +1846,7 @@ Frequire(obj, fname)
     while (p < pend) {
 	Check_Type(*p, T_STRING);
 	if (strcmp(RSTRING(*p)->ptr, file) == 0) return FALSE;
+	__r49_bugfix_q(p++;) /* without this, this will infinite loop */
     }
     Fary_push(rb_loadfiles, str_new2(file));
 

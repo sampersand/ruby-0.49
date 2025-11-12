@@ -1,9 +1,11 @@
 #!ruby -s
-$* << '.'
-dir = $*[0] || Dir.pwd
+dir = Dir.pwd
+$LOAD_PATH.unshift( Dir.pwd + '/libs')
 
-$LOAD_PATH << './libs'
 require('find.rb')
+__r49_dump("A")
+require("print.rb")
+__r49_dump("A")
 include Find
 
 $, = ' '
