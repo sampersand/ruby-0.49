@@ -1,3 +1,5 @@
+# This showcases a weird bug relating to `iterator_p()`: you can't negate it!
+
 def if_print
   if iterator_p(); print("iterator\n") else print("not iterator\n") end
 end

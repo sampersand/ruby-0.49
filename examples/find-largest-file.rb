@@ -2,11 +2,8 @@
 dir = Dir.pwd
 $LOAD_PATH.unshift( Dir.pwd + '/libs')
 
+# This segfaults! TODO: Solve it!
 require('find.rb')
-__r49_dump("A")
-require("print.rb")
-__r49_dump("A")
-include Find
 
 $, = ' '
 $\ = "\n"
