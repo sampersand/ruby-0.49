@@ -37,3 +37,6 @@ If you disable some of the macros, you may end up with segfaults. I also haven't
 
 ## Reading `CHANGELOG` and friends
 It's in EUC-JP encoding. You can convert via `iconv -f EUC-JP -t UTF-8 input_filename`; I then pasted it into Google translate to read it.
+
+## Known issues
+- You can't use `Kernel#class` --- that should be a bugfix i need to do
