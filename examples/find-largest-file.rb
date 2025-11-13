@@ -1,9 +1,14 @@
-#!ruby -s
-dir = Dir.pwd
-$LOAD_PATH.unshift( Dir.pwd + '/libs')
+##
+# Finds the largest file in a directory, and all its children.
+# If `-print` is supplied, also prints out sizes of the files
+##
 
-# This segfaults! TODO: Solve it!
-require('find.rb')
+dir = Dir.pwd
+# $LOAD_PATH.unshift(Dir.pwd + '/examples/libs') # No way to get the current file
+# $LOAD_PATH.unshift( Dir.pwd + '/libs')
+
+require('find')
+include Find
 
 $, = ' '
 $\ = "\n"

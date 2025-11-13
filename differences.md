@@ -40,3 +40,6 @@ doit(\greeting::"Hello", \place::"World")
   `using VARIABLE` was optional. You were allowed exactly one variable per block.
   - A fun little tidbit is that the variable could also be a global variable or instance variable.
 - You checked for blocks via `iterator_p()` not `block_given?`
+
+
+- Instead of `===`, `case` uses `=~`
