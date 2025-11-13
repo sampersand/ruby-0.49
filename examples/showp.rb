@@ -18,7 +18,7 @@ def Directory.foreach(dir)
   end
 end
 
-for dir in $ENV['PATH'].split(':')
+for dir in getenv('PATH').split(':') # `$ENV['PATH']` is also valid
   # Make sure it's a dir and you can look through it
   unless File.d(dir) && File.x(dir)
     continue

@@ -11,8 +11,8 @@ srand()
 %words_file =
   if defined("$words") # instead of `defined?($words)`, a function called `defined` was used.
     $words
-  elsif (q = getenv("WORDS_FILE")) # Alternative is `$ENV`; only alphanumerics were allowed in variable names, hence `is_`
-    q
+  elsif !(words = $ENV["WORDS_FILE"]).is_nil # `$ENV` was a global! Also, `xxx?` was `is_xxx`
+    words
   else
     "/usr/share/dict/words"
   end if # <-- old ruby let you optionally "tag" `end`s, such as this `end if`.
@@ -41,7 +41,7 @@ def func words_from_file(file)
   end
 
   words
-end
+end def
 
 module loopable
   def loop
@@ -186,10 +186,5 @@ class hangman : game
   def _inspect to_s
 end
 
-def gets()
-  ('a'..'z').to_a[rand(26)] + "\n"
-end
-
 hm = hangman.from_file(%words_file, \guesses::10)
-# $stdin = $stdin
 hm.play()

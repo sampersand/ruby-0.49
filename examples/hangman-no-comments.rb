@@ -5,7 +5,7 @@ srand()
 %words_file =
   if defined("$words")
     $words
-  elsif (q = getenv("WORDS_FILE"))
+  elsif !(q = $ENV["WORDS_FILE"]).is_nil
     q
   else
     "/usr/share/dict/words"
@@ -155,11 +155,5 @@ class hangman : game
   def _inspect to_s
 end
 
-def gets()
-  # (('a'..'z').to_a + ["9"])[rand(26)] + "\n"
-  "0"
-end
-
 hm = hangman.from_file(%words_file, \guesses::10)
-# $stdin = $stdin
 hm.play()
