@@ -4,13 +4,13 @@ class fraction
   attr('numer')
   attr('denom')
 
-  def fraction.new(*args)
+  def fraction.new(numer, *args)
     # Default second argument to `1`
-    if args.length == 1
+    if args.length == 0
       args << 1
     end
 
-    super.init(*args)
+    super.init(numer, *args)
   end
 
   def init(numer, denom)
