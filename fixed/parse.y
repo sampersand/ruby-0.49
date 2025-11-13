@@ -13,7 +13,6 @@
 %{
 
 #define YYDEBUG 1
-#include "__r49_fixes.h"
 #include "ruby.h"
 #include "env.h"
 #include "node.h"
