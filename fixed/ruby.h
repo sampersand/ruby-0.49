@@ -56,7 +56,7 @@ typedef unsigned short USHORT;
 # define FIXNUM_MIN RSHIFT((long)LONG_MIN,1)
 
 #define FIXNUM_FLAG 0x01
-#define INT2FIX(i) (VALUE)(((__r49_required_change_r(int, VALUE))(i))<<1 | FIXNUM_FLAG)
+#define INT2FIX(i) (VALUE)(((__r49_modern_c_r(int, VALUE))(i))<<1 | FIXNUM_FLAG)
 
 #if (-1==(((-1)<<1)&FIXNUM_FLAG)>>1)
 # define RSHIFT(x,y) ((x)>>y)
@@ -127,8 +127,8 @@ extern VALUE C_Data;
 #define Need_Fixnum(x)  {if (!FIXNUM_P(x)) (x) = num2fix(x);}
 #define NUM2INT(x) (FIXNUM_P(x)?FIX2INT(x):num2int(x))
 
-VALUE num2fix(__r49_required_change_q(VALUE val));
-int   num2int(__r49_required_change_q(VALUE val));
+VALUE num2fix(__r49_modern_c_q(VALUE val));
+int   num2int(__r49_modern_c_q(VALUE val));
 
 #define NEWOBJ(obj,type) type *obj = (type*)newobj(sizeof(type))
 #define OBJSETUP(obj,c,t) {\
@@ -303,8 +303,8 @@ void rb_define_attr();
 ID rb_intern();
 char *rb_id2name();
 
-VALUE rb_funcall(__r49_required_change_q(VALUE recv, ID mid, int n, ...));
-int rb_scan_args(__r49_required_change_q(VALUE args, char *fmt, ...));
+VALUE rb_funcall(__r49_modern_c_q(VALUE recv, ID mid, int n, ...));
+int rb_scan_args(__r49_modern_c_q(VALUE args, char *fmt, ...));
 
 VALUE rb_yield();
 

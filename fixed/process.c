@@ -20,7 +20,7 @@
 #include "st.h"
 VALUE rb_readonly_hook();
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 pid_t wait(int *);
 pid_t waitpid(pid_t pid, int *wstatus, int options);
 #endif
@@ -511,7 +511,7 @@ sighandle(sig)
     rb_trap_eval(trap_list[sig]);
 #endif
 
-#ifdef __r49_required_change /* use `return 0;` only if RETSIGTYPE is int. */
+#ifdef __r49_modern_c /* use `return 0;` only if RETSIGTYPE is int. */
 # define __r49_sighandle_replacementeturn_void
 # define __r49_sighandle_replacementeturn_int return 0;
 # define __r49_ret1(U) __r49_ret2(U)
@@ -545,11 +545,11 @@ rb_trap_exec()
 #ifdef HAVE_SYSCALL_H
 #include <syscall.h>
 #ifdef SYS_read
-__r49_required_change_r(int, ssize_t)
+__r49_modern_c_r(int, ssize_t)
 read(fd, buf, nbytes)
-    int fd __r49_required_change_nq(, nbytes);
-    __r49_required_change_q(size_t nbytes;)
-    __r49_required_change_r(char, void) *buf;
+    int fd __r49_modern_c_nq(, nbytes);
+    __r49_modern_c_q(size_t nbytes;)
+    __r49_modern_c_r(char, void) *buf;
 {
     int res;
 
@@ -722,7 +722,7 @@ Fproc_getpgrp(obj, args)
     }
 
     /* __r49: I'm not positive this is the right replacement; but getpgrp doesnt take a pid */
-    pgrp = __r49_required_change_r(getpgrp(pid), getpgrp());
+    pgrp = __r49_modern_c_r(getpgrp(pid), getpgrp());
     return INT2FIX(pgrp);
 }
 
@@ -736,7 +736,7 @@ Fproc_setpgrp(obj, pid, pgrp)
     ipgrp = NUM2INT(pgrp);
 
     /* __r49: I'm not positive this is the right replacement; but getpgrp doesnt take a pid */
-    if (__r49_required_change_r(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(Qnil);
+    if (__r49_modern_c_r(getpgrp(ipid, ipgrp), getpgrp()) == -1) rb_sys_fail(Qnil);
 
     return Qnil;
 }

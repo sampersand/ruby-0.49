@@ -90,7 +90,7 @@ st_table *table;
     }
     free((char *) table->bins);
     free((char *) table);
-    __r49_required_change_q(return 0;) /* even though the return value is never used, we need one */
+    __r49_modern_c_q(return 0;) /* even though the return value is never used, we need one */
 }
 
 #define PTR_NOT_EQUAL(table, ptr, key)\
@@ -184,7 +184,7 @@ char *value;
     
     hash_val = do_hash(key, table);
     ADD_DIRECT(table, key, value, hash_val, tbl);
-    __r49_required_change_q(return 0;)
+    __r49_modern_c_q(return 0;)
 }
 
 __r49_implicit(int)
@@ -345,7 +345,7 @@ char *arg;
 		ptr = ptr->next;
 		break;
 	    case ST_STOP:
-		return __r49_required_change_q(0);
+		return __r49_modern_c_q(0);
 	    case ST_DELETE:
 		tmp = ptr;
 		if (last == nil(st_table_entry)) {
@@ -359,7 +359,7 @@ char *arg;
 	}
     }
 
-    __r49_required_change_q(return 0;)
+    __r49_modern_c_q(return 0;)
 }
 
 __r49_implicit(int)

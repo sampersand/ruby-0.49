@@ -932,10 +932,10 @@ struct timeval *time_timeval();
 
 #ifdef __linux__
 #   define READ_PENDING(fp) ((fp)->_gptr < (fp)->_egptr > 0)
-#   if defined(__r49_required_change) && !defined(__R49_USE_OLD_FILE_GPTR)
+#   if defined(__r49_modern_c) && !defined(__R49_USE_OLD_FILE_GPTR)
 #      undef READ_PENDING
 #      define READ_PENDING(fp) ((fp)->_IO_read_ptr < (fp)->_IO_read_end > 0)
-#   endif /* __r49_required_change && !__R49_USE_OLD_FILE_GPTR */
+#   endif /* __r49_modern_c && !__R49_USE_OLD_FILE_GPTR */
 #else
 # ifdef __SLBF
 #   define READ_PENDING(fp) ((fp)->_r > 0)

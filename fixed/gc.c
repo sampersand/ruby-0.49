@@ -416,7 +416,7 @@ freemethod(key, body)
     ID key;
     char *body;
 {
-#if defined(__r49_bugfix) && defined(__r49_required_change)
+#if defined(__r49_bugfix) && defined(__r49_modern_c)
     freenode(__r49_cast(struct RMethod *, char *, body)->node);
 #else
     __r49_clang_diagnostics_ignore_q("incompatible-pointer-types", freenode(body));

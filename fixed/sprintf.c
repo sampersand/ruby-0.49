@@ -53,7 +53,7 @@ Fsprintf(argc, argv)
 }
 
 #define GETARG() \
-    ((argc == 1)?Fail("too few argument.") __r49_required_change_q(, 0):(argc--, argv++, argv[0]))
+    ((argc == 1)?Fail("too few argument.") __r49_modern_c_q(, 0):(argc--, argv++, argv[0]))
 
     fmt = (struct RString*)GETARG();
     Check_Type(fmt, T_STRING);

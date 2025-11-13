@@ -13,7 +13,7 @@
 #include "ruby.h"
 #include "env.h"
 #include <stdio.h>
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 # include <stdarg.h>
 # include <errno.h>
 #else
@@ -66,7 +66,7 @@ yyerror(msg)
 }
 
 __r49_void_return
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 Error(char *fmt, ...)
 #else
 Error(fmt, va_alist)
@@ -76,7 +76,7 @@ Error(fmt, va_alist)
 {
     va_list args;
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_start(args, fmt);
 #else
     va_start(args);
@@ -87,7 +87,7 @@ Error(fmt, va_alist)
 }
 
 __r49_void_return
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 Warning(char *fmt, ...)
 #else
 Warning(fmt, va_alist)
@@ -100,7 +100,7 @@ Warning(fmt, va_alist)
 
     sprintf(buf, "warning: %s", fmt);
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_start(args, fmt);
 #else
     va_start(args);
@@ -110,7 +110,7 @@ Warning(fmt, va_alist)
 }
 
 __r49_noreturn
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 Fatal(char *fmt, ...)
 #else
 Fatal(fmt, va_alist)
@@ -120,7 +120,7 @@ Fatal(fmt, va_alist)
 {
     va_list args;
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_start(args, fmt);
 #else
     va_start(args);
@@ -131,7 +131,7 @@ Fatal(fmt, va_alist)
 }
 
 __r49_noreturn
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 Bug(char *fmt, ...)
 #else
 Bug(fmt, va_alist)
@@ -144,7 +144,7 @@ Bug(fmt, va_alist)
 
     sprintf(buf, "[BUG] %s", fmt);
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_start(args, fmt);
 #else
     va_start(args);
@@ -168,7 +168,7 @@ Bug(fmt, va_alist)
 }
 
 __r49_noreturn
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 Fail(char *fmt, ...)
 #else
 Fail(fmt, va_alist)
@@ -179,7 +179,7 @@ Fail(fmt, va_alist)
     va_list args;
     char buf[BUFSIZ]; 
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_start(args, fmt);
 #else
     va_start(args);
@@ -195,7 +195,7 @@ rb_sys_fail(mesg)
     char *mesg;
 {
     char buf[BUFSIZ];
-    __r49_required_change_nq(extern int errno;)
+    __r49_modern_c_nq(extern int errno;)
 
     if (mesg == Qnil)
 	sprintf(buf, "%s.\n", strerror(errno));

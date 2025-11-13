@@ -250,7 +250,7 @@ rb_define_single_method(obj, name, func, argc)
     VALUE (*func)();
     int argc;
 {
-    rb_define_method(rb_single_class(obj), name, func, argc __r49_required_change_nq(, MTH_METHOD));
+    rb_define_method(rb_single_class(obj), name, func, argc __r49_modern_c_nq(, MTH_METHOD));
 }
 void
 rb_define_mfunc(class, name, func, argc)
@@ -303,7 +303,7 @@ rb_define_single_attr(obj, name, pub)
     rb_define_attr(rb_single_class(obj), name, pub);
 }
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 # include <stdarg.h>
 #else
 # include <varargs.h>
@@ -311,7 +311,7 @@ rb_define_single_attr(obj, name, pub)
 #include <ctype.h>
 
 int
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 rb_scan_args(VALUE args, char *fmt, ...)
 #else
 rb_scan_args(args, fmt, va_alist)
@@ -333,7 +333,7 @@ rb_scan_args(args, fmt, va_alist)
 	len = RARRAY(args)->len;
     }
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_start(vargs, fmt);
 #else
     va_start(vargs);

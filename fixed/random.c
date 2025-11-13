@@ -51,7 +51,7 @@ Fsrand(obj, args)
     return int2inum(old);
 #else
     /* `srand` doesn't return a value, so we just use `0` always.. */
-    old = __r49_required_change_r(srand(seed), (srand(seed), 0));
+    old = __r49_modern_c_r(srand(seed), (srand(seed), 0));
     return int2inum(old);
 #endif
 }

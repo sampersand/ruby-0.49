@@ -55,7 +55,7 @@ Fstruct_access(s)
     return struct_find(s, the_env->last_func);
 }
 
-static __r49_required_change_r(VALUE, __r49_void_return) /* the return type is given, but never used */
+static __r49_modern_c_r(VALUE, __r49_void_return) /* the return type is given, but never used */
 struct_add(s, mem, val)
     struct RStruct *s;
     char *mem;
@@ -76,14 +76,14 @@ struct_add(s, mem, val)
     rb_define_single_method(s, mem, Fstruct_access, 0);
 }
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 # include <stdarg.h>
 #else
 # include <varargs.h>
 #endif
 
 VALUE
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 struct_new(char *name, ...)
 #else
 struct_new(name, va_alist)
@@ -97,7 +97,7 @@ struct_new(name, va_alist)
 
     GC_LINK;
     GC_PRO3(st, struct_alloc(C_Struct,name));
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_start(args, name);
 #else
     va_start(args);
@@ -107,7 +107,7 @@ struct_new(name, va_alist)
 	struct_add(st, mem, va_arg(args, VALUE));
     }
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
     va_end(args); /* for some reason `vargs` was given, even though it's not a variable.. */
 #else
     va_end(vargs);
@@ -151,7 +151,7 @@ Fstruct_new(class, args)
     return st;
 }
 
-static __r49_required_change_r(VALUE, __r49_void_return) /* the return type is given, but never used */
+static __r49_modern_c_r(VALUE, __r49_void_return) /* the return type is given, but never used */
 Fstruct_each(s)
     struct RStruct *s;
 {
@@ -194,7 +194,7 @@ Fstruct_aref(s, idx)
 
     /* Add the `s` parameter, which was undoubtedly unintentionally missing */
     if (TYPE(idx) == T_STRING)
-	return struct_find(__r49_required_change_q(s,) rb_intern(RSTRING(idx)->ptr));
+	return struct_find(__r49_modern_c_q(s,) rb_intern(RSTRING(idx)->ptr));
 	
     i = NUM2INT(idx);
     if (s->len <= i)
@@ -265,7 +265,7 @@ Fstruct_clone(s)
 {
     /* __r49: This function wasn't fixed before it was completely rewritten, so I can't verify
      * my assumptions. However, it makes sense to use `s` as the clone source. */
-    struct RStruct *st = (struct RStruct*)struct_alloc(__r49_required_change_q(s,) s->name);
+    struct RStruct *st = (struct RStruct*)struct_alloc(__r49_modern_c_q(s,) s->name);
 
     CLONESETUP(st, s);
     st->len = s->len;

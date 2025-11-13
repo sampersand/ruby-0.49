@@ -93,14 +93,14 @@
 /* Changes that are required to even compile it. In Ruby 0.49, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
  * compiler from accepting the code. */
-#define __r49_required_change
-#ifdef __r49_no_required_change
-# undef __r49_required_change
+#define __r49_modern_c
+#ifdef __r49_no_modern_c
+# undef __r49_modern_c
 #endif
 
-#ifdef __r49_required_change
-# define __r49_required_change_q(...) __VA_ARGS__
-# define __r49_required_change_nq(...)
+#ifdef __r49_modern_c
+# define __r49_modern_c_q(...) __VA_ARGS__
+# define __r49_modern_c_nq(...)
 # ifdef __r49_dev /* These shouldn't still exist in the codebase, but can exist without the requirements */
 #  ifdef __GNUC__  /* clang also defines __GNUC__ */
 #   pragma GCC diagnostic error "-Wint-to-pointer-cast"
@@ -111,11 +111,11 @@
 #   pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
 # endif /* __r49_dev */
 #else
-# define __r49_required_change_q(...)
-# define __r49_required_change_nq(...) __VA_ARGS__
+# define __r49_modern_c_q(...)
+# define __r49_modern_c_nq(...) __VA_ARGS__
 #endif
 
-#define __r49_required_change_r(old, new) __r49_required_change_nq(old) __r49_required_change_q(new)
+#define __r49_modern_c_r(old, new) __r49_modern_c_nq(old) __r49_modern_c_q(new)
 
 /* Changes that are required to get Ruby 0.49 to compile on 64 bit architectures. This is mostly
  * Things to make sure that `sizeof(VALUE) == sizeof(void *)` and friends. If you disable this,
@@ -205,7 +205,7 @@
 # define __r49_noreturn void
 #endif
 
-#ifndef __r49_required_change
+#ifndef __r49_modern_c
 # define __r49_cast(to, from, val) (val)
 #elif defined(__r49_dev) && 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
 # define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
@@ -213,7 +213,7 @@
 # define __r49_cast(to, from, val) ((to) (val))
 #endif
 
-#define __r49_implicit(what) __r49_required_change_q(what)
+#define __r49_implicit(what) __r49_modern_c_q(what)
 #define __r49_implicit_arg(type, arg) __r49_implicit(type arg;)
 #define __r49_void_return __r49_implicit(void)
 #define __r49_cast_to_RBasic(from, ptr) (__r49_cast(struct RBasic *, struct from *, ptr))

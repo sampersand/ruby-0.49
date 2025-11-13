@@ -29,7 +29,7 @@
 #define USE_DBM
 
 /* __r49: Ruby unconditionally did `USE_DBM` previously; here we check for it */
-#if defined(__r49_required_change) && !defined(HAVE_NDBM_H)
+#if defined(__r49_modern_c) && !defined(HAVE_NDBM_H)
 # undef USE_DBM
 #endif
 

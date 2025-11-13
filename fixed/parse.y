@@ -1068,8 +1068,8 @@ comma		: ',' 		{ yyerrok; }
 static char *tokenbuf = NULL;
 static int   tokidx, toksiz = 0;
 
-__r49_required_change_r(char, void) *xmalloc();
-__r49_required_change_r(char, void) *xrealloc();
+__r49_modern_c_r(char, void) *xmalloc();
+__r49_modern_c_r(char, void) *xrealloc();
 VALUE newregexp();
 VALUE newstring();
 VALUE newfloat();
@@ -2492,10 +2492,10 @@ rb_intern(name)
     char *name;
 {
     static ID last_id = LAST_TOKEN;
-    __r49_required_change_r(int, ID) id;
+    __r49_modern_c_r(int, ID) id;
     int last;
 
-    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(__r49_required_change_r(int, ID), &id)))
+    if (st_lookup(sym_tbl, name, __r49_cast_to_charpp(__r49_modern_c_r(int, ID), &id)))
 	return id;
 
     id = ++last_id;

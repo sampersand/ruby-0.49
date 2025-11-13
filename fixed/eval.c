@@ -1590,14 +1590,14 @@ Fapply(recv, args)
     return rb_apply(recv, mid, rest);
 }
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 # include <stdarg.h>
 #else
 # include <varargs.h>
 #endif
 
 VALUE
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 rb_funcall(VALUE recv, ID mid, int n, ...)
 #else
 rb_funcall(recv, mid, n, va_alist)
@@ -1617,7 +1617,7 @@ rb_funcall(recv, mid, n, va_alist)
 	argc = n + 1;
 	argv = (VALUE*)alloca(sizeof(VALUE)*argc);
 
-#ifdef __r49_required_change
+#ifdef __r49_modern_c
 	va_start(ar, n);
 #else
 	va_start(ar);

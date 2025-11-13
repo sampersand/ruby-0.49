@@ -3,8 +3,8 @@
  */
 #include "../__r49_fixes.h"
 
-extern __r49_required_change_q(const) int sys_nerr;
-extern __r49_required_change_q(const) char *__r49_required_change_q(const) sys_errlist[];
+extern __r49_modern_c_q(const) int sys_nerr;
+extern __r49_modern_c_q(const) char *__r49_modern_c_q(const) sys_errlist[];
 
 static char msg[50];
 

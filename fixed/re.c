@@ -205,7 +205,7 @@ re_last_match(id)
 #define CONCAT(a,b) a/**/b
 #endif
 
-#if defined(__r49_required_change) && !defined(__STDC__)
+#if defined(__r49_modern_c) && !defined(__STDC__)
 # undef CONCAT
 # define CONCAT(a,b) a##b /* MSVC is silly */
 #endif
