@@ -145,11 +145,11 @@
 #endif
 
 #ifdef __r49_critical_bugfix
-# define __r49_critical_bugfix_q(...) __VA_ARGS__
-# define __r49_critical_bugfix_r(old, new) new
+# define __R49_CRITICAL_BUGFIX_Q(...) __VA_ARGS__ /* Q for question */
+# define __R49_CRITICAL_BUGFIX_R(old, new) new
 #else
-# define __r49_critical_bugfix_q(...)
-# define __r49_critical_bugfix_r(old, new) old
+# define __R49_CRITICAL_BUGFIX_Q(...)
+# define __R49_CRITICAL_BUGFIX_R(old, new) old
 #endif
 
 /* Bugfix is fixing code which is probably a bug (like not having `$;` be valid syntax, even though
@@ -160,6 +160,7 @@
 #endif
  
 #ifdef __r49_bugfix
+# define __R49_BUGFIX_Q(...) __VA_ARGS__
 # define __r49_bugfix_q(...) __VA_ARGS__
 # define __r49_bugfix_r(old, new) new
 # ifndef __r49_recursion_limit  /* ruby 0.49 segfaults if you recurse too deep; this fixes that */
@@ -168,6 +169,7 @@
 #  undef __r49_recursion_limit /* undefine it if we dont want it */
 # endif
 #else
+# define __R49_BUGFIX_Q(...)
 # define __r49_bugfix_q(...)
 # define __r49_bugfix_r(old, new) old
 #endif

@@ -6,7 +6,6 @@ def fizzbuzz(max)
     do fizzbuzz(max) using i; ary.push(i) end
     return ary
   end
-
   # This is similar to modern ruby!
   for x in 1..max
     yield case 0

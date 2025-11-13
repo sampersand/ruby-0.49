@@ -152,7 +152,7 @@ Bug(fmt, va_alist)
     err_print(buf, args);
     va_end(args);
 /* __r49: Without this there's no way to see the content of errors when `load`ing files. */
-#ifdef __r49_critical_bugfix
+#ifdef __r49_critical_bugfix // TODO: verify above claim
     extern VALUE errstr;
     if (errstr != Qnil) {
 	Check_Type(errstr, T_STRING);
@@ -219,7 +219,7 @@ static char *builtin_types[] = {
     "Fixnum",
     "Dictionary",
     "Data",
-    __r49_critical_bugfix_q("Method", "Struct", "Bignum") /* __r49: otherwise WrongType segfaults */
+    __R49_CRITICAL_BUGFIX_Q("Method", "Struct", "Bignum") /* __r49: otherwise WrongType segfaults */
 };
 
 __r49_noreturn

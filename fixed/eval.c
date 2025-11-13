@@ -486,8 +486,8 @@ rb_eval(node)
 	    if (state == 0) {
 		if (node->type == NODE_DO) {
 		    the_env->iterator = 1;
-		    /* allow you to use the return value of blocks */
-		    __r49_critical_bugfix_q(result =) rb_eval(node->nd_iter);
+		    /* __r49: allows you to use the return value of blocks */
+		    __R49_CRITICAL_BUGFIX_Q(result =) rb_eval(node->nd_iter);
 		}
 		else {
 		    VALUE recv;
@@ -1157,13 +1157,13 @@ rb_yield(val)
       retry:
       case 0:
 
-      	/* __r49: if nothing is given in the body of a `do` block, it segfaults. */
-	__r49_critical_bugfix_q(if (!block->body) result = Qnil; else)
+	/* __r49: IF nothing is given in the body of a `do` block, it segfaults without this. */
+	__R49_BUGFIX_Q(if (!block->body) result = Qnil; else)
 	if (block->body->type == NODE_CFUNC) {
 	    the_env->flags |= DURING_ITERATE;
-	    /* __r49: The replacement allows us to actually use iterators */
+	    /* __r49: The replacement allows us to actually use iterators. */
 	    result = (*block->body->nd_cfnc)(val, block->body->
-	    	__r49_critical_bugfix_r(nd_argc, nd_value));
+	    	__R49_CRITICAL_BUGFIX_R(nd_argc, nd_value));
 	}
 	else {
 	    result = rb_eval(block->body);
@@ -1375,8 +1375,8 @@ rb_undefined(obj, id)
 	desc = Fkrn_to_s(obj);
     }
     Fail("undefined method `%s' for \"%s\"(%s)",
-	 /* __r49: the `NUM2INT(id)` causes segfaults, but `id` doesn't. */
-	 rb_id2name(__r49_critical_bugfix_r(NUM2INT(id), id)),
+	 /* __r49: Without this, undefined methods segfault (as `id2name` expects an ID, not an int). */
+	 rb_id2name(__R49_CRITICAL_BUGFIX_R(NUM2INT(id), id)),
 	 RSTRING(desc)->ptr,
 	 rb_class2name(CLASS_OF(obj)));
 }
