@@ -1,12 +1,10 @@
-#ruby -s
-
 srand()
 
 %words_file =
   if defined("$words")
     $words
-  elsif !(q = $ENV["WORDS_FILE"]).is_nil
-    q
+  elsif !(words = $ENV["WORDS_FILE"]).is_nil
+    words
   else
     "/usr/share/dict/words"
   end if
@@ -31,7 +29,9 @@ end def
 
 module loopable
   def loop
-    iterator_p() || fail("must pass an iterator to `loop`")
+    unless iterator_p()
+      fail("must pass an iterator to `loop`")
+    end
 
     while %TRUE
       yield nil
@@ -51,17 +51,18 @@ class game
       end
 
       print("New game? y/N\n")
-      $stdin.gets.chop.lc != 'y' && break
+
+      gets().chop.lc != 'y' && break
     end
   end
 end
 
-class hangman : game
-  def hangman.from_file(file, *opts)
+class Hangman : game
+  def Hangman.from_file(file, *opts)
     new(words_from_file(file), *opts)
   end
 
-  def hangman.new(*args)
+  def Hangman.new(*args)
     super.init(*args)
   end
 
@@ -74,14 +75,13 @@ class hangman : game
       @extra_guesses = guesses[1]
     end
 
-    reset()
     self
   end
 
   def reset
     @secret = @words[rand(@words.length)].split("")
     @guesses = []
-  end def
+  end
 
   def @word_string
     str = ''
@@ -94,37 +94,29 @@ class hangman : game
   end
 
   def @incorrect_guesses
-    incorrect = []
+    bad = []
 
     for c in @guesses
-      unless @secret.includes(c)
-        incorrect << c
-      end unless
+      if !@secret.includes(c) then bad << c end
     end
 
-    incorrect
+    bad
   end
 
   def has_won
-    # There was no `String#includes?`.
     @word_string() !~ /_/
   end
 
   def take_turn
-    do loop()
+    while 1
       print()
       $stdout.flush
 
-      until (letter = gets().chop.lc) =~ /[a-z]/
-        # do nothing
-      end
+      (letter = gets().chop.lc) =~ /[a-z]/ || continue
 
-      unless guess(letter)
-        $stderr.print(sprintf("Character '%s' isn't was already guessed; try again\n", letter))
-        continue
-      end
+      if guess(letter) then return end
 
-      break
+      printf($stderr, "Character '%s' isn't was already guessed; try again\n", letter)
     end
   end
 
@@ -155,5 +147,5 @@ class hangman : game
   def _inspect to_s
 end
 
-hm = hangman.from_file(%words_file, \guesses::10)
+hm = Hangman.from_file(%words_file, \guesses::10)
 hm.play()

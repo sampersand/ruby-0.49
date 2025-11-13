@@ -26,7 +26,7 @@ def func words_from_file(file)
   protect
     # Parenthesis after a method call was required always except when the method came after a `.`,
     # and took no arguments.
-    words = f.to_a
+    words = f.to_a # Fun fact, this sets `$_` to the last value in `f`!
   resque
     # The current exception was only found in the special variable `$!`; Also, `fail` was the only
     # way to raise exceptions (`raise` didn't exist), and only took an optional string argument.
@@ -43,27 +43,30 @@ def func words_from_file(file)
   words
 end def
 
+# Let's make a mixin!---module (and class) names could be lowercase!
 module loopable
   def loop
+    # Instead of `block_given?` we use `iterator_p()` lol
     unless iterator_p()
       fail("must pass an iterator to `loop`")
     end
 
+    # true and false were actually constants--`%TRUE` and `%FALSE`. Because `nil` was _the_ only
+    # falsey thing in ruby 0.49, `%FALSE` was actually an alias for it, and `%TRUE` was simply `1`.
     while %TRUE
       yield nil # You _need_ to yield something, even if you're not going to use it.
     end
   end
 end
 
-# Classes could be lower-case.
+# Let's make an abstract class
 class game
   include loopable # includes act like they do in modern ruby
 
   def play
-    # true and false were actually constants--`%TRUE` and `%FALSE`. Because `nil` was _the_ only
-    # falsey thing in ruby 0.49, `%FALSE` was actually an alias for it, and `%TRUE` was simply `1`.
     do loop()
-      # More examples of needed `()`s when called like a function.
+      # You need to use `()` here, as `reset` on its own is taken as an uninitialized
+      # variable (which default to `nil`, not `NameError`s!)
       reset()
 
       # `until` has always existed!
@@ -71,23 +74,26 @@ class game
         take_turn()
       end
 
+      # There's no `puts`; you gotta use `print`
       print("New game? y/N\n")
-      $stdin.gets.chop.lc != 'y' && break
+
+      # Instead of `downcase`, we got `lc`. Also, no `and` or modifier `if`, just `&&`.
+      gets().chop.lc != 'y' && break
     end
   end
 end
 
 # Inheritance was done via `:` (maybe inspired from C++??) instead of `<`.
-class hangman : game
-  # It was convention to do instance methods on the class n ame iself.,
+class Hangman : game
+  # It was convention to do instance methods on the class name itself.
   # Also, keyword args were passed as tuples, hence the `*opts`.
-  def hangman.from_file(file, *opts)
+  def Hangman.from_file(file, *opts)
     new(words_from_file(file), *opts)
   end
 
   # Object#new didn't automatically call `initialize` (which was called `init` back then).
   # Also, the convention was to have `init` return `self`.
-  def hangman.new(*args)
+  def Hangman.new(*args)
     super.init(*args)
   end
 
@@ -101,12 +107,11 @@ class hangman : game
     @words = words
 
     # Keyword arguments were passed in as tuples of `[key, value]`. So, to get the value of it,
-    # you'd need to use the `Array#assoc` function (which still exists today!)
+    # you'd need to use the `Array#assoc` function (which still exists today!). Also, `\foo` is the
+    # old syntax for creating symbols!
     if (guesses = options.assoc(\guesses))
       @extra_guesses = guesses[1]
     end
-
-    reset()
 
     self # You need to return `self` from `init`s by convention.
   end
@@ -122,6 +127,7 @@ class hangman : game
     str = ''
 
     for letter in @secret
+      # No ternary operators, so you just use `if` expressions
       str.concat(if @guesses.includes(letter) then letter else '_' end)
     end for
 
@@ -131,6 +137,7 @@ class hangman : game
   def @incorrect_guesses
     bad = []
 
+    # There's no `.select`, `.reject`, or anything, so you gotta do it manually
     for c in @guesses
       if !@secret.includes(c) then bad << c end
     end
@@ -139,26 +146,27 @@ class hangman : game
   end
 
   def has_won
-    # There was no `String#includes?`.
+    # There was no `String#includes?`. Gotta use regex!
     @word_string() !~ /_/
   end
 
   def take_turn
-    while %TRUE
-      print()
-      $stdout.flush
+    while 1 # Instead of `loop()` for shiggles
+      print() # I totally forgot why this was needed, but without it breaks lol
+      $stdout.flush # make sure whatever was printed earlier is out
 
+      # No `next`, ruby 0.49 used `continue`!
       (letter = gets().chop.lc) =~ /[a-z]/ || continue
 
-      unless guess(letter)
-        $stderr.print(sprintf("Character '%s' isn't was already guessed; try again\n", letter))
-        continue
-      end
+      # Alas, no `and` :-(
+      if guess(letter) then return end
 
-      return
+      # Just like modern Ruby, you can `printf` to streams
+      printf($stderr, "Character '%s' isn't was already guessed; try again\n", letter)
     end
   end
 
+  # Unfortunately, you must use parens for arguments; you can't `def guess letter`
   def guess(letter)
     if @guesses.includes(letter)
       return %FALSE
@@ -169,7 +177,7 @@ class hangman : game
 
   def to_s
     incorrect = @incorrect_guesses()
-    args = [? ] * 9
+    args = [? ] * 9 # There was no escape for spaces (modern ruby has `?\s`), so this is just awkward.
     incorrect.length >= 1 && args[0] = ?o
     args[1] = incorrect[0, 5].join(' ')
     incorrect.length >= 2 && args[3] = ?|
@@ -183,8 +191,10 @@ class hangman : game
     sprintf("  .--.\n  |  %c   %s\n  | %c%c%c  %s\n  | %c %c  %s\n -+------\n\n  %s\n", *args)
   end
 
+  # This is how aliases worked! Instead of `alias a b` you just `def a b`
   def _inspect to_s
 end
 
-hm = hangman.from_file(%words_file, \guesses::10)
+# The `::` operator actually just creates a tuple: `a::b` is just `[a, b]`.
+hm = Hangman.from_file(%words_file, \guesses::10)
 hm.play()
