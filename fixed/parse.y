@@ -515,7 +515,11 @@ expr2		: IF expr2 then
 		  compexpr opt_else END end_mark
 		    {
 			if ($7 && $7 != UNLESS) {
+#ifdef __r49_bugfix
+			    Error("unmatched end keyword(expected `unless')");
+#else
 			    Error("unmatched end keyword(expected `if')");
+#endif
 			}
 		        $$ = NEW_UNLESS(cond($2), $4, $5);
 		    }
@@ -1170,7 +1174,7 @@ static struct kwtable {
     "super",	SUPER,		EXPR_END,
     "then",     THEN,           EXPR_BEG,
     "undef",	UNDEF,		EXPR_BEG,
-    "unless",	UNLESS,		EXPR_BEG,
+    "unless",	UNLESS,		__r49_bugfix_r(EXPR_BEG, KEEP_STATE), /* without this, there's no `end unless` */
     "until",	UNTIL,		EXPR_BEG,
     "using",	USING,		KEEP_STATE,
     "when",	WHEN,		EXPR_BEG,

@@ -18,7 +18,7 @@ def puts(*args)
 
     unless arg =~ /\n$/
       arg.concat("\n")
-    end
+    end unless
 
     $stdout.write(arg)
   end
