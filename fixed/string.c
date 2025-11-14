@@ -539,7 +539,7 @@ Fstr_rindex(str, args)
 
     Check_Type(sub, T_STRING);
     if (pos > str->len) return Qnil; /* substring longer than string */
-    sbeg = str->ptr; s = s + pos - sub->len;
+    sbeg = str->ptr; s = __r49_bugfix_r(s, sbeg) + pos - sub->len; /* __r49: without this, it uses unallocated memory */
     t = sub->ptr;
     len = sub->len;
     while (sbeg <= s) {

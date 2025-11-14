@@ -3,11 +3,11 @@
 # If `-print` is supplied, also prints out sizes of the files
 ##
 
-dir = Dir.pwd
-# $LOAD_PATH.unshift(Dir.pwd + '/examples/libs') # No way to get the current file
-# $LOAD_PATH.unshift( Dir.pwd + '/libs')
+# Similar to `$:.unshift(__dir__)` nowadays, but a lot more baroque-ly
+$LOAD_PATH.unshift($0[0, $0.rindex('/')] + '/libs')
 
-require('find')
+GC.disable # There's a bug in GC that I haven't solved yet
+require('find.rb')
 include Find
 
 $, = ' '
