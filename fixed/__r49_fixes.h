@@ -30,20 +30,27 @@
 
 /**************************************************************************************************
  **                                                                                              **
- **                                      Compiler Warnings                                       **
+ **                              Disable Compiler-Specific Warnings                              **
  **                                                                                              **
  **************************************************************************************************/
 
+/**
+ * To preserve the original feeling of the code as much as possible, we disable a lot of compiler-
+ * specific warnings that I've investigated and feel don't need to be changed. I opted to put all
+ * the disables in the header file, so as much as possible source code wouldn't be littered with
+ * disabled warnings.
+ **/
 
 /* Disable GCC-specific compiler warnings */
 #if defined(__GNUC__) && !defined(__clang__) /* (not for clang, which defines __GNUC__) */
-# pragma GCC diagnostic ignored "-Wparentheses" /* Lot of `if (foo = bar)` in the source code */
-# pragma GCC diagnostic ignored "-Wint-conversion" /* Lots of int conversion thrown around */
-# pragma GCC diagnostic ignored "-Wunused-value" /* Few places with unused values */
-# pragma GCC diagnostic ignored "-Wempty-body" /* Single one of these, in `sprintf.c`. */
-# pragma GCC diagnostic ignored "-Wcomment" /* Single instance, in regex.c. */
+# pragma GCC diagnostic ignored "-Wparentheses"             /* Lot of `if (foo = bar)` in the source code */
+# pragma GCC diagnostic ignored "-Wint-conversion"          /* Lots of int conversion thrown around */
+# pragma GCC diagnostic ignored "-Wunused-value"            /* Few places with unused values */
+# pragma GCC diagnostic ignored "-Wempty-body"              /* Single one of these, in `sprintf.c`. */
+# pragma GCC diagnostic ignored "-Wcomment"                 /* Single instance, in regex.c. */
 # pragma GCC diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
-# pragma GCC diagnostic ignored "-Wendif-labels" /* there's a single one of these, in `st.h`. */
+# pragma GCC diagnostic ignored "-Wendif-labels"            /* there's a single one of these, in `st.h`. */
+// # pragma GCC diagnostic ignored "-Wmacro-redefined"       /* lots at the top of `pack.c` */
 #endif /* defined(__GNUC__) && !defined(__clang__) */
 
 /* Disable clang-specific compiler warnings */
@@ -59,16 +66,16 @@
 	__VA_ARGS__ \
 	__R49_CLANG_DIAGNOSTICS_POP()
 # define __R49_CLANG_IGNORE(...) __R49_CLANG_DIAGNOSTICS_IGNORE(__VA_ARGS__)
-# pragma clang diagnostic ignored "-Wdeprecated-non-prototype" // TODO
-# pragma clang diagnostic ignored "-Wparentheses" /* Lot of `if (foo = bar)` in the source code */
-# pragma clang diagnostic ignored "-Wint-conversion" /* Lots of int conversion thrown around */
-# pragma clang diagnostic ignored "-Wunused-value" /* Few places with unused values */
-# pragma clang diagnostic ignored "-Wempty-body" /* Single one of these, in `sprintf.c`. */
-# pragma clang diagnostic ignored "-Wcomment" /* Single instance, in regex.c. */
-# pragma clang diagnostic ignored "-Wdeprecated-declarations" /* vsprintf, sprintf, and friends. */
-# pragma clang diagnostic ignored "-Wextra-tokens" /* Single one, in `st.h`. */
+# pragma clang diagnostic ignored "-Wdeprecated-non-prototype"    /* ruby uses K&R code. We warn earlier about this though. */
+# pragma clang diagnostic ignored "-Wparentheses"                 /* Lot of `if (foo = bar)` in the source code */
+# pragma clang diagnostic ignored "-Wint-conversion"              /* Lots of int conversion thrown around */
+# pragma clang diagnostic ignored "-Wunused-value"                /* Few places with unused values */
+# pragma clang diagnostic ignored "-Wempty-body"                  /* Single one of these, in `sprintf.c`. */
+# pragma clang diagnostic ignored "-Wcomment"                     /* Single instance, in regex.c. */
+# pragma clang diagnostic ignored "-Wdeprecated-declarations"     /* vsprintf, sprintf, and friends. */
+# pragma clang diagnostic ignored "-Wextra-tokens"                /* Single one, in `st.h`. */
 # pragma clang diagnostic ignored "-Wnon-literal-null-conversion" /* Qnil is used instead of NULL/0 a lot. */
-# pragma clang diagnostic ignored "-Wmacro-redefined" /* lots at the top of `pack.c` */
+# pragma clang diagnostic ignored "-Wmacro-redefined"             /* lots at the top of `pack.c` */
 #else
 # define __r49_clang_diagnostics_ignore_q(diagnostic, ...) __VA_ARGS__
 #endif /* defined(__clang__) */

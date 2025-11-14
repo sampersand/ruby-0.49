@@ -5,7 +5,7 @@ SHELL = /bin/sh
 srcdir = @srcdir@
 VPATH = @srcdir@
 
-CC = @CC@
+CC ?= @CC@ #__r49: Added the `?` here to make it easier to test with different compilers
 DBM = @DBM@
 YACC = @YACC@
 INSTALL = @INSTALL@
