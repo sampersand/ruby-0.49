@@ -1,0 +1,164 @@
+.\"ruby.1 -				       -*- Nroff -*-
+.\"  $Author$
+.\"  $Date$
+.\"  created at: Tue Apr 12 01:45:04 GMT 1994
+.TH RUBY 1 "\*(RP"
+.UC
+.SH NAME
+ruby \- Object-oriented scripting language
+.SH "SYNOPSIS"
+.B ruby
+[
+.B options
+] filename args
+.SH DESCRIPTION
+.IB Ruby
+is an object-oriented scripting language with various features for easy object-oriented programming. The basic design principles are as follows.
+
+.IP Functionality
+It provides sufficient features necessary for object-oriented programming and script programming. In particular, it has rich text-processing capabilities. Also, although it is a pure object-oriented language, procedural programming is possible when necessary.
+.IP Extensibility
+Features can easily be extended as needed. You can freely add classes, and you can add any functionality to the interpreter by linking C programs. Furthermore, depending on the platform, dynamic linking of object code is also provided.
+.IP Consistency
+It has a consistent language specification to which a small number of principles apply throughout. This may have reduced the "fun of puzzles." However, usability is not sacrificed for consistency.
+.PP
+.IB Ruby
+follows common conventions familiar to people who know sh or perl as much as possible, so for those fluent in these languages, learning it will (probably) be easy.
+.SH OPTIONS
+.IB ruby
+accepts the following arguments.
+.TP 5
+.B \-a
+Used together with `\-n` or `\-p` to turn on autosplit mode. In autosplit mode, at the beginning of each loop,
+.nf
+.ne 2
+
+	$F = $_.split
+
+.fi
+is executed. Unless either the `\-n` or `\-p` option is specified, this option has no effect.
+.TP 5
+.B \-c
+Only compiles the script into its internal form and does not execute it. After compilation, if there are no syntax errors, it prints "Syntax OK".
+.TP 5
+.B \-e " script"
+Specifies a script from the command line. When the \-e option is given, the script filename is not taken from the arguments.
+.TP 5
+.B \-F " string"
+Sets the input field separator (`$;`) to the given string. Works the same as the option of the same name in awk.
+.TP 5
+.B \-i " extension"
+Specifies in-place editing of the file given as an argument. The original file is saved with the specified extension.
+.nf
+Example:
+.ne 2
+
+	% echo matz > /tmp/junk
+	% cat /tmp/junk
+	matz
+	% ruby -p -i.bak -e '$_.toupper' /tmp/junk
+	% cat /tmp/junk
+	MATZ
+	% cat /tmp/junk.bak
+	matz
+
+.fi
+.TP 5
+.B \-I " directory"
+Specifies (adds) a path from which files will be loaded. The specified directory is added to
+.IB ruby
+'s array variable $LOAD_PATH.
+.TP 5
+.B \-d, \--debug
+Turns on debug mode. When this flag is set, the system variable $DEBUG is set.
+.TP 5
+.B \-l
+Sets `$\\` to the same value as `$/`, and appends a newline when printing with print(). Also, when used together with \-n or \-p, chops the last character of each input line.
+.TP 5
+.B \-n
+When this flag is set, the whole program behaves as if it were enclosed in:
+.nf
+.ne 2
+
+	while gets()
+	  \.\.\.
+	end
+
+.fi
+.TP 5
+.B \-p
+Same as the \-n flag, but prints the value of variable `$_` at the end of each loop.
+.nf
+Example:
+.ne 2
+
+	% echo matz | ruby \-p \-e '$_.tr("a-z", "A-Z")'
+	MATZ
+
+.fi
+.TP 5
+.B \-R string (or octal)
+Sets the input record separator (`$/`) to the given string. When the string consists entirely of digits (0-7), the character with the octal code specified is used as the separator.
+
+In this case, \-R0 sets paragraph mode, and \-R777 sets a mode where (because that code has no corresponding character) the entire file is read at once.
+.TP 5
+.B \-s
+Interprets arguments beginning with \- that follow the script name and sets a global variable of the same name. Interpretation stops after an argument of `\-\-`. Such arguments are removed from $ARGV.
+.nf
+Example:
+.ne 2
+
+	#! /usr/local/ruby -s
+	# When the -xyz option is given, prints "true".
+	if $xyz then print("true\n") end
+
+.fi
+.TP 5
+.B \-v, \--verbose
+Verbose mode. Displays the version number at startup and sets the system variable $VERBOSE. When this variable is set, some methods output verbose messages at runtime. When only the \-v option is specified and there are no non-option arguments, the version is displayed and execution terminates (it does not wait for a script from standard input).
+.TP 5
+.B \--version
+Displays
+.IB ruby
+'s version.
+.nf
+Example output:
+.ne 2
+
+	ruby - version 0.47 (11 Jul 94)
+
+.fi
+.TP 5
+.B \-x
+Extracts and executes a script embedded in a message. It skips lines until a line starting with #! and containing the string "ruby" is found. The end of the script is marked by EOF, ^D (control-D), ^Z (control-Z), or the string "__END__".
+.TP 5
+.B \-X " directory"
+Changes to the specified directory before executing the script.
+.TP 5
+.B \-y, \--yydebug
+Compiler debug mode. Displays the parsing process during compilation. This output is extremely verbose, so it is best not to enable it unless you are debugging the compiler itself.
+.TP 5
+.B \-N, \-E, \-S
+Specifies the Kanji encoding processed by
+.IB ruby.
+N means no Kanji support. E represents EUC, S represents SJIS. The default is no Kanji support.
+
+.SH "BUG (or shortcomings)"
+.PP
+Slow. Simple processing takes about 2-3 times as long as perl or awk. Unlike other languages, most of its provided features involve method calls, which is the cause, but in processing where other languages would also have many function calls,
+.IB ruby
+becomes advantageous due to method caching, and when data structures become complex, the benefits of object orientation can be exploited-so perhaps it's forgivable.
+.PP
+More verbose than perl. This is a consequence of
+.IB ruby
+pursuing consistency. However, as a result,
+.IB ruby
+scripts should be easier to read than perl, and it is hoped that you will appreciate that understandability and readability are gained at the cost of a slight increase in verbosity.
+.PP
+When compiled on Sparc,
+.IB ruby
+may core dump if break is evaluated inside an iterator. This is believed to be a bug related to setjmp(), but it does not reproduce on other architectures, and the cause has not been identified. If anyone knows, please tell me.
+.PP
+Documentation is insufficient. Please read the source to obtain necessary information.
+.PP
+Testing is insufficient. If you encounter a bug, fix it yourself if possible and quietly let me know. If that is not possible, at least clearly state the conditions under which the bug reproduces and report it.
