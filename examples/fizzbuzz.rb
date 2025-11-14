@@ -1,5 +1,6 @@
 %MAX = ($ARGV[0] || 100).to_i
 
+$\ = "\n"
 for num in 1..%MAX
   if a = 0 == num % 3
     "Fizz".print
@@ -9,7 +10,7 @@ for num in 1..%MAX
     "Buzz".print
   end
 
-  (unless (a || b) then num.print end unless)
-
-  "\n".print
+  unless (a || b) then
+    num.print
+  end unless
 end for

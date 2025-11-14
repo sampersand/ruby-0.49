@@ -1,132 +1,140 @@
 .\" C-IF -  -*- Text -*- created at: Tue Oct 12 14:15:00 JST 1993
 
-Ruby-C インターフェース
+Ruby-C Interface
 
 VALUE
 
- Rubyオブジェクトを表現する型. 必要に応じてキャストして用いる.
+ Type representing a Ruby object. Cast as necessary when using it.
 
 Qnil
 
- 定数: nilオブジェクト
+ Constant: the nil object
 
 Qself
 
- 変数: 現在のselfオブジェクトの値. この変数の値を変更する時は以後の
- selfの値そのものが変わってしまうので, 慎重に行なうこと.
+ Variable: the value of the current self object. When changing the value
+ of this variable, the value of self itself will change thereafter, so
+ do it carefully.
 
 VALUE rb_define_class(char *name, VALUE super)
 
- Rubyクラスを定義する.
+ Define a Ruby class.
 
 VALUE rb_define_module(char *name)
 
- Rubyモジュールを定義する.
+ Define a Ruby module.
 
 rb_include_module(VALUE class, VALUE module)
 
- モジュールをインクルードする. classがすでにmoduleをインクルードしてい
- る時には何もしない(多重インクルードの禁止).
+ Include a module. If class has already included module, do nothing
+ (prevents multiple inclusion).
 
 void rb_define_variable(char *name, VALUE *var,
 			VALUE (*get_hook), VALUE (*set+hook)())
 
- RubyとCとで共有するグローバル変数を定義する. Rubyオブジェクトを指す大
- 域変数は全てこの関数によって定義されなければならない(GCから保護するた
- め). get_hookがQnilでない時, 変数参照の際にget_hookにセットされた関数
- が呼ばれる. set_hookがQnilでない時には代入の時にset_hookが呼ばれる.
+ Define a global variable shared between Ruby and C. All global variables
+ that refer to Ruby objects must be defined with this function (to
+ protect them from GC). When get_hook is not Qnil, the function set in
+ get_hook is called when the variable is referenced. When set_hook is
+ not Qnil, it is called when the variable is assigned.
 
- 変数名が`$'で始まらない時には自動的に追加される. 変数名としてrubyの識
- 別子として許されない文字(例えば` ')を含む場合にはrubyプログラムからア
- クセスできなくなる.
+ When the variable name does not start with `$', it is automatically
+ added. If the variable name contains characters not allowed in Ruby
+ identifiers (for example ` '), it becomes inaccessible from Ruby
+ programs.
 
 void rb_global_variable(VALUE *var)
 
- GCにRubyからはアクセスされないが, Rubyオブジェクトを含む大域変数をマー
- クさせる.
+ Mark a global variable containing Ruby objects for GC even though it is
+ not accessed from Ruby.
 
 void rb_read_only_hook()
 
- 読み出し専用の変数のためのset_hook関数.
+ set_hook function for read-only variables.
 
 rb_define_method(VALUE class, char *name, VALUE (*func)(), int argc)
 
- メソッドを定義する. argcが-1の時, 引数はargc, argv形式で与えられる.
+ Define a method. When argc is -1, arguments are given in argc, argv
+ form.
 
 rb_define_single_method(VALUE class, char *name, VALUE (*func)(), int argc)
 
- 特異メソッドを定義する. 引数はrb_define_method()と同じ.
+ Define a singleton method. Arguments are the same as for
+ rb_define_method().
 
 ID rb_intern(char *name)
 
- 文字列に対応するIDを返す.
+ Return the ID corresponding to a string.
 
 char *rb_id2name(ID id)
 
-  IDに対応する文字列を返す(デバッグ用).
+  Return the string corresponding to an ID (for debugging).
 
 VALUE rb_funcall(VALUE recv, ID mid, int narg, ...)
 
- メソッド呼び出し. 文字列からmidを得るためにはrb_intern()を使う.
+ Method call. To obtain mid from a string, use rb_intern().
 
 rb_iv_get(VALUE obj, char *name)
 
- objのインスタンス変数を得る. @から始まらないインスタンス変数はRubyプ
- ログラムからアクセスできない.
+ Get an instance variable of obj. Instance variables not starting with
+ @ cannot be accessed from Ruby programs.
 
 rb_iv_set(VALUE obj, char *name, VALUE val)
 
- objのインスタンス変数をvalにセットする.
+ Set the instance variable of obj to val.
 
 rb_call_super(VALUE args)
 
- スーパークラスのメソッドを呼び出す. argsは引数リストとなる配列. args
- がQnilの時は引数をそのまま引き継ぐ.
+ Call the method of the superclass. args is an array forming the argument
+ list. When args is Qnil, arguments are inherited as-is.
 
 rb_iterate(VALUE (*func1)(), char *arg1, VALUE (*func2)(), char *arg2)
 
- func2をブロックとして設定し, func1をイテレータとして呼ぶ.  func1には
- arg1が引数として渡され, func2には第1引数にイテレータとして与えられた
- 値, 第2引数にarg2が渡される.
- 
+ Set func2 as the block and call func1 as the iterator. arg1 is passed
+ as the argument to func1, and func2 receives as its first argument the
+ value given by the iterator, and as its second argument arg2.
+
 rb_yield(VALUE val)
 
- valを値としてイテレータブロックを呼び出す.
+ Call the iterator block with val as the value.
 
 rb_resque(VALUE (*func1)(), char *arg1, VALUE (*func2)(), char *arg2)
 
- 関数func1をarg1を引数に呼び出す. func1の実行中に例外が発生した時には
- func2をarg2を引数として呼ぶ. 戻り値は例外が発生しなかった時はfunc1の
- 戻り値, 例外が発生した時にはfunc2の戻り値である.
+ Call function func1 with arg1 as its argument. If an exception occurs
+ during execution of func1, func2 is called with arg2 as its argument.
+ The return value is func1's return value when no exception occurs, and
+ func2's return value when an exception does occur.
 
 rb_ensure(VALUE (*func1)(), char *arg1, VALUE (*func2)(), char *arg2)
 
- 関数func1をarg1を引数として実行し, 実行終了後(たとえ例外が発生しても)
- func2をarg2を引数として実行する. 戻り値はfunc1の戻り値である(例外が発
- 生した時はnil).
+ Execute function func1 with arg1 as its argument, and after execution
+ (even if an exception occurs), execute func2 with arg2 as its argument.
+ The return value is func1's return value (nil if an exception occurs).
 
 GC_LINK
 
- ローカル変数のGC保護を行なう宣言.
+ Declaration for GC protection of local variables.
 
 GC_PRO(var)
 
- ローカル変数をGCから保護する. ローカル変数が保護されていない可能性の
- あるRubyオブジェクトを指している時にはGC_PRO()を使って保護する必要が
- ある. GC_PRO()で保護される変数は必ず初期化されている必要がある(未初期
- 化のゴミが入ってるとGCで落ちる).
+ Protect a local variable from GC. When a local variable may be pointing
+ to a Ruby object that is not protected, it must be protected using
+ GC_PRO(). A variable protected by GC_PRO() must be initialized (if it
+ contains uninitialized garbage, GC will crash).
 
 GC_PRO2(var)
 
- GC保護, varをnilで初期化すること以外はGC_PRO(var)と同じ.
+ GC protection; same as GC_PRO(var) except that var is initialized to
+ nil.
 
 GC_PRO2(var, init)
 
- GC保護, varをinitに初期化すること以外はGC_PRO(var)と同じ.
+ GC protection; same as GC_PRO(var) except that var is initialized to
+ init.
 
 GC_UNLINK
 
- GC保護終了の宣言.
+ Declaration for ending GC protection.
 
 /*
  * Local variables:

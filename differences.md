@@ -43,3 +43,8 @@ doit(\greeting::"Hello", \place::"World")
 
 
 - Instead of `===`, `case` uses `=~`
+
+
+## Other (todo: sort)
+- Converting Symbols to Strings was considered a debugging thing (C-IF says `rb_id2name` is "Return the string corresponding to an ID (for debugging).")
+- `to_a` was defined on `Kernel`, and defaulted to `[self]`

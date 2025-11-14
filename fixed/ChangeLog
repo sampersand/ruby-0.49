@@ -1,430 +1,398 @@
 Mon Jul 18 10:19:15 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* parse.y: Â¿½ÅÂåÆþ¤ò½èÍý¤¹¤ë¥ë¡¼¥ë¤Ë¥Ð¥°¤¬¤¢¤Ã¤Æ, 3Í×ÁÇ°Ê¾å¤ÎÂ¿½Å
-	  ÂåÆþ¤Ë¼ºÇÔ¤·¤Æ¤¤¤¿.
+	* parse.y: There was a bug in the rule that handles multiple assignment,
+	  which caused failure when assigning more than 3 elements.
 
-	* eval.c(rb_eval): Â¿½ÅÂåÆþ¤Ç, ±¦ÊÕ¤¬ÇÛÎó¤Ç¤Ê¤¤»þ¤Ë¤Ï`to_a'¥á¥½¥Ã
-	  ¥É¤ÇÇÛÎó¤ËÊÑ´¹¤·¤ÆÂåÆþ¤¹¤ë¤è¤¦¤Ë¤·¤¿. º£¤Þ¤Ç¤Î»ÅÍÍ¤À¤È±¦ÊÕÃÍ¤¬Âè
-	  1Í×ÁÇ¤Ë¤½¤Î¤Þ¤ÞÂåÆþ¤µ¤ì¤Æ¤¤¤¿¤¬, struct¤Ê¤ÉÇÛÎó¤ËÊÑ´¹¤Ç¤­¤ë¤â¤Î
-	  ¤ÏÊÑ´¹¤·¤¿Êý¤¬´ò¤·¤¤µ¤¤¬¤¹¤ë. 
+	* eval.c(rb_eval): In multiple assignment, when the right-hand side is not
+	  an array, convert it to an array using the `to_a' method before assigning.
+	  Previously the right-hand value was assigned directly to the first element,
+	  but for things like structs that can be converted to arrays, conversion
+	  seems nicer.
 
-	* dbm.c,dict.c(delete_if): ¥á¥½¥Ã¥ÉÄÉ²Ã.
+	* dbm.c,dict.c(delete_if): Added method.
 
-	* process.c(wait,waitpid): ¥·¥¹¥Æ¥à¥³¡¼¥ëwaitpid¤Þ¤¿¤Ïwait4¤¬¤¢¤ë
-	  »þ¤Ï¤½¤Á¤é¤ò»È¤¦¤è¤¦¤Ë. configure¤â¤½¤ì¤é¤ò¥Á¥§¥Ã¥¯¤¹¤ë¤è¤¦¤ËÊÑ¹¹.
+	* process.c(wait,waitpid): When the system call waitpid or wait4 exists,
+	  use that. Modified configure to check for them as well.
 
-	* dbm.c, dict.c(clear): ¥á¥½¥Ã¥ÉÄÉ²Ã.
+	* dbm.c, dict.c(clear): Added method.
 
 Fri Jul 15 10:54:45 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* array.c(Fary_fill,Fary_clear): ¥á¥½¥Ã¥É¤òÄÉ²Ã.
+	* array.c(Fary_fill,Fary_clear): Added methods.
 
-	* string.c(Fstr_split): $;¤ÎÃÍ¤¬Ä¹¤µ1¤ÎÊ¸»úÎó¤Ç¤¢¤ë»þ, ¤³¤ì¤òÀµµ¬
-	  É½¸½²½¤·¤Ê¤¤¤Ç, Ã±¤Ê¤ëÊ¸»ú¤È¤·¤ÆÊ¬³ä¤¹¤ë.
+	* string.c(Fstr_split): When the value of $; is a 1-character string, split
+	  by it as a plain character without converting it to a regular expression.
 
-	* string.c(Fstr_aset/Fstr_aref): ¥¤¥ó¥Ç¥Ã¥¯¥¹¤¬Ê¸»úÎó¤ÎÈÏ°Ï³°¤À¤Ã
-	  ¤¿»þ¤ÎÆ°ºî¤òArray¤ò»²¹Í¤Ë½¤Àµ¤·¤¿.
+	* string.c(Fstr_aset/Fstr_aref): Modified the behavior for when the index is
+	  outside the string range, referencing Array.
 
-	* array.c(astore,Fary_aset): ÎÎ°è¤òrealloc¤·¤¿¸å, ¥¼¥í¤Ç¥¯¥ê¥¢¤¹¤ë
-	  ¤è¤¦¤Ë. º£¤Þ¤ÇÇÛÎó¤Ë¥´¥ß¤¬Æþ¤Ã¤Æ¤¤¤¿.
+	* array.c(astore,Fary_aset): After reallocating the region, clear it with
+	  zero. Until now, garbage remained in arrays.
 
-	* array.c: []/[]=¤Ç¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹´Ø·¸¤òÀ°Íý. ´ðËÜÅª¤ËÉé¤Î¥¤¥ó¥Ç¥Ã
-	  ¥¯¥¹¤ËÂåÆþ¤·¤Ê¤¤¸Â¤êÎã³°¤Ïµ¯¤­¤Ê¤¤¤è¤¦¤ËÊÑ¹¹¤·¤¿. É¬Í×¤Ë±þ¤¸¤ÆÅ¬
-	  Åö¤Ë²ò¼á¤·¤Æ, É¬Í×¤Ê¤é¤ÐÎÎ°è¤ò³ÈÄ¥¤¹¤ë¤è¤¦¤Ë.
-
-Thu Jul 14 11:18:07 1994  Yukihiro Matsumoto  (matz@ix-02)
-
-	* autoexec.c: ºï½ü. autoload´Ø·¸¤Îµ¡Ç½¤Ïº£¸å¸¡Æ¤¤·¤è¤¦.
-
-	* dict.c: ¼­½ñ¥¯¥é¥¹¤ÎÀµ¼°Ì¾¾Î¤òDict¤ËÊÑ¹¹¤·¤¿. ÊÌÌ¾¤È¤·¤ÆHash¤òÍÑ
-	  °Õ¤·¤¿. º£¤Þ¤ÇDictionary¤Ê¤É¤ÈÄ¹¤¤Ì¾Á°¤Ë¤·¤Æ¤¤¤¿¤¬Ã¯¤â»È¤Ã¤Æ¤¤¤Ê
-	  ¤«¤Ã¤¿¤·¤Í. *BACKWARD INCOMPATIBILITY*
-
-	* parse.y: Dict¤òÀ¸À®¤¹¤ë¹½Ê¸¤òÄÉ²Ã. ¤³¤Á¤é¤ò{..}¤Ë¤·¤¿.
-
-	* parse.y: ÇÛÎó¤òÀ¸À®¤¹¤ë¹½Ê¸¤ò[..]¤ËÊÑ¹¹¤·¤¿. ²áµî¤ÎRuby¥¹¥¯¥ê¥×
-	  ¥È¤È¤Î¸ß´¹À­¤¬ÊÝ¤Æ¤Ê¤¤¤¬, Dict¤òÀ¸À®¤¹¤ë¹½Ê¸¤òÆ³Æþ¤¹¤ë¤ËÅö¤¿¤ê,
-	  perl5¤Ë¹ç¤ï¤»¤Æ(°Õ¼±¤·¤Æ), ÊÑ¹¹¤¹¤ë»þ´ü¤Ïº£¤·¤«¤Ê¤¤¤È¹Í¤¨¤¿. 
-	  *BACKWARD INCOMPATIBILITY*
-
-	* eval.c(Feval): eval()¤Ç¥á¥½¥Ã¥É¤òÄêµÁ¤¹¤ë»þ, ÄêµÁ¤µ¤ì¤ë¥¯¥é¥¹¤ò
-	  ¥á¥½¥Ã¥É¤Î½êÂ°¤¹¤ë¥¯¥é¥¹¤Ë¤·¤¿. º£¤Þ¤Ç¤ÏObject¥¯¥é¥¹¤ËÄêµÁ¤µ¤ì¤Æ
-	  ¤¤¤¿.
-
-	* parse.y: ¥í¡¼¥«¥ë°ú¿ô¤¬¤Ê¤¤»þ¤Îeval()¤ÇÍî¤Á¤Æ¤¤¤¿.
+	* array.c: Cleaned up index handling for []/[]=. Basically, exceptions no
+	  longer occur unless assigning to a negative index. Interpret appropriately
+	  as needed and expand the region when necessary.
 
 Thu Jul 14 11:18:07 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* eval.c: ¥á¥½¥Ã¥É¤¬Â¸ºß¤·¤Ê¤¤»þ¤Ë¤ÏKernel:_undefined(id)¤¬¸Æ¤Ð¤ì
-	  ¤ë¤è¤¦¤Ë.  ¤·¤«¤·, ruby¤Ç¤Ï¸Ä¡¹¤Î¥á¥½¥Ã¥ÉËè¤Î½èÍý¤è¤ê¤â, ¥¯¥é¥¹
-	  Ã±°Ì¤Î½èÍý¤¬É¬Í×¤Êµ¤¤â¤¹¤ë¤Ê¤¢.
+	* autoexec.c: Removed. autoload-related features will be examined later.
 
-	* autoexec.c: ºï½ü. autoload´Ø·¸¤Îµ¡Ç½¤Ïº£¸å¸¡Æ¤¤·¤è¤¦.
+	* dict.c: Changed the formal name of the dictionary class to Dict. Prepared
+	  Hash as an alias. The previous long names like Dictionary were not used by
+	  anyone. *BACKWARD INCOMPATIBILITY*
 
-	* dict.c: ¼­½ñ¥¯¥é¥¹¤ÎÀµ¼°Ì¾¾Î¤òDict¤ËÊÑ¹¹¤·¤¿. ÊÌÌ¾¤È¤·¤ÆHash¤òÍÑ
-	  °Õ¤·¤¿. º£¤Þ¤ÇDictionary¤Ê¤É¤ÈÄ¹¤¤Ì¾Á°¤Ë¤·¤Æ¤¤¤¿¤¬Ã¯¤â»È¤Ã¤Æ¤¤¤Ê
-	  ¤«¤Ã¤¿¤·¤Í. *BACKWARD INCOMPATIBILITY*
+	* parse.y: Added syntax to create Dict. Used {..} for this.
 
-	* parse.y: Dict¤òÀ¸À®¤¹¤ë¹½Ê¸¤òÄÉ²Ã. ¤³¤Á¤é¤ò{..}¤Ë¤·¤¿.
-
-	* parse.y: ÇÛÎó¤òÀ¸À®¤¹¤ë¹½Ê¸¤ò[..]¤ËÊÑ¹¹¤·¤¿. ²áµî¤ÎRuby¥¹¥¯¥ê¥×
-	  ¥È¤È¤Î¸ß´¹À­¤¬ÊÝ¤Æ¤Ê¤¤¤¬, Dict¤òÀ¸À®¤¹¤ë¹½Ê¸¤òÆ³Æþ¤¹¤ë¤ËÅö¤¿¤ê,
-	  perl5¤Ë¹ç¤ï¤»¤Æ(°Õ¼±¤·¤Æ), ÊÑ¹¹¤¹¤ë»þ´ü¤Ïº£¤·¤«¤Ê¤¤¤È¹Í¤¨¤¿. 
+	* parse.y: Changed the syntax to create arrays to [..]. This breaks
+	  compatibility with older Ruby scripts, but introducing syntax for Dict and
+	  aligning with perl5 made now the only right time to change it.
 	  *BACKWARD INCOMPATIBILITY*
 
-	* eval.c(Feval): eval()¤Ç¥á¥½¥Ã¥É¤òÄêµÁ¤¹¤ë»þ, ÄêµÁ¤µ¤ì¤ë¥¯¥é¥¹¤ò
-	  ¥á¥½¥Ã¥É¤Î½êÂ°¤¹¤ë¥¯¥é¥¹¤Ë¤·¤¿. º£¤Þ¤Ç¤ÏObject¥¯¥é¥¹¤ËÄêµÁ¤µ¤ì¤Æ
-	  ¤¤¤¿.
+	* eval.c(Feval): When defining methods via eval(), the defined method is now
+	  placed in the class to which the method belongs. Previously it was defined
+	  in Object.
 
-	* parse.y: ¥í¡¼¥«¥ë°ú¿ô¤¬¤Ê¤¤»þ¤Îeval()¤ÇÍî¤Á¤Æ¤¤¤¿.
+	* parse.y: Crashed in eval() when no local arguments existed.
+
+Thu Jul 14 11:18:07 1994  Yukihiro Matsumoto  (matz@ix-02)
+
+	* eval.c: When a method does not exist, call Kernel:_undefined(id). But it
+	  feels like Ruby needs more class-level handling than per-method handling.
+
+	* autoexec.c: Removed. autoload-related features will be examined later.
+
+	* dict.c: Changed the formal name of the dictionary class to Dict. Prepared
+	  Hash as an alias. The previous long names like Dictionary were not used.
+	  *BACKWARD INCOMPATIBILITY*
+
+	* parse.y: Added syntax to create Dict. Used {..} for this.
+
+	* parse.y: Changed array-generation syntax to [..]. This breaks compatibility
+	  with past Ruby scripts, but to introduce Dict syntax and in line with
+	  perl5, now was the time. *BACKWARD INCOMPATIBILITY*
+
+	* eval.c(Feval): Methods defined via eval() are now placed in the class they
+	  belong to. Previously they were defined in Object.
+
+	* parse.y: Crashed in eval() when no local arguments existed.
 
 Tue Jul 12 09:41:28 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* pack.c: uuencode·Á¼°¤Î¥µ¥Ý¡¼¥È.
+	* pack.c: Support for uuencode format.
 
-	* `-0'¤ò`-R'¤Ë. ½ÐÎÏ¥ì¥³¡¼¥É¥»¥Ñ¥ì¡¼¥¿¤ò¥³¥Þ¥ó¥É¥é¥¤¥ó¤«¤é»ØÄê¤¹¤ë
-	  ÊýË¡¤Ï¤Ê¤¯¤Ê¤Ã¤¿. ¤É¤¦¤â, »ÅÍÍ¤¬¤æ¤ì¤ë¤Ê¤¢.
+	* Changed `-0' to `-R'. No longer possible to specify the output record
+	  separator from the command line. The spec keeps shifting…
 
 Mon Jul 11 09:51:24 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* ruby.c: `-r'¥ª¥×¥·¥ç¥ó¤Ï`-0'¥ª¥×¥·¥ç¥ó¤Ë¤Ê¤Ã¤¿. ÅöÌÌ¤Ï`-r'¤âÍ­¸ú
-	  ¤À¤¬ÊÑ¹¹¤µ¤ì¤ë²ÄÇ½À­¤¬¤¢¤ë. `-R'¤ÏÅöÌÌ¤Ï¤½¤Î¤Þ¤Þ.
+	* ruby.c: The `-r' option became `-0'. `-r' still works for now but may
+	  change. `-R' remains for the time being.
 
-	* version.c: versionÉ½¼¨¤ËÆüÉÕ¤ò´Þ¤á¤¿.
+	* version.c: Included date in version display.
 
-	* parse.y: private method¤ÎÉü³è. Ruby¤Îprivate¥á¥½¥Ã¥É¤ÏC++¤Ë¤ª¤±
-	  ¤ëprotected method¤Ë³ºÅö¤¹¤ë¤â¤Î¤Ç, `@'¤Ç»Ï¤Þ¤ëÌ¾Á°¤ò»ý¤Ä.
+	* parse.y: Restored private methods. Ruby’s private methods correspond to C++
+	  protected methods and have names starting with `@'.
 
-	* env.h: struct ENVIRON¤ÎÄêµÁ¤òÊ¬Î¥.
+	* env.h: Separated definition of struct ENVIRON.
 
-	* parse.y: `\$var', `\@var', `%var'¤âµö¤¹¤è¤¦¤Ë.
+	* parse.y: Allow `\$var', `\@var', `%var'.
 
-	* variable.c(Fdefined): id¤â°ú¿ô¤È¤·¤Æ¼õ¤±ÉÕ¤±¤ë¤è¤¦¤Ë.
+	* variable.c(Fdefined): Allow id as an argument.
 
-	* parse.y: ifÊ¸/unlessÊ¸¤Ë¥­¡¼¥ï¡¼¥Éthen¤òÄÉ²Ã. then¤Ê¤·¤È¤¤¤¦¤Î¤Ï, 
-	  °Õ³°¤È´Ö°ã¤¤¤¬Â¿¤¤¤Î¤Ç. ¤â¤Á¤í¤ó¾ÊÎ¬¤Ç¤­¤ë.
+	* parse.y: Added keyword `then' to if/unless. Surprisingly many mistakes
+	  occurred without it. It may still be omitted.
 
 Sat Jul  9 02:16:04 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* eval.c(rb_eval): class/module¤ÎÉ¾²Á¤Ç¿·¤·¤¤¥¹¥³¡¼¥×¤ò³ä¤êÅö¤Æ¤Æ
-	  ¤¤¤Ê¤«¤Ã¤¿. ¥¹¥³¡¼¥×³ä¤êÅö¤ÆÉôÊ¬¤òrb_call()¤«¤érb_eval()¤Ë°Ü¤·¤¿.
+	* eval.c(rb_eval): Class/module evaluation did not allocate a new scope.
+	  Moved scope allocation from rb_call() to rb_eval().
 
-	* eval.c(rb_call): realloc()¤ËÅÏ¤µ¤ì¤ë»ö¤Î¤¢¤ë, ¥í¡¼¥«¥ëÊÑ¿ôÍÑ¤ÎÎÎ
-	  °è¤òalloca()¤·¤Æ¤¤¤¿. ¤¿¤Þ¤ËÍî¤Á¤ë¤ï¤±¤À.
+	* eval.c(rb_call): The local-variable region passed to realloc() was being
+	  allocated with alloca(). No wonder it occasionally crashed.
 
-	* string.c(Fstr_times): ³ä¤êÅö¤Æ¤¿ÎÎ°è¤ò±Û¤¨¤¿ÉôÊ¬¤òÊÑ¹¹¤·¤Æ¤¤¤¿.
+	* string.c(Fstr_times): Modified areas beyond the allocated region.
 
 Wed Jul  6 15:52:42 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* socket.c: Socket -> BasicSocket, RawSocket -> Socket ¤Ë²þÌ¾.
+	* socket.c: Renamed Socket -> BasicSocket, RawSocket -> Socket.
 
-	* string.c(ucfirst,lcfirst): ºÇ½é¤Î1Ê¸»ú¤À¤±¤ÎÂçÊ¸»ú/¾®Ê¸»úÊÑ´¹.
+	* string.c(ucfirst,lcfirst): Uppercase/lowercase only the first character.
 
-	* numeric.c(chr): À°¿ô¤ÎÊ¸»úÎó²½¥á¥½¥Ã¥É.
+	* numeric.c(chr): Stringification method for integers.
 
-	* inits.c, dbm.c: DBM¤¬»È¤¨¤Ê¤¤»þ¤Ï¥¯¥é¥¹¤½¤Î¤â¤Î¤òÄêµÁ¤·¤Ê¤¤¤è¤¦
-	  ¤Ë¤·¤¿.  ÍøÍÑ¤Ç¤­¤Ê¤¤¥¯¥é¥¹¤Ïnil¤È¤¹¤ë¤³¤È¤òº£¸å¤Î¥Ý¥ê¥·¡¼¤È¤·¤è
-	  ¤¦(¤¤¤Þ¤Þ¤Ç¤Ï¥¢¥¯¥»¥¹¤·¤¿»þÅÀ¤Ç¥¨¥é¡¼¤¬È¯À¸¤·¤Æ¤¤¤¿). autoexec()
-	  ¤Î¤¢¤êÊý¤â¸¡Æ¤¤¬É¬Í×¤Ë¤Ê¤ê¤½¤¦¤À.
+	* inits.c, dbm.c: If DBM is unavailable, do not define the class at all.
+	  Unavailable classes should become nil going forward (previously errors
+	  occurred on access). autoexec() may need review.
 
-	* bignum.c(bigadd): ¥Ð¥°½¤Àµ.
+	* bignum.c(bigadd): Bug fix.
 
 Thu Jul  7 11:12:18 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* eval.c(Fload,Feval): eval_tree¤ò¥¯¥ê¥¢¤·Ëº¤ì¤Æ¤¤¤¿.
+	* eval.c(Fload,Feval): Forgot to clear eval_tree.
 
-	* _inspect: ¥ª¥Ö¥¸¥§¥¯¥È¤ò²ÄÆÉ·Á¼°¤ÎÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë(¼ç¤Ë¥Ç¥Ð¥Ã¥°
-	  ½ÐÎÏÍÑ).
+	* _inspect: Convert objects into human-readable string (mainly for debug
+	  output).
 
 Wed Jul  6 00:57:18 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* numeric.c, bignum.c: À°¿ô¤ËÂÐ¤¹¤ë`[]'±é»»»Ò. n¥Ó¥Ã¥ÈÌÜ¤¬¥»¥Ã¥È¤µ
-	  ¤ì¤Æ¤¤¤ë¤«¤É¤¦¤«¤òÊÖ¤¹.
+	* numeric.c, bignum.c: `[]' operator for integers. Returns whether the n-th
+	  bit is set.
 
 Tue Jul  5 12:48:39 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* io.c(Feof): ÄÉ²Ã. ¥³¥Þ¥ó¥É¥é¥¤¥ó¤«¤é¤Ê¤ë²¾ÁÛ¥Õ¥¡¥¤¥ë¤Ë¤Ä¤¤¤Æ¤â
-	  EOF¤¬¸¡½Ð¤Ç¤­¤ë¤è¤¦¤Ë.
+	* io.c(Feof): Added. Detect EOF even for virtual files from command line.
 
-	* ruby.c: -l/-r/-R/-X¥ª¥×¥·¥ç¥ó¤ÎÄÉ²Ã.
-	
-	* ruby.c: -n/-p¥ª¥×¥·¥ç¥ó¤Îloop¤ÎÉÕ²Ã¤Ê¤É¤ò¥á¥¤¥ó¥ë¡¼¥Á¥ó¤Ë°ÜÆ°¤·
-	  ¤¿. ¤³¤ì¤Ç, ¥ª¥×¥·¥ç¥ó¤Î²òÀÏÅÓÃæ¤Ç(`-c'¥ª¥×¥·¥ç¥ó¤Î¤»¤¤¤Ç)½ªÎ»¤Ê
-	  ¤É¤È¤¤¤Ã¤¿¤³¤È¤Ï¤Ê¤¤.
+	* ruby.c: Added -l/-r/-R/-X options.
 
-	* io.c(Fgets): ¹âÂ®²½. ¶Å¤Ã¤¿¤³¤È¤ò¤·¤Ê¤¤Êý¤¬Â®¤«¤Ã¤¿. µõ¤·¤¤.
+	* ruby.c: Moved loop addition for -n/-p options to main routine. Prevents
+	  exiting prematurely during option parsing (like with `-c').
+
+	* io.c(Fgets): Speedup. Not doing fancy things made it faster—sadly.
 
 Mon Jul  4 15:55:48 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* Socket:getsockname/getpeername - ¤è¤¦¤ä¤¯»ÅÍÍ¤¬°ÂÄê¤·¤¿.
+	* Socket:getsockname/getpeername - Spec stabilized at last.
 
-	* io.c(Fgets): each¤Çgets¤òµ­½Ò¤¹¤ë¤Î¤Ç¤Ï¤Ê¤¯, gets¤Çeach¤òµ­½Ò¤¹
-	  ¤ë¤è¤¦¤Ë¤·¤¿.
+	* io.c(Fgets): Instead of describing gets in each, describe each using gets.
 
 Fri Jul  1 10:35:49 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* $ENV[env] = nil/$ENV.delete(env)¤Ç´Ä¶­ÊÑ¿ô¤òºï½ü¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤Ã
-	  ¤¿. $ENV.delete¤Ï´Ä¶­ÊÑ¿ô¤Î°ÊÁ°¤ÎÃÍ¤òÊÖ¤¹.
+	* $ENV[env] = nil/$ENV.delete(env) now deletes environment variables.
+	  $ENV.delete returns the previous value.
 
-	* !~¤ÎÄêµÁ¤¬´Ö°ã¤Ã¤Æ¤¤¤¿.
+	* Definition of !~ was wrong.
 
-	* Dict,DBM:[]= - nil¤ÎÂåÆþ¤Ë¤è¤Ã¤ÆÍ×ÁÇ¤òºï½ü¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿. ¤³
-	  ¤ì¤Ë¤È¤â¤Ê¤¤nil¤ÏDict¤ÎÍ×ÁÇ¤Ë¤Ê¤ì¤Ê¤¯¤Ê¤Ã¤¿.
+	* Dict,DBM:[]= - Assigning nil deletes an element. Thus nil can no longer be
+	  an element of Dict.
 
-	* ¥½¡¼¥¹¤ÎÀ°Íý. ÌÕÄ²¤Î¤è¤¦¤Ê»È¤ï¤ì¤Æ¤¤¤Ê¤¤¥³¡¼¥É¤ò¤Ê¤¯¤·¤¿¤ê, ÊÑ¿ô
-	  Ì¾¤òÉÕ¤±ÊÑ¤¨¤¿¤ê¤·¤¿.
+	* Cleaned the source; removed unused code like an appendix, renamed variables.
 
 Fri Jul  1 00:21:29 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Array:join() - Í×ÁÇ¿ô0¤ÎÇÛÎó¤ËÂÐ¤·¤Æ¶õÊ¸»úÎó¤òÊÖ¤¹.
+	* Array:join() - Return empty string for arrays with zero elements.
 
-	* RawSocket:open(),socketpair() - Ê¸»úÎó¤Ç»ØÄê¤Ç¤­¤ë¥É¥á¥¤¥ó¤È¥¿¥¤
-	  ¥×¤ò¤¤¤¯¤Ä¤«ÄÉ²Ã¤·¤¿.
+	* RawSocket:open(),socketpair() - Added several string-specified domains and
+	  types.
 
 Thu Jun 30 13:51:29 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* -f¥ª¥×¥·¥ç¥ó¤ò¤Ê¤¯¤·¤¿. ÀÎ(load¤Î¤Ê¤«¤Ã¤¿º¢)¤ÎÌ¾»Ä¤Ê¤Î¤Ç, º£¤È¤Ê¤Ã
-	  ¤Æ¤ÏÉ¬Í×¤Ê¤¤¤À¤í¤¦.
+	* Removed -f option. It’s a relic from before load existed; no longer needed.
 
-	* -s¥ª¥×¥·¥ç¥ó¤òÄÉ²Ã. perl¤Î-s¥ª¥×¥·¥ç¥ó¤ÈÆ±¤¸Æ°¤­¤ò¤¹¤ë.
+	* Added -s option. Works like perl’s -s.
 
-	* RawSocket¥¯¥é¥¹¤òÄó¶¡¤¹¤ë. Socket¤ËÂÐ¤¹¤ë¥·¥¹¥Æ¥à¥³¡¼¥ë¥ì¥Ù¥ë¤Î
-	  ¥¢¥¯¥»¥¹¤¬²ÄÇ½¤Ë¤Ê¤Ã¤¿.
+	* Provided RawSocket class for system-call level access to Socket.
 
 Thu Jun 30 00:27:19 1994  Yukihiro Matsumoto  (matz@dyna)
 
 	* Socket - bug fixes.
 
-	* linux¤Ç¤Ïsyscall(SYS_select)¤¬Àµ¾ï¤ËÆ°ºî¤·¤Ê¤¤.
+	* syscall(SYS_select) doesn’t work properly on linux.
 
-	* Socket:addr,peeraddr - ÇÛÎó¤È¤·¤Æsockaddr¤Î¾ðÊó¤òÊÖ¤¹.
+	* Socket:addr,peeraddr - Return sockaddr info as array.
 
 Wed Jun 29 00:14:20 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Socket:setopt,getopt - setsockopt(2), getsockopt(2)¤Ø¤Î¥¢¥¯¥»¥¹
-	  ¤ò¼Â¸½.
+	* Socket:setopt,getopt - Access to setsockopt(2), getsockopt(2).
 
-	* sprintf() - ruby¤Ë¤Ïunsigned¤ÏÌµ¤¤¤Î¤Ç, %u¤ò¼è¤ê½ü¤¤¤¿.
+	* sprintf() - Ruby has no unsigned, so removed %u.
 
-	* sprintf() - %b, %x, %o¤Ç¤Ï2¤ÎÊä¿ôÉ½¸½, %B, %X, %O¤Ç¤ÏÉä¹æÉÕ¤­É½
-	  ¸½¤Ç½ÐÎÏ¤¹¤ë¤è¤¦¤Ë. ¤³¤³¿ôÆü¤Çsprintf()¤Î»ÅÍÍ¤¬¤æ¤é¤¤¤Ç¤¤¤¿¤¬, 
-	  ¤³¤ì¤ÇÍî¤ÁÃå¤­¤½¤¦¤À.
+	* sprintf() - %b, %x, %o output two’s complement; %B, %X, %O output signed.
+	  Specs fluctuated recently, but this should settle it.
 
 Tue Jun 28 14:42:03 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* Bignum:<<,>> - 2¤ÎÊä¿ô¤ò¤È¤ë½èÍý¤ò½ü¤¤¤¿. ¥·¥Õ¥È±é»»¤Ë¤Ï´Ø·¸¤Ê¤¤
-	  ½èÍý¤À¤Ã¤¿.
+	* Bignum:<<,>> - Removed processing for two’s complement. Not needed for
+	  shift operations.
 
-	* Bignum:^ - bug fix. Éä¹ç¤¬È¿ÂÐ¤À¤Ã¤¿.
+	* Bignum:^ - Bug fix. Sign was reversed.
 
-	* sprintf() - 2¿Ê½ÐÎÏ»Ò"%b"¤òÄÉ²Ã.
+	* sprintf() - Added binary output "%b".
 
-	* sprintf() - %x, %o¤ÇFixnum¤ò½ÐÎÏ¤¹¤ë»þ, 2¤ÎÊä¿ôÉ½¼¨¤ò¹Ô¤Ê¤ï¤Ê¤¤.
+	* sprintf() - Do not output two’s complement for Fixnum in %x, %o.
 
-	* sprintf() - %x, %o¤Ï¤ä¤Ï¤êÉé¤Î¿ô¤Î»þ¤Ï`-'¤ò½ÐÎÏ¤¹¤ë¤è¤¦¤Ë.
+	* sprintf() - For negative numbers, output '-' for %x, %o after all.
 
 Mon Jun 27 14:56:13 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* sprintf() - Bignum¤Ë¤Ä¤¤¤Æ¤â%d, %o¤Ï(2¤ÎÊä¿ôÉ½¸½¤ËÊÑ´¹¤·¤Æ)Àµ¤Î
-	  À°¿ô¤òÉ½¼¨¤¹¤ë¤è¤¦¤Ë¤·¤¿.
+	* sprintf() - For Bignum, %d and %o now display positive integer by
+	  converting from two’s complement.
 
-	* Bignum¤ËÂÐ¤¹¤ëÏÀÍý±é»»¤ÎÄêµÁ¤ò½¤Àµ¤·¤¿. Éé¤Î¿ô¤Ï2¤ÎÊä¿ôÉ½¸½¤Ç¤¢
-	  ¤ë¤È¤ß¤Ê¤·, ¤«¤Ä²¾ÁÛÅª¤Ëº¸Â¦¤ËÌµ¸Â¤Ë1¤¬Ï¢Â³¤·¤Æ¤¤¤ë¤è¤¦¤Ê±é»»·ë
-	  ²Ì¤òÆÀ¤ë.
+	* Revised definitions of bitwise operations on Bignum. Treat negative numbers
+	  as two’s complement with infinite leading 1s.
 
-	* Fixnum:<<,>> - Éä¹çÉÕ¥·¥Õ¥È¤ËÊÑ¹¹.
+	* Fixnum:<<,>> - Changed to signed shifts.
 
-	* Bignum:>> - Éé¤ÎÀ°¿ô¤Î¥·¥Õ¥È¤ËÂÐ±þ¤·¤¿.
+	* Bignum:>> - Support shifting of negative integers.
 
-	* __END__, ^D, ^Z¤Ç¥¹¥¯¥ê¥×¥È¤ò½ªÎ»¤Ç¤­¤ë.
+	* Scripts can now end with __END__, ^D, ^Z.
 
-	* -x¥ª¥×¥·¥ç¥ó¤òÄÉ²Ã. #! ..ruby¤Ê¤ë¹Ô¤Þ¤ÇÆÉ¤ßÈô¤Ð¤¹.
+	* Added -x option. Skips input until a line containing #! ..ruby.
 
-	* -c¥ª¥×¥·¥ç¥ó¤òÄÉ²Ã. ¥³¥ó¥Ñ¥¤¥ë¤Î¤ß¤ò¹Ô¤¦.
+	* Added -c option. Compile-only.
 
 Sat Jun 25 01:37:21 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Fixnum:<< - É¬Í×¤Ë±þ¤¸¤ÆBignum¤Ë³ÈÄ¥¤·¤Æº¸¥·¥Õ¥È¤¹¤ë¤è¤¦¤Ë. ¤è¤Ã
-	  ¤Æ, ¥·¥Õ¥ÈÉý¤¬32¤ò±Û¤¨¤ë¤ÈC¤äPerl¤È¤Ï°ã¤Ã¤¿ÃÍ¤òÊÖ¤¹.
+	* Fixnum:<< - Expand to Bignum as needed for left shift. Thus values differ
+	  from C/Perl when shift > 32.
 
 Fri Jun 24 10:01:28 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* ioctl()/fcntl() - ¥·¥¹¥Æ¥à¥³¡¼¥ë¤ò¸Æ¤Ó½Ð¤¹Á°¤Ë¥Ð¥Ã¥Õ¥¡¤ÎÂç¤­¤µ¤ò
-	  Ä´Àá¤¹¤ë¤è¤¦¤Ë¤·¤¿.
+	* ioctl()/fcntl() - Adjust buffer size before calling system calls.
 
-	* String:toupper/tolower - Ê¸»úÎó¤òÃÖ¤­´¹¤¨¤¿¥³¥Ô¡¼¤òºî¤ë¤Î¤Ç¤Ï¤Ê
-	  ¤¯, ¸µ¤ÎÊ¸»úÎó¤ÎÆâÍÆ¤òÊÑ¹¹¤¹¤ë¤è¤¦¤Ë¤·¤¿.
+	* String:toupper/tolower - Modify original string rather than returning a
+	  replaced copy.
 
-	* inplace edit¤ò¼Â¸½¤·¤¿. perl¤ÈÆ±¤¸¤è¤¦¤Ë`-i'¥ª¥×¥·¥ç¥ó¤Ç»ØÄê¤¹¤ë.
-	  ¤â¤Ã¤È¤â, ¤³¤Á¤é¤ÏMS-DOS¤Î¤³¤È¤È¤«¹Í¤¨¤Æ¤Ê¤¤¤±¤É.
+	* Implemented inplace edit. Use `-i' like perl. Doesn’t consider MS-DOS.
 
-	* ¥Ç¥Õ¥©¥ë¥È¤Î½ÐÎÏÀè¤òÄÉ²Ã¤·¤¿. º£¤Þ¤Ç¤Ï$stdout¤ËÂåÆþ¤¹¤ë¤·¤«ÊýË¡
-	  ¤Ï¤Ê¤«¤Ã¤¿.
+	* Added default output destination. Previously only way was assigning to
+	  $stdout.
 
 Fri Jun 17 10:55:08 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* ´Ä¶­ÊÑ¿ô¤Ë¥¢¥¯¥»¥¹¤¹¤ëÊýË¡¤È¤·¤Ægetenv()/setenv()°Ê³°¤Ë$ENV¤òÍÑ
-	  °Õ¤·¤¿. $ENV¤ÏÊ¸»úÎó-Ê¸»úÎó¤Î¼­½ñ¤Ç¤¢¤ë¤«¤Î¤è¤¦¤ËÆ°ºî¤¹¤ëEnvDict
-	  ¥ª¥Ö¥¸¥§¥¯¥È¤¬ÂåÆþ¤µ¤ì¤Æ¤¤¤ë(each¤Ïassoc¤òÍ¿¤¨¤ë).
+	* Added $ENV as another way to access environment variables aside from
+	  getenv()/setenv(). $ENV behaves like a string-to-string dictionary; each
+	  returns assoc.
 
-	* nil¤ËÂåÆþ¤¹¤ë¤Ècore dump¤·¤¿. ¥³¥ó¥Ñ¥¤¥ë»þ¤Î¥Á¥§¥Ã¥¯¤ò¶¯²½.
+	* Assigning to nil caused core dump. Strengthened compile-time checks.
 
-	* Struct: struct_new()¤Î°ú¿ô¤òGC¥×¥í¥Æ¥¯¥È¤¹¤ëÉ¬Í×¤¬¤¢¤ë. ¤»¤á¤Æ¥¹
-	  ¥¿¥Ã¥¯ÎÎ°è¤À¤±¤Ç¤â¥¹¥­¥ã¥ó¤Ç¤­¤ë¤è¤¦¤Ë¤·¤Ê¤±¤ì¤Ð¤¤¤±¤Ê¤¤¤ó¤À¤í¤¦
-	  ¤«? ¤Ç¤â, °Ü¿¢À­¤¬¤Ê¤¢.
+	* Struct: Need GC-protection for struct_new() arguments. Maybe must scan
+	  stack area for portability… though that hurts portability.
 
 Fri Jun 17 01:01:46 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Time::asctime() - ÆüÉÕ¤Î¥Õ¥©¡¼¥Þ¥Ã¥È¤ÇÆü¤¬Íî¤Á¤Æ¤¤¤¿.
+	* Time::asctime() - Day was missing in date format.
 
-	* Stat: Stat¤ÏEtc¤Ê¤É¤ÈÆ±ÍÍ¤ËStruct¤Ç¼Â¸½¤·¤¿¤Î¤Ç, Stat¥¯¥é¥¹¤ÏÌµ
-	  ¤¯¤Ê¤Ã¤¿.
+	* Stat: Since Stat is implemented as a Struct like Etc, removed Stat class.
 
 Thu Jun 16 10:32:23 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* bignum.c: ¤¤¤¯¤Ä¤«¤Î¥Ð¥°¤ò½¤Àµ¤·¤¿. Fixnum¤òÅÏ¤¹¤Ù¤­¤È¤³¤í¤ÇÉáÄÌ
-	  ¤Îint¤òÅÏ¤·¤Æ¤¤¤¿. ¼ºÇÔ.
+	* bignum.c: Fixed several bugs. Passed normal int where Fixnum should be.
+	  Failure.
 
-	* big2str() - 1·å¤º¤Äbase¤Ç³ä¤ëÂå¤ï¤ê¤Ë, 4·å¤º¤Ä³ä»»¤ò¹Ô¤Ê¤¦¤è¤¦¤Ë
-	  ¤·¤¿. ¤³¤ì¤ÇÂ¿ÇÜÄ¹³ä»»¤Î²ó¿ô¤¬1/4¤Ë¤Ê¤ë. ¤µ¤é¤ËÀ°¿ô->¿ô(Ê¸»ú)¤Ø
-	  ¤ÎÊÑ´¹¤ò¥Æ¡¼¥Ö¥ë¤òÍÑ¤¤¤ë¤è¤¦¤Ë¤·¤¿.
+	* big2str() - Divide 4 digits at a time instead of 1 in certain bases.
+	  Division count becomes 1/4. Also use table for converting integers to
+	  characters.
 
-	* rb_ivar_get_1() - ¤¹¤Ç¤Ë²¿¤é¤«¤Î¥¤¥ó¥¹¥¿¥ó¥¹ÊÑ¿ô¤ò»ý¤Ä¥ª¥Ö¥¸¥§¥¯
-	  ¥È¤Ç¤Ï, Ì¤ÄêµÁ¤Î¥¤¥ó¥¹¥¿¥ó¥¹ÊÑ¿ô¤ÎÃÍ¤¬ÉÔÄêÃÍ¤Ë¤Ê¤Ã¤Æ¤¤¤¿.
+	* rb_ivar_get_1() - Undefined instance variable returned garbage on objects
+	  already having some instance variables.
 
-	* yylex() - ¥¤¥ó¥¹¥¿¥ó¥¹ÊÑ¿ô¤ÎÇ§¼±¤Ë¼ºÇÔ¤·¤Æ¤¤¤¿. attr()¤ÏÀµ¤·¤¯Æ°
-	  ºî¤·¤Æ¤¤¤¿¤Î¤Ç, º®ÍÑ¤¹¤ë¤ÈÆ°ºî¤·¤Ê¤«¤Ã¤¿. Á´Éô°ã¤Ã¤Æ¤¤¤¿¤«¤éÆ°¤¤
-	  ¤Æ¤¤¤¿¤Î¤Í.
+	* yylex() - Failed to recognize instance variables. attr() worked correctly,
+	  so mixing caused failure. Everything was wrong so it worked…
 
-	* Object:attr() - ¤¹¤Ç¤Ë¥¢¥¯¥»¥¹¥á¥½¥Ã¥É¤¬ÄêµÁ¤µ¤ì¤Æ¤¤¤ë»þ¤Ë¤Ï¥Ç¥Õ¥©
-	  ¥ë¥È¤Î¥¢¥¯¥»¥¹¥á¥½¥Ã¥É¤òÄêµÁ¤·¤Ê¤¤¤è¤¦¤Ë¤·¤¿. ¤â¤Ã¤È¤â¥¢¥¯¥»¥¹¥á
-	  ¥½¥Ã¥É¤ÈÆ±Ì¾¤Î¥á¥½¥Ã¥É¤Î¶èÊÌ¤ÏRuby¤Ë¤ÏÂ¸ºß¤·¤Ê¤¤¤±¤É, ¤½¤ì¤Ï»ÅÊý
-	  ¤¬¤Ê¤¤¤è¤Í.
+	* Object:attr() - Do not define default accessor methods if already defined.
+	  No distinction between accessor and same-named method in Ruby, but oh well.
 
-	* pack.c: ¥¨¥ó¥Ç¥£¥¢¥ó¤òautoconf¤ÇÈ½Äê¤¹¤ë¤è¤¦¤Ë¤·¤¿¤Î¤Ç, v/V¤¬»È
-	  ¤¨¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿. ¤Þ¤¿ntoh?()/hton?()¤â¼«Á°¤ÇÍÑ°Õ¤·¤¿.
+	* pack.c: Determined endianness using autoconf, enabling v/V. Prepared our
+	  own ntoh?()/hton?().
 
-	* Stat: st_rdev¤ò¥¢¥¯¥»¥¹¤¹¤ë¥á¥½¥Ã¥É¤òÄÉ²Ã. ¤µ¤é¤Ë¥·¥¹¥Æ¥à¤¬stat 
-	  ¹½Â¤ÂÎ¤Ëst_blksize, st_block¤ò»ý¤Ã¤Æ¤¤¤ë¤«¤òautoconf¤Ç¥Á¥§¥Ã¥¯¤¹
-	  ¤ë¤è¤¦¤Ë¤·¤¿.
+	* Stat: Added accessor for st_rdev. autoconf now checks whether system’s
+	  stat struct has st_blksize, st_block.
 
-	* ¥É¥­¥å¥á¥ó¥È¤ò¾¯¤·À°È÷¤·¤¿.
+	* Cleaned up some documentation.
 
-	* INT2FIX()¤Î¤¦¤Á, 31bitÉý¤¬ÊÝ¾Ú¤Ç¤­¤Ê¤¤¤â¤Î¤Ï, int2inum()¤ËÃÖ¤­´¹
-	  ¤¨¤¿.
+	* Replaced INT2FIX() that cannot guarantee 31-bit width with int2inum().
 
 Wed Jun 15 10:18:27 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* sprintf() - bignum¤Î½ÐÎÏ¤Î»þ, ½ÐÎÏÉý¤òÀµ¤·¤¯·×»»¤¹¤ë¤è¤¦¤Ë¤·¤¿.
+	* sprintf() - Correctly compute output width for bignum output.
 
-	* str2inum() - base¤¬0¤Î»þ, base¤ò¼«Æ°È½Äê¤¹¤ë¤è¤¦¤Ë(0x¤Ç»Ï¤Þ¤ë»þ
-	  16 ¿Ê, 0¤Ç»Ï¤Þ¤ë»þ8¿Ê).
+	* str2inum() - When base is 0, auto-detect base (0x => hex, 0 => octal).
 
 Tue Jun 14 16:08:42 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* gc.c: Bignum¤òÄÉ²Ã¤¹¤ë¤Î¤òËº¤ì¤Æ¤¤¤¿. ÁÈ¤ß¹þ¤ß·¿¤òÄÉ²Ã¤·¤¿»þ¤Ë¤Ï
-	  É¬¤ºmark()¤Èsweep()¤Ë¤½¤Î·¿¤Ë´Ø¤¹¤ë½èÍý¤òÄÉ²Ã¤¹¤ëÉ¬Í×¤¬¤¢¤ë.
+	* gc.c: Forgot to add Bignum. Must add processing to mark() and sweep() when
+	  adding built-in types.
 
-	* bignum: ³ä»»¤âÆ°¤¤¤¿¤è¤¦¤Êµ¤¤¬¤¹¤ë. ¥¢¥ë¥´¥ê¥º¥à¤òÍý²ò¤·¤Æ¤¤¤Ê¤¤
-	  ¤Î¤Ç, ¼«¿®¤¬¤Ê¤¤.
+	* bignum: Division seems to work? Unsure—don’t fully understand algorithm.
 
 Mon Jun 13 14:36:55 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* ¤Þ¤À¥µ¥Ý¡¼¥È¤·¤Æ¤¤¤Ê¤¤¥á¥½¥Ã¥É¤Ê¤É¤¬¤¢¤ë¤¬, ¶Ê¤¬¤ê¤Ê¤ê¤Ë¤âBignum
-	  ¤¬»È¤¨¤ë¤è¤¦¤Ë¤Ê¤ë. ¤³¤ì¤Çioctl¤â»È¤¨¤ë.
+	* Although some methods still unsupported, Bignum is usable. ioctl works.
 
 Fri Jun 10 17:26:42 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* Comparable: ´ðÁÃ¤È¤Ê¤ë¥á¥½¥Ã¥É¤ò`=='¤È`>'¤«¤é`<=>'¤ËÊÑ¹¹¤·¤¿. º£
-	  ¸åComparable¤Î¥µ¥Ö¥¯¥é¥¹¤Ï`<=>'¤À¤±¤òÄêµÁ¤¹¤ëÉ¬Í×¤¬¤¢¤ë.
+	* Comparable: Base methods changed from `==' and `>' to `<=>'. Subclasses now
+	  only need `<=>'.
 
 Wed Jun  8 13:12:18 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* Need_Fixnum()¤ò¤Û¤È¤ó¤É¤Ê¤¯¤·¤Æ, NUM2INT()¤ÇÄ¾ÀÜint¤ËÊÑ´¹¤¹¤ë¤³
-	  ¤È¤Ë¤·¤¿. ¤³¤ì¤Ç31bit¤Ë´Ý¤á¤Æ·åÍî¤Á¤ò¤ª¤³¤¹ÌäÂê¤¬¤Ê¤¯¤Ê¤ë.
+	* Removed nearly all Need_Fixnum(), use NUM2INT() to convert directly to int.
+	  Prevents loss from forcing into 31 bits.
 
 Tue Jun  7 09:45:31 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* ruby.h: ¥Þ¥¯¥íFIXABLE(n)¤òÄÉ²Ã. ¤Ä¤¤¤Ç¤ËFIXNUM¼þ¤ê¤ÎÄêµÁ¤òÊÑ¹¹¤·
-	  ¤Æ, °Ü¿¢À­¤ò¹â¤á¤¿(¤Ä¤â¤ê).
+	* ruby.h: Added FIXABLE(n) macro. Revised FIXNUM definitions to improve
+	  portability (hopefully).
 
-	* C++¤ÎÍ½Ìó¸ì¤Ç¤¢¤ënew¤òºï½ü¤·¤¿. ¤·¤«¤·, ¤â¤¦¤Ò¤È¤Ä¤ÎÍ½Ìó¸ì¤Ç¤¢¤ë
-	  class¤Ë´Ø¤·¤Æ¤Ï, ÃÖ¤­´¹¤¨¤ëÃ±¸ì¤¬»×¤¤¤Ä¤«¤Ê¤¤¤³¤È¤â¤¢¤Ã¤Æ¤½¤Î¤Þ
-	  ¤Þ¤Ë¤Ê¤Ã¤Æ¤¤¤ë.
+	* Removed "new" which is a C++ keyword. But "class" is also reserved and has
+	  no replacement, so left unchanged.
 
-	* 31bit¤ò±Û¤¨¤½¤¦¤ÊINT2FIX()¤ò´Ø¿ô¸Æ¤Ó½Ð¤·¤ËÊÑ¤¨¤¿. ¾­Íèbignum¤¬Æ³
-	  Æþ¤µ¤ì¤¿»þ¤Ë¤Ï¼«Æ°Åª¤Ëbignum¤òÊÖ¤¹¤è¤¦¤Ë¤¹¤ë.
+	* INT2FIX() that might exceed 31 bits now uses function call. Will return
+	  bignum automatically in the future.
 
-	* readline() - °ú¿ô¤Î`-'¤ÏÉ¸½àÆþÎÏ¤ò°ÕÌ£¤¹¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿.
+	* readline(): `-' argument means standard input.
 
-	* ruby.h: ±¦¥·¥Õ¥È¤¬ÏÀÍý¥·¥Õ¥È¤«»»½Ñ¥·¥Õ¥È¤«¤Ï½èÍý·Ï°ÍÂ¸¤Î¤è¤¦¤Ê¤Î
-	  ¤Ç, ruby.h¤Çcpp¤ò»È¤Ã¤Æ¥Á¥§¥Ã¥¯¤¹¤ë¤è¤¦¤Ë¤·¤¿. ¤³¤ì¤Ç¤¦¤Þ¤¯¤¤¤¯
-	  ¤È»×¤¦¤Î¤À¤¬, ¼ê¸µ¤ËÉä¹çÉÕint¤òÏÀÍý¥·¥Õ¥È¤¹¤ë½èÍý·Ï¤¬¤Ê¤¤¤Î¤Ç³Î
-	  Ç§¤Ç¤­¤Ê¤¤. NEWS-OS¤ÎCC¤Ï³Î¤«±¦¥·¥Õ¥È¤Ï¤¤¤Ä¤âÏÀÍý¥·¥Õ¥È¤À¤Ã¤¿¤è
-	  ¤¦¤Êµ¤¤¬¤¹¤ë¤ó¤À¤±¤É¡Ä.
+	* ruby.h: Since whether right shift is logical or arithmetic depends on
+	  implementation, check via cpp in ruby.h. Should work, but I have no system
+	  with logical right shift for signed ints. On NEWS-OS CC, I think right
+	  shift was always logical…
 
 Mon Jun  6 10:10:22 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* FIX2INT()¤ÎÄêµÁ¤òÊÑ¹¹¤·¤¿. ¤É¤¦¤·¤ÆÀÎ¤Ï¤¦¤Þ¤¯Æ°¤«¤Ê¤«¤Ã¤¿¤ó¤À¤í
-	  ¤¦¤«? ¤â¤·¤«¤·¤Æ, ±¦¥·¥Õ¥È¤ÎÉä¹æ³ÈÄ¥¤Ï½èÍý·Ï°ÍÂ¸?
+	* Modified definition of FIX2INT(). Why didn’t it work before? Maybe sign
+	  extension on right shift is implementation dependent?
 
-	* FIX2INT()¤ÈFIX2UINT()¤ò»È¤¤Ê¬¤±¤ë¤è¤¦¤Ë¤·¤¿. ¤â¤Ã¤È¤âfixnum¤Ï31
-	  ¥Ó¥Ã¥È¤·¤«¤Ê¤¤¤Î¤Ç, ËÜ¼ÁÅª¤Ê²ò·è¤Ë¤Ï¤Ê¤é¤Ê¤¤¤Î¤À¤¬(ioctl¤¬ÁÈ¤ß¹þ
-	  ¤ß¤¿¤«¤Ã¤¿).
+	* Distinguished FIX2INT() and FIX2UINT(). fixnum is only 31 bits, so not a
+	  real solution (wanted ioctl built-in).
 
-	* print¤ò´Ø¿ôÅª¥á¥½¥Ã¥É¤«¤éÄÌ¾ï¥á¥½¥Ã¥É¤ËÊÑ¹¹. °ú¿ô¤¬Í¿¤¨¤é¤ì¤Ê¤¤
-	  »þ¤Ë¤Ï¥ì¥·¡¼¥Ð¤ò¥×¥ê¥ó¥È¤¹¤ë¤è¤¦¤Ë¤·¤¿. ¤³¤ì¤Çprint¤ò¥á¥Ã¥»¡¼¥¸
-	  ·Á¼°¤Ç¤â¼Â¹Ô¤Ç¤­¤ë¤è¤¦¤Ë¤Ê¤Ã¤¿. Îã:
+	* Changed print from functional method to normal method. When given no
+	  arguments, print receiver. Enables message form:
 
 		ruby -e 'readlines().sort.print'
 
-	  ¾å¤Î¥¹¥¯¥ê¥×¥È¤Ï, °ú¿ô¤È¤·¤ÆÍ¿¤¨¤é¤ì¤¿(¤¢¤ë¤¤¤ÏÉ¸½àÆþÎÏ¤«¤éÆÉ¤ß
-	  ¹þ¤Þ¤ì¤¿)Ê¸»úÎó¤ò³Æ¹ÔËè¤Ë¥½¡¼¥È¤·¤ÆÉ½¼¨¤¹¤ë.
+	  Above sorts input lines (from args or stdin) and prints them.
 
-	* eval.c: argc,argv¥Ñ¥¿¡¼¥ó¤Ç°ú¿ô¤ò¼õ¤±¤ë¥á¥½¥Ã¥É¤Ë°ú¿ô¤¬°ì¤Ä¤âÍ¿
-	  ¤¨¤é¤ì¤Ê¤¤»þ, argv¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤¿(argv[0]¤Ë¥¢¥¯¥»¥¹¤¹¤ë¤ÈÍî¤Á
-	  ¤Æ¤·¤Þ¤¦).
+	* eval.c: Methods receiving argc,argv pattern had argv=nil when no arguments,
+	  causing crash on argv[0].
 
-	* _exit()¤òÄÉ²Ã. ¤³¤Á¤é¤ÏÎã³°½èÍý¤Ê¤É¹Ô¤Ê¤ï¤Ê¤¤.
+	* Added _exit(). No exception handling.
 
-	* dbm¥¯¥é¥¹: ¥¯¥é¥¹Ì¾¾Î¤òDBM(ÂçÊ¸»ú)¤ËÅý°ì¤·¤¿.
+	* dbm class: Unified class name to DBM (uppercase).
 
 Sat Jun  4 00:51:04 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* ¥ë¡¼¥×ÊÑ¿ô¤Ë¤âÂ°À­¤äÇÛÎóÍ×ÁÇ¤ò»ØÄê¤Ç¤­¤ë¤è¤¦¤Ë¤·¤¿.
+	* Loop variables may now specify attributes or array elements.
 
 Fri Jun  3 09:49:48 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* Â¿½ÅÂåÆþ¤Ë¤ª¤¤¤Æ, Â°À­ÂåÆþ, ÇÛÎóÍ×ÁÇ¤Ø¤ÎÂåÆþ¤â¹Ô¤Ê¤¨¤ë¤è¤¦¤Ë¤·¤¿.
+	* In multiple assignment, allow attribute assignment and array-element
+	  assignment too.
 
-	* Need_Fixnum(): nil¤ò0¤ËÊÑ´¹¤¹¤ë¤è¤¦¤Ë.
+	* Need_Fixnum(): Convert nil to 0.
 
-	* Enumerable:min, max, index, includes - ÄÉ²Ã. min, max¤ÏÍ×ÁÇ¤¬
-	  `<=>'¥á¥½¥Ã¥É¤ò»ý¤Ä¤³¤È¤ò²¾Äê¤·¤Æ¤¤¤ë.
+	* Enumerable:min, max, index, includes - Added. min/max assume elements have
+	  `<=>'.
 
-	* Dict/Dbm:length - Í×ÁÇ¿ô¤òÊÖ¤¹¥á¥½¥Ã¥É.
+	* Dict/Dbm:length - Return element count.
 
-	* Dbm¥¯¥é¥¹¤Ëto_a¥á¥½¥Ã¥É¤òÄÉ²Ã.
+	* Added to_a to Dbm class.
 
-	* Sun¤Ë¤ª¤±¤ësort¤Î¸íÆ°ºî¤Î·ï, ºòÆü¤Î½¤Àµ¤Çfix¤µ¤ì¤¿. ¤·¤«¤·, ¤½¤ì
-	  ¤Ç¤Ê¤¼Æ°¤«¤Ê¤«¤Ã¤¿¤Î¤«¤ÏÌÀ¤é¤«¤Ç¤Ï¤Ê¤¤¤¬¡Ä. Èæ³Ó´Ø¿ô¤¬¤É¤ó¤ÊÃÍ¤ò
-	  ÊÖ¤·¤Æ¤â»ØÄê¤·¤¿ÎÎ°è³°¤ò¥¢¥¯¥»¥¹¤¹¤ë¤Î¤Ï¥Ð¥°¤Ç¤Ï¤Ê¤¤¤«.
+	* Sun sort misbehavior fixed by yesterday’s change. But unclear why it broke;
+	  comparing function returning weird values shouldn’t access outside region.
 
-	* ¥Õ¥¡¥¤¥ë¤ÎÁ´ÆâÍÆ¤òÆÉ¤ó¤Ç, ³Æ¹Ô¤òÇÛÎó¤È¤·¤ÆÊÖ¤¹¥á¥½¥Ã¥É¤Ïpython¤ò
-	  »²¹Í¤Ë¤·¤Æ`readlines'¤È¤¤¤¦Ì¾Á°¤Ë¤·¤¿. ¤½¤ì¤Ë¤È¤â¤Ê¤¤gets¤ËÂÐ¤·
-	  ¤Æreadline¤È¤¤¤¦ÊÌÌ¾¤òÍÑ°Õ¤·¤¿.
+	* Method returning all lines as array named `readlines` after python.
+	  Added alias readline for gets.
 
 Fri Jun  3 00:08:38 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Array:sort - È½ÊÌ´Ø¿ô¤ÎÌá¤êÃÍ¤ÏFixnum¤Ç¤Ï¤Ê¤¯, Int¤Ç¤¢¤ë¤Ù¤­¤À¤Ã
-	  ¤¿. ´Ö°ã¤¤. Sun¤ÇÆ°ºî¤¬¤ª¤«¤·¤«¤Ã¤¿¤Î¤Ï¤³¤Î¤»¤¤¤«¤âÃÎ¤ì¤Ê¤¤.
+	* Array:sort - Comparator should return Int, not Fixnum. Mistake. Possibly
+	  reason for Sun issues.
 
 Thu Jun  2 11:48:37 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* IO:read_all() - ¥¹¥È¥ê¡¼¥à¤ÎºÇ¸å¤Þ¤ÇÆþÎÏ¤·¤Æ, ³Æ¹Ô¤òÍ×ÁÇ¤È¤¹¤ëÇÛ
-	  Îó¤òÊÖ¤¹¥á¥½¥Ã¥É¤òÄÉ²Ã. ¤Þ¤¿´Ø¿ô¥á¥½¥Ã¥É read_all()¤âÄÉ²Ã¤·¤¿.
-  	  ¤³¤ì¤Ï°ú¿ô¤Î¥Õ¥¡¥¤¥ë¤«¤éÆÉ¤ß¹þ¤ó¤Ç³Æ¹Ô¤òÍ×ÁÇ¤È¤¹¤ëÇÛÎó¤òÊÖ¤¹. °Õ
-	  Ì£Åª¤Ë¤Ï
+	* IO:read_all() - Added method to read until end of stream and return array
+	  of lines. Added function method read_all() reading from argument file.
+	  Semantically same as:
 
 		def read_all()
 	  	  ary = {}
@@ -433,309 +401,286 @@ Thu Jun  2 11:48:37 1994  Yukihiro Matsumoto  (matz@ix-02)
 		  end
 		end
 
-	  ¤È¤Û¤ÜÅù²Á¤Ç¤¢¤ë.
+	* Deleted String:atoi. to_a suggests array; want to avoid confusion. Use
+	  to_i instead.
 
-	* String:atoi¥á¥½¥Ã¥É¤òºï½ü. to_a¥á¥½¥Ã¥É¤«¤éa¤¬ÇÛÎó¤Ç¤¢¤ë¤È¤ÎÏ¢ÁÛ
-	  ¤ò¸Æ¤ó¤Ç, º®Íð¤ò¾·¤«¤Ê¤¤¤¿¤á. Âå¤ï¤ê¤Ëto_i¥á¥½¥Ã¥É¤ò»È¤¦¤³¤È.
+	* Introduced to_a for array conversion. Normal objects return array of length
+	  1 containing themselves. Arrays return themselves. Dictionaries return array
+	  of key/value pairs. Classes including Enumerated return array of each item
+	  from each.
 
-	* ÇÛÎó¤Ø¤ÎÊÑ´¹¥á¥½¥Ã¥Éto_a¤òÆ³Æþ¤·¤¿. ÄÌ¾ï¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Ï¼«Ê¬¼«¿È
-	  ¤òÍ£°ì¤ÎÍ×ÁÇ¤È¤¹¤ëÄ¹¤µ1¤ÎÇÛÎó¤òÊÖ¤¹. ÇÛÎó¤Ï¼«Ê¬¼«¿È¤ò, ¼­½ñ¤Ï¥­¡¼
-	  ¤ÈÃÍ¤Î¥Ú¥¢¤ÎÇÛÎó¤òÊÖ¤¹. Enumerated¤òinclude¤·¤¿¥¯¥é¥¹¤Ï, each¤¬
-	  ÊÖ¤¹³ÆÍ×ÁÇ¤ò´Þ¤àÇÛÎó¤òÊÖ¤¹.
+	* file.c: Rewrote variadic methods (chmod,chown,utimes), cleaning them.
+	  Now do type check for all arguments first; on failure, raise exception.
 
-	* file.c: ÉÔÄê¸Ä¤Î°ú¿ô¤ò¼õ¤±¤È¤ë¥á¥½¥Ã¥É(chmod,chown,utimes)¤ò½ñ¤­
-	  ´¹¤¨¤Æ, À°Íý¤·¤¿. ¤½¤ì¤ËÈ¼¤¤, ºÇ½é¤ËÁ´¤Æ¤Î°ú¿ô¤Î·¿¥Á¥§¥Ã¥¯¤ò¹Ô¤Ê
-	  ¤¦¤è¤¦¤Ë¤·¤¿. ·¿¥Á¥§¥Ã¥¯¤Ë¼ºÇÔ¤¹¤ë¤È½èÍý¤ò¹Ô¤Ê¤ï¤º¤ËÎã³°¤òÈ¯À¸¤µ
-	  ¤»¤ë.
-
-	* configure.in: ÉÔÉ¬Í×¤Ê¥Æ¥¹¥È¤ò¹Ô¤Ê¤ï¤Ê¤¤¤è¤¦¤Ë½¤Àµ¤·¤¿.
+	* configure.in: Stop unnecessary tests.
 
 Tue May 31 10:41:08 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* String:pack(): 2¿Ê¿ô¤ÎÊ¸»úÎóÊÑ´¹(B,b)¤Ç0¤È1¤¬µÕ¤À¤Ã¤¿.
+	* String:pack(): Binary string conversion (B,b) had 0 and 1 reversed.
 
-	* Math.c: ¼Â¿ô·Ï¤Î¥á¥½¥Ã¥É¤Ë°ú¿ô¤È¤·¤ÆÀ°¿ô¤¬ÅÏ¤µ¤ì¤¿»þ¤Ë¼«Æ°Åª¤ËÊÑ
-	  ´¹¤¹¤ë¤è¤¦¤Ë¤·¤¿.
+	* Math.c: Automatically convert integers to real types when passed to real
+	  methods.
 
-	* toupper(), tolower(): Ê¸»úÎó¤ÎÈ½Äê¥ß¥¹¤ÇÊÑ´¹¤µ¤ì¤Æ¤¤¤Ê¤«¤Ã¤¿.
+	* toupper(), tolower(): Due to string-detection bug, conversion didn’t occur.
 
-	* getopt_long()¤Î»ÅÍÍ¤Ë¤è¤Ã¤Æ, ¥¹¥¯¥ê¥×¥È¤Ø¤Î°ú¿ô¤¬¥¤¥ó¥¿¥×¥ê¥¿¤Î
-	  °ú¿ô¤À¤È²ò¼á¤µ¤ì¤Æ¤¤¤¿. °ú¿ô¥Ñ¥¿¡¼¥óÊ¸»úÎó¤ÎÀèÆ¬¤Ë`+'¤òÄÉ²Ã.
+	* getopt_long(): Script arguments interpreted as interpreter args. Added `+`
+	  at beginning of argument pattern string.
 
-	* config.h¤òºï½ü¤·¤¿. DEFINE¤ÏMakefile¤ÇÍ¿¤¨¤é¤ì¤ë.
+	* Deleted config.h. DEFINE provided by Makefile.
 
-	* sprintf(): "%d"¤ËÊ¸»úÎó¤¬Í¿¤¨¤é¤ì¤¿»þ¤Ë¤Ï¥¢¥É¥ì¥¹¤Ç¤Ï¤Ê¤¯ÆâÍÆ¤ò
-	  À°¿ô¤ËÊÑ´¹¤¹¤ë¤è¤¦¤Ë¤·¤¿. ¤Ä¤¤¤Ç¤ËÉâÆ°¾®¿ôÅÀ¿ô¤âÊÑ´¹¤¹¤ë¤è¤¦¤ËÊÑ
-	  ¹¹¤·¤¿.
+	* sprintf(): When "%d" receives a string, convert its content to integer
+	  instead of address. Also convert floats.
 
-	* regexp.c: ruby¤Î³ÈÄ¥Àµµ¬É½¸½(\d, \D, \s, \S)¤Î½èÍý¤Ç³ä¤êÅö¤Æ¤¿ÎÎ
-	  °è¤ò±Û¤¨¤Æ¥Ð¥Ã¥Õ¥¡¤Ë½ñ¤­¹þ¤ó¤Ç¤¤¤¿. ½èÍýÁ°¤Ë¥Ð¥Ã¥Õ¥¡¤ò¤­¤Á¤ó¤È³È
-	  Ä¥¤¹¤ë¤è¤¦¤Ë¤·¤¿. ¤³¤ì¤ÇºòÆüÌäÂê¤Ë¤·¤Æ¤¤¤¿¥á¥â¥ê¤ÎÌäÂê¤Ï²ò·è¤Ç¤­
-	  ¤¿¤È»×¤¦.
+	* regexp.c: Ruby’s extended regex (\d,\D,\s,\S) wrote past allocated region.
+	  Now expand buffer properly. Yesterday’s memory problem likely solved.
 
-	* yylex(): ¥À¥Ö¥ë¥¯¥©¡¼¥ÈÊ¸»úÎóÃæ¤Ç¥À¥Ö¥ë¥¯¥©¡¼¥È¤òÉ½¸½¤¹¤ë¤¿¤á
-	  ¤Î¥Ð¥Ã¥¯¥¹¥é¥Ã¥·¥åÉ½¸½¤¬¤Ç¤­¤Ê¤«¤Ã¤¿.
+	* yylex(): Could not express double-quote inside double-quoted string using
+	  backslash.
 
 Mon May 30 10:07:42 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* ±é»»»Ò`!'¤Î±¦ÊÕ¤â¾ò·ï¼°¤Ç¤¢¤ë¤È¤·¤¿. ¤³¤ì¤Ë¤è¤Ã¤Æ, ¤³¤Î±é»»»Ò¤ò
-	  ºÆÄêµÁ¤¹¤ë¿Í¤Ïº®Íð¤¹¤ë¤«¤âÃÎ¤ì¤Ê¤¤¤¬, ÂçÂ¿¿ô¤Î¤³¤Î±é»»»Ò¤ò»È¤¦¿Í
-	  ¤Ïº®Íð¤òÈò¤±¤ë¤³¤È¤¬¤Ç¤­¤ë¤È»×¤¦.
+	* Treat right-hand side of operator `!' as conditional expression. This may
+	  confuse re-definers but helps most users avoid confusion.
 
-	* autoconf¤ò»È¤Ã¤Æ, ¼«Æ°Åª¤ËMakefile, config.h¤òÀ¸À®¤¹¤ë¤è¤¦¤Ë¤·¤¿.
-	  ¤³¤ì¤Ç, ÂçÄñ¤Î¥Þ¥·¥ó¤Ç¤Ï`configure'¤ò¼Â¹Ô¤·¤¿¸å, `make'°ìÈ¯¤Ç¥³
-	  ¥ó¥Ñ¥¤¥ë¤Ç¤­¤ë¤È»×¤¦.
+	* Use autoconf to generate Makefile and config.h. Should allow compile with
+	  just `configure` then `make` on most machines.
 
-	* clone: ¥µ¥Ö¥¯¥é¥¹¤ËÂÐ¤·¤ÆÍÑ¤¤¤é¤ì¤¿¾ì¹ç, ¸µ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ÈÆ±¤¸
-	  ¥¯¥é¥¹¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤òÊÖ¤¹¤è¤¦¤Ë(°ÊÁ°¤Ï¥Ó¥ë¥È¥¤¥ó¥¯¥é¥¹¤Î¾ì¹ç¤ò
-	  ¹Í¤¨¤Æ¤Ê¤«¤Ã¤¿).
+	* clone: When used on subclass, return instance of same class (previously did
+	  not consider built-in subclasses).
 
-	* ¥Ó¥ë¥È¥¤¥ó¥¯¥é¥¹¤Î¥µ¥Ö¥¯¥é¥¹¤âºî¤ì¤ë¤è¤¦¤Ë, ¥ê¥Æ¥é¥ë¤Î¤¢¤ë¥¯¥é¥¹
-	  ¤Ë¤ânew¥á¥½¥Ã¥É¤òÄÉ²Ã¤·¤¿.
+	* Added new method to literal-having classes to allow subclassing of built-in
+	  classes.
 
-	* malloc()¤ÇÍî¤Á¤ë. purify¤¬É¬Í×¤«¤âÃÎ¤ì¤Ê¤¤.
+	* malloc() crashes. Might need purify.
 
-	* re.c: rb_global_variable()¤Î¸Æ¤Ó¤À¤··Á¼°¤Î´Ö°ã¤¤. ÊÑ¿ô¤Ø¤Î¥Ý¥¤¥ó
-	  ¥¿¤òÅÏ¤µ¤Ê¤±¤ì¤Ð¤¤¤±¤Ê¤¤.
+	* re.c: Wrong rb_global_variable() call: must pass pointer to variable.
 
-	* parse.y: ¥í¡¼¥«¥ëÊÑ¿ô¤Î°·¤¤¤Ë°ú¿ô¤ÎÉ¾²Á½ç¤Ë°ÍÂ¸¤¹¤ë°Ü¿¢À­¤Î¤Ê¤¤
-	  ÉôÊ¬¤¬¤¢¤Ã¤¿.
+	* parse.y: Non-portable handling of local variables dependent on argument
+	  evaluation order.
 
-	* attr(): Â°À­ÀßÄê¤Î¥Ð¥°¤òÄ¾¤·¤¿. ¤¤¤ÄÆâÉô»ÅÍÍ¤¬ÊÑ¤ï¤Ã¤¿¤ó¤À¤í¤¦¡Ä?
+	* attr(): Fixed bug in attribute setting. When did the internals change…?
 
 Sat May 28 23:08:18 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Àµµ¬É½¸½¥­¥ã¥Ã¥·¥å¤ÎÊ¸»úÎó°ìÃ×È½Äê¤ò¥Ý¥¤¥ó¥¿°ìÃ×¤«¤éÆâÍÆ°ìÃ×¤ËÊÑ
-	  ¹¹¤·¤¿. ¤½¤¦¤¤¤¨¤ÐÊ¸»úÎó¥ê¥Æ¥é¥ë¤Ï°ì²óËè¤Ë¿·¤·¤¯¥ª¥Ö¥¸¥§¥¯¥È¤¬À¸
-	  À®¤µ¤ì¤ë¤Î¤À¤Ã¤¿.
+	* Changed regex cache string comparison from pointer-equality to content-
+	  equality. Literal strings create new objects each time.
 
 Fri May 27 11:42:00 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* Àµµ¬É½¸½¤ÎÊ¸»ú¥³¡¼¥É¤Î¥Ç¥Õ¥©¥ë¥È¤ò´Á»úÈóÂÐ±þ¤Ë¤·¤¿. ¤³¤ì¤Ë¤è¤Ã¤Æ
-	  ¼ã´³¤Î¹âÂ®²½¤¬¿Þ¤ì¤ë.
+	* Default regex encoding changed to non-Kanji. Slight speedup.
 
-	* tr¤«¤éÊ¸»úºï½ü(delete), Ê¸»ú°µ½Ì(squeeze)¤òÊ¬Î¥¤·¤¿. ¤½¤ì¤Ë¤È¤â
-	  ¤Ê¤¤tr¤Î¥ª¥×¥·¥ç¥ó°ú¿ô¤Ï¤Ê¤¯¤Ê¤Ã¤¿.
+	* Split tr into delete and squeeze. No option arguments for tr now.
 
 Thu May 26 10:32:55 1994  Yukihiro Matsumoto  (matz@ix-02)
 
-	* ¥¹¥¯¥ê¥×¥ÈÆÉ¤ß¹þ¤ß¥ë¡¼¥Á¥ó¤ò½ñ¤­Ä¾¤·¤Æ, ÄÌ¾ï¥Õ¥¡¥¤¥ë°Ê³°¤Î¥Õ¥¡¥¤
-	  ¥ëÌ¾¤ä¶õÊ¸»úÎó¤¬¥¹¥¯¥ê¥×¥È¤È¤·¤ÆÍ¿¤¨¤é¤ì¤¿¾ì¹ç¤ËÂÐ±þ¤·¤¿. ¤Þ¤¿, 
-	  É¸½àÆþÎÏ¤«¤é¥¹¥¯¥ê¥×¥È¤òÆÉ¤ß¹þ¤à»þ¤Ë, °ì»þ¥Õ¥¡¥¤¥ë¤¬/tmp¤Ë»Ä¤é¤Ê
-	  ¤¤¤è¤¦¤Ë¤·¤¿.
+	* Rewrote script-loading routine; now handles non-regular filenames or empty
+	  string script names. Also prevents temporary files remaining in /tmp when
+	  reading from stdin.
 
-	* Fixnum:id2name - ID¤«¤éÊ¸»úÎó¤ËÌá¤¹´Ø¿ô. String:intern¤ÎµÕ.
+	* Fixnum:id2name - Convert ID to string. Opposite of String:intern.
 
-	* Array: ÇÛÎó¤ÎÈÏ°Ï³°¤ÎÍ×ÁÇ¤ò¥¢¥¯¥»¥¹¤·¤¿»þ¤ËÎã³°¤òÈ¯À¸¤µ¤»¤º¤Ë,
-	  nil¤òÊÖ¤¹¤è¤¦¤Ë¤·¤¿. ÇÛÎó¤Ï¼«Æ°Åª¤Ë³ÈÄ¥¤µ¤ì¤ë.
+	* Array: Accessing element outside array range returns nil instead of
+	  raising exception. Auto-expands array.
 
-	* string:strip¤òÄÉ²Ã.
+	* string: Added strip.
 
-	* -n¥ª¥×¥·¥ç¥ó¤¬-e¥ª¥×¥·¥ç¥ó¤òÊ£¿ô»ØÄê¤·¤¿»þ¤âÆ°ºî¤¹¤ë¤è¤¦¤Ë.
+	* -n works even with multiple -e.
 
-	* parse.y¤Ç<sys/types.h>¤â¥¤¥ó¥¯¥ë¡¼¥É¤¹¤ë¤è¤¦¤Ë¤·¤¿.
+	* parse.y includes <sys/types.h> now.
 
-	* fname¼þ¤ê¤ÎºÙ¤«¤¤bug¤ò½¤Àµ.
+	* Fixed small bugs around fname.
 
 Wed May 26 11:45:10 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Äê¿ô¤ò¥­¥ã¥Ã¥·¥å¤¹¤ë¤è¤¦¤Ë¤·¤¿. ·«¤êÊÖ¤·¤¬Â¿¤¤¾ì¹ç¤Ë¤ÏÍ­¸ú¤Î¤Ï¤º
-	  ¤À¤¬, °ìÅÙ¤·¤«¥¢¥¯¥»¥¹¤·¤Ê¤¤¾ì¹ç¤ÏÃÙ¤¯¤Ê¤ë¤Ê¤¢.
+	* Added constant caching. Helps when repeated many times, slows when only
+	  accessed once.
 
 Wed May 25 00:42:24 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Â¿½ÅÂåÆþÊ¸(foo, bar = 1, 2)¤ÎºÎÍÑ.
+	* Adopted multiple assignment (foo, bar = 1, 2).
 
-	* ¾ò·ï¼°Éô¤ËÊ¸»úÎó¤¢¤ë¤¤¤ÏÀµµ¬É½¸½¥ê¥Æ¥é¥ë¤ò¤ª¤¯¤È`=~'±é»»»Ò¤Ë¤è¤Ã
-	  ¤Æ`$_'¤ÈÈæ³Ó¤µ¤ì¤ë. ¹¹¤Ë`...'¤ÎÎ¾ÊÕ¤Ç¤ÏÀ°¿ô¥ê¥Æ¥é¥ë¤¬`$.'¤ÈÈæ³Ó
-	  ¤µ¤ì¤ë.
+	* When placing string or regex literal in conditional, compare with `$_`
+	  using `=~'. For ... operator, compare integer literals with `$.'.
 
 Mon May 23 23:27:03 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* &¼° ·Á¼°¤Ï¤Ê¤¯¤Ê¤Ã¤¿. Âå¤ï¤ê¤Ëkernel:apply(id, args..)¤òÆ³Æþ.
+	* Removed &form syntax. Introduced kernel:apply(id, args..).
 
-	* def op () ..·Á¼°¤ÎÆ³Æþ. op¤ÏºÆÄêµÁ²ÄÇ½¤Ê±é»»»Ò.
+	* Introduced def op () .. form. op is redefinable operator.
 
-	* constant¤ÎÂåÆþ»þ¥Á¥§¥Ã¥¯. ´û¤Ë½é´ü²½¤µ¤ì¤Æ¤¤¤ëÄê¿ô¤ËÂåÆþ¤·¤¿¾ì¹ç
-	  ¤ÏÎã³°¤¬È¯À¸¤¹¤ë.
+	* Check constant assignment. Assigning to already-initialized constant raises
+	  exception.
 
-	* Â¿½ÅÂåÆþÊ¸.
+	* Multiple assignment.
 
 Thu May 19 22:57:07 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* Ê£¹çÊ¸¤Ç¤âvoid value¤Î¥Á¥§¥Ã¥¯¤ò¹Ô¤¦¤è¤¦¤Ë¤·¤¿.
+	* Now check void value even in compound statements.
 
-	* until¤ÎÆ°ºî¤Î½¤Àµ(do..until·¿¤À¤Ã¤¿). 
+	* Fixed until behavior (it was do..until type).
 
 Wed May 18 01:06:25 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* °Ü¿¢¤Ë´Ø¤¹¤ë¼ã´³¤ÎÌäÂê¤ò½¤Àµ.
+	* Fixed some portability issues.
 
-	* ÊÌÌ¾¤Î¹½Ê¸¤ò¡Ödef a b¡×¤Ë¤·¤¿.
+	* Alias syntax changed to “def a b”.
 
-	* until/unless: ±é»»»Ò¤«¤éÀ©¸æÊ¸¤Ø. Îã³°¤òÊáÂª¤¹¤ëµ¡Ç½¤Ï¤½¤Î¤Þ¤Þ.
+	* until/unless: from operators to control statements. Exception-catching
+	  remains.
 
-	* ÁªÂò²ÄÇ½¤Êµ¡Ç½¤òconfig.h¤«¤édefines.h¤Ë°ÜÆ°.
+	* Moved selectable features from config.h to defines.h.
 
 Fri May 13 23:20:21 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* -y¥ª¥×¥·¥ç¥ó¤ò¿·Àß. -d¥ª¥×¥·¥ç¥ó¤«¤é¥³¥ó¥Ñ¥¤¥é¤Î¥Ç¥Ð¥Ã¥°ÉôÊ¬¤òÊ¬
-	  Î¥¤·¤¿.
+	* Added -y option. Separated compiler debug portion from -d.
 
 Tue Apr 25 20:17:33 1994  Yukihiro Matsumoto  (matz@dyna)
 
-	* ¥Þ¥ë¥Á¥Ð¥¤¥ÈÊ¸»úÎó¤ò¼±ÊÌ»Ò¤Ë»È¤¨¤ë¤è¤¦¤Ë. ¸Ä¿ÍÅª¤Ë¤Ï»È¤¤¤¿¤¯¤ÏÌµ
-	  ¤¤¤±¤É¤Ê¤¢.
+	* Allow multibyte strings as identifiers. Personally don’t want to use them…
 
-	* `-v'¥Õ¥é¥°¤Î¾õÂÖ¤ò$verbose¤Ç¥¢¥¯¥»¥¹¤Ç¤­¤ë¤è¤¦¤Ë.
+	* Expose `-v' flag state via $verbose.
 
-	* CVS¤ÎÆ³Æþ¤ËÈ¼¤¤, ¥Ð¡¼¥¸¥ç¥ó´ÉÍý¤ÎÊýË¡¤òÊÑ¹¹.
+	* With CVS introduction, changed version-control method.
 
-	* ¿¿ÌÌÌÜ¤ËChangeLog¤ò¤Ä¤±¤ë»ö¤Ë¤·¤¿.
+	* Decided to maintain ChangeLog properly.
 
 Tue Mar  8 10:09:25 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* %ÊÑ¿ôÌ¾ ¤Ë¤è¤ë¥¯¥é¥¹Äê¿ô¤òÆ³Æþ.
+	* Introduced class constants via %varname.
 
-	* undef ¥á¥½¥Ã¥É ¤Ë¤è¤ë¥á¥½¥Ã¥ÉÄêµÁ¤Î¼è¤ê¾Ã¤·¤òÆ³Æþ.
+	* Introduced undef method to remove method definitions.
 
-	* rb_get_method_body¤Ç¤Ïthe_env¤òÊÑ¹¹¤»¤º, rb_call()¤ÇÌÀ¼¨Åª¤ËÊÑ¹¹
-	  ¤¹¤ë¤è¤¦¤Ë. ¤³¤ì¤Çresponds_to¤Ê¤É¤Ç´Ä¶­¤¬ÇË²õ¤µ¤ì¤Ê¤¤.
+	* rb_get_method_body no longer alters the_env; rb_call() changes explicitly.
+	  Prevents environment corruption via responds_to etc.
 
 Mon Mar  7 17:46:15 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* ¡Ö&Ê¸»úÎó¡×·Á¼°. ¡Ö¼°.Ê¸»úÎó¡×·¿¤Î¥á¥Ã¥»¡¼¥¸¥»¥ó¥É¤Ï¤Ê¤¯¤Ê¤Ã¤¿.
+	* “&string” form. Removed “expr.string” message-send form.
 
-	* ¼«¸ÊÂåÆþ·Á¼°(+=. -=, ...)
+	* Self-assignment forms (+=, -=, ...)
 
-	* obj.attr = expr·Á¼°¤ÎºÎÍÑ.
+	* Adopted obj.attr = expr form.
 
 Thu Feb 24 16:23:28 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* toint, tofloat, print_string¤ò¤½¤ì¤¾¤ìto_i, to_f, to_s¤ËÊÑ¹¹.
+	* Changed toint, tofloat, print_string to to_i, to_f, to_s.
 
-	* String:clone - Copy on Write¤Î¼Â¸½.
+	* String:clone - Implement Copy on Write.
 
 Tue Feb 22 11:11:44 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* re.c: ¥Þ¥Ã¥Á¤·¤¿Ê¸»úÎó¤ÎÊÝÂ¸¤Ë¼ºÇÔ¤·¤Æ¤¤¤¿.
+	* re.c: Failed to save matched strings.
 
-	* trap: ²ÄÇ½¤Ê¤é¤Ð½èÍý¤Ë»þ´Ö¤Î¤«¤«¤ë¥·¥¹¥Æ¥à¥³¡¼¥ë(read, wait,
-	  sigpause, select)¤ò¥Õ¥Ã¥¯¤·¤Æ³ä¤ê¹þ¤ß½èÍý¤ÎÂ¨ÅúÀ­¤ò¹â¤á¤ë(DOS¤Ê
-	  ¤É¤Ç¤ÏÌµÍý¤À¤Ê¤¢).
+	* trap: If possible, hook slow system calls (read, wait, sigpause, select) to
+	  improve interrupt responsiveness (not possible on DOS…).
 
-	* trap: ³ä¤ê¹þ¤ß¤ò¤½¤Î¾ì¤Ç½èÍý¤¹¤ë¤«(¿×Â®¤À¤¬´í¸±), °ÂÁ´¤Ê¥¿¥¤¥ß¥ó
-	  ¥°¤Ç½èÍý¤¹¤ë¤«¤òÁªÂò¤Ç¤­¤ë¤è¤¦¤Ë.
+	* trap: Allow choosing between immediate interrupt handling (fast but risky)
+	  and safe-timing handling.
 
 Tue Feb 17 11:11:12 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* trap: ³ä¤ê¹þ¤ß¥Ï¥ó¥É¥é.
+	* trap: Interrupt handler.
 
 Wed Feb 16 12:29:12 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* String:crypt: °Å¹æ²½¥ë¡¼¥Á¥ó
+	* String:crypt: encryption routine.
 
-	* "::"±é»»»Ò¤ÎÄÉ²Ã. a::b ¤Ï {a, b}¤ÈÆ±µÁ. a::b::c ¤Ï {a, {b, c}}¤È
-	  Æ±µÁ(±¦·ë¹ç). Æ±µÁ¤È¤Ï¤¤¤¦¤â¤Î¤Î, "::"±é»»»Ò¤ò»È¤Ã¤¿Êý¤¬¾¯¤·¤À¤±
-	  ¥á¥â¥ê¸úÎ¨¤¬ÎÉ¤¤.
+	* Added "::" operator. a::b is same as {a, b}. a::b::c is {a, {b, c}}
+	  (right-associative). Though equivalent, "::" is slightly more memory-
+	  efficient.
 
-	* Dir.rmdir(), File.unlink(), File.utime() -- ³Æ¥·¥¹¥Æ¥à¥³¡¼¥ë¤Ø¤Î
-	  ¥¤¥ó¥¿¥Õ¥§¡¼¥¹.
+	* Dir.rmdir(), File.unlink(), File.utime() -- interfaces to each system
+	  call.
 
-	* kill -- kill(2) I/F
+	* kill -- kill(2) interface.
 
-	* select(): read¤Î¥Á¥§¥Ã¥¯¤Ç¤Ïstdio¤Ë¥Ð¥Ã¥Õ¥¡¥ê¥ó¥°¤µ¤ì¤Æ¤¤¤ë¤«¤É
-	  ¤¦¤«¤ò¥Á¥§¥Ã¥¯¤¹¤ë¤è¤¦¤Ë.
+	* select(): For read checks, check whether data is buffered by stdio.
 
 Tue Feb 15 15:08:31 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* file.c: stat¤ò¥­¥ã¥Ã¥·¥å¤¹¤ë¤è¤¦¤Ë.
+	* file.c: Cache stat.
 
-	* File:utime()¤òÄÉ²Ã.
+	* Added File:utime().
 
-	* unliteralize(): ¥Õ¥é¥°¤òÇË²õ¤·¤Æ¤¤¤¿.
+	* unliteralize(): Destroyed flags.
 
-	* Bug(): core¤òÅÇ¤¯¤è¤¦¤Ë.
+	* Bug(): emits core.
 
-	* String:tr -- tr(1)¸ß´¹. °ú¿ô¥Ñ¥¿¡¼¥ó¤¬¤Á¤ç¤Ã¤È°ã¤¦¤±¤É¡Ä.
+	* String:tr -- tr(1) compatible. Argument patterns differ somewhat.
 
 Mon Feb 14 18:24:13 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* unless, until¤¬Îã³°¤âµ¶¤È¸«¤Ê¤¹¤è¤¦¤Ë.
+	* unless, until now treat exceptions as false.
 
 	* select() -- select(2) I/F
 
-	* Array:pack, String:unpack: perl¤Îpack/unpack¤ÎÆ±ÅùÉÊ
+	* Array:pack, String:unpack: perl-compatible pack/unpack
 
 Tue Feb  8 17:11:10 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* setenv()¤Î¤Ê¤¤¥·¥¹¥Æ¥à¤Î¤¿¤á¤Ëputenv()¤ò»È¤Ã¤¿¥³¡¼¥É¤âÍÑ°Õ¤·¤¿.
+	* For systems without setenv(), prepared code using putenv().
 
 Mon Feb  7 09:52:44 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* °ú¿ô¤Î°ìÈÖºÇ¸å¤Ë`*'¤òÃÖ¤±¤ë¤è¤¦¤Ë¤·¤¿. ¤³¤ì¤Çrest°ú¿ô¤Î¥ê¥¹¥È¤ò
-	  Áàºî¤¹¤ëÉ¬Í×¤¬¾¯¤Ê¤¯¤Ê¤ë.
+	* Allow `*' at end of argument list. Reduces need to manipulate rest-arg list.
 
 Fri Feb  4 18:23:26 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* ruby-mode.el¤ò½ñ¤­Ä¾¤¹. ¤º¤¤¤Ö¤ó¤Þ¤·¤Ë¤Ê¤Ã¤¿¤È»×¤¦.
+	* Rewrote ruby-mode.el. Much improved.
 
-	* Ê¸»úÎó¥ê¥Æ¥é¥ë¤ÎCopy on Write¤ò¼Â¸½. ¤³¤ì¤ÇÊ¸»úÎó¤¬¥ê¥Æ¥é¥ë¤Ç¤¢
-	  ¤ë¤«¤é¤È¤¤¤Ã¤Æ¤¤¤Á¤¤¤Áclone¤·¤Ê¤¯¤Æ¤âºÑ¤à.
+	* Implement Copy on Write for string literals. No need to clone literals each
+	  time.
 
 Tue Feb  1 09:21:09 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* sub(), gsub()¤Ç, ¥Þ¥Ã¥Á¤·¤¿Ê¸»úÎó¤ò$&, $1..$9¤Ç¥¢¥¯¥»¥¹¤Ç¤­¤ë¤è
-	  ¤¦¤Ë¤·¤¿. Æ±»þ¤Ë¥Þ¥Ã¥Á¤·¤¿ÉôÊ¬Ê¸»úÎó¤ò¥³¥Ô¡¼¤·¤Æ¤ª¤¯¤è¤¦¤Ë(¸µ¤Î
-	  Ê¸»úÎó¤¬ÊÑ¹¹¤µ¤ì¤Æ¤â¾õÂÖ¤òÊÝÂ¸¤¹¤ë¤¿¤á).
+	* sub(), gsub(): Matched strings now accessible via $&, $1..$9. Also copy
+	  matched substrings so state survives when original string changes.
 
 Mon Jan 31 15:16:58 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* ¥×¥é¥¤¥Ù¡¼¥È¥á¥½¥Ã¥É¤Î»ÅÍÍ¤òÊÑ¹¹. º£¤Þ¤Ç¤ÏÆ±¤¸¥¯¥é¥¹¤Î¥á¥½¥Ã¥É¤«
-	  ¤é¤·¤«¥¢¥¯¥»¥¹¤Ç¤­¤Ê¤«¤Ã¤¿¤¬, ¥µ¥Ö¥¯¥é¥¹¤Î¥á¥½¥Ã¥É¤«¤é¤â¥¢¥¯¥»¥¹
-	  ¤Ç¤­¤ë¤è¤¦¤Ë¤·¤¿(C++¤Ë¤ª¤±¤ëprotected ¥á¥ó¥Ð´Ø¿ô).
+	* Changed private method spec. Originally only same-class methods accessed
+	  them; now subclasses may also access (like C++ protected).
 
-	* ¥á¥½¥Ã¥É¥µ¡¼¥Á¤Î¥¢¥ë¥´¥ê¥º¥à¤ò²þÁ±¤·, 10%ÄøÅÙ¤Î¹âÂ®²½¤ò¹Ô¤Ê¤Ã¤¿.
+	* Improved method-search algorithm, ~10% faster.
 
-	* ¹âÂ®²½. C¤Çµ­½Ò¤µ¤ì¤¿¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ð¤¹»þ¤Ë¤Ïsetjmp¤ò¸Æ¤Ð¤Ê¤¤¤è
-	  ¤¦¤Ë¤·¤¿. ¤³¤ì¤ÇC¥á¥½¥Ã¥É¤òÂ¿ÍÑ¤¹¤ë¾ì¹ç¤Ë¤Ï3ÇÜÄøÅÙ¹âÂ®¤Ë¤Ê¤Ã¤¿.
+	* Speed improvements. Avoid setjmp when calling C methods. C-heavy code
+	  becomes ~3× faster.
 
 Fri Jan 28 15:44:04 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* sh-mode¤ò¸µ¤Ëruby-mode.el¤òºî¤ë. ±é»»»Ò¤Ç½ª¤ë, 2¹Ô¤ËÅÏ¤ëÊ¸¤Ë¤ÏÂÐ
-	  ±þ¤·¤Æ¤¤¤Ê¤¤¤±¤É¡Ä.
+	* Created ruby-mode.el based on sh-mode. Doesn’t handle multi-line statements
+	  ending with operators.
 
 Thu Jan 27 11:35:19 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* freenode(): NODE_NIL¤Î²òÊüËº¤ì.
+	* freenode(): Forgot to free NODE_NIL.
 
-	* »ú¶ç²òÀÏÉô¤Î¥Ð¥°½¤Àµ(¥³¥á¥ó¥È¤Î¸å¤Î¾õÂÖ¤òÌá¤·Ëº¤ì).
+	* Fixed lexing bug (state not restored after comment).
 
-	* protect .. end¤Î¥Ð¥°½¤Àµ. GC_LINK¤Î¥Í¥¹¥È¤¬ÉÔÀµ¤À¤Ã¤¿.
+	* Fixed protect .. end bug. GC_LINK nesting was wrong.
 
-	* join¤Î¥Ð¥°½¤Àµ(»È¤Ã¤Æ¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òfree¤·¤Æ¤¤¤¿).
+	* Fixed join bug (freeing object in use).
 
-	* split¤Î¥Ð¥°½¤Àµ(¥¢¥ë¥´¥ê¥º¥à¤¬¤ª¤«¤·¤«¤Ã¤¿).
+	* Fixed split bug (wrong algorithm).
 
-	* fork()¤òÄÉ²Ã.
+	* Added fork().
 
 Wed Jan 26 17:09:56 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* ¥Õ¥¡¥¤¥ë¥Æ¥¹¥È¥á¥½¥Ã¥É¤ÎÄÉ²Ã.
+	* Added file-test methods.
 
-	* rb_autoexec(): ¥¯¥é¥¹¤ò½é¤á¤Æ¥¢¥¯¥»¥¹¤·¤¿»þ¤ÎµóÆ°¤òÀ©¸æ¤Ç¤­¤ë¤è
-	  ¤¦¤Ë¤·¤¿. ¤³¤ì¤Çautoload¤â¼Â¸½¤Ç¤­¤ë. ¤³¤ì¤Ë¤È¤â¤Ê¤¤¥á¥½¥Ã¥É
-	  unknown¤Ï¤Ê¤¯¤Ê¤Ã¤¿.
+	* rb_autoexec(): Allow controlling behavior on first access to class. Enables
+	  autoload. Method unknown removed.
 
 Tue Jan 25 15:51:36 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* Dbm¥¯¥é¥¹, Math¥â¥¸¥å¡¼¥ë¤òºîÀ®.
+	* Created Dbm class, Math module.
 
-	* -I¥ª¥×¥·¥ç¥ó¤Ç¥µ¡¼¥Á¥Ñ¥¹¤ËÄÉ²Ã¤Ç¤­¤ë¤è¤¦¤Ë.
+	* -I adds to search path.
 
-	* ¥µ¡¼¥Á¥Ñ¥¹¤òÊÑ¿ô$load_path¤ËÀßÄê¤Ç¤­¤ë¤è¤¦¤Ë.
+	* Search path assignable to $load_path.
 
-	* load(): ¥À¥¤¥Ê¥ß¥Ã¥¯¥í¡¼¥É¤ò»È¤¨¤ë¤è¤¦¤Ë¤·¤¿.
+	* load(): Enabled dynamic loading.
 
 Tue Jan 18 14:14:01 1994  Yukihiro Matsumoto  (matz at nws119)
 
@@ -749,40 +694,38 @@ Fri Jan 14 16:53:37 1994  Yukihiro Matsumoto  (matz at nws119)
 
 	* version 0.07
 
-	* ¥á¥½¥Ã¥É¤Ë´Ø¤¹¤ë¥É¥­¥å¥á¥ó¥È¤ò½¼¼Â¤µ¤»¤¿.
+	* Enhanced documentation about methods.
 
-	* String:index(): °ú¿ôposition¤òÁý¤ä¤·¤¿.
+	* String:index(): Added position argument.
 
 Thu Jan 13 15:13:52 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* Ì¤½é´ü²½¤ÎÊÑ¿ô¥¢¥¯¥»¥¹¤ò¤Ê¤¯¤·¤¿.
+	* Removed access to uninitialized variables.
 
-	* ÌµÂÌ¤Êhash table¤Î¥¢¥í¥±¡¼¥·¥ç¥ó¤òºï½ü.
+	* Removed unnecessary hash table allocations.
 
-	* Purify'd(on Sun)
+	* Purify'd (on Sun)
 
-	* ~RE ¤È ~STR¤Î¥³¥ó¥Ñ¥¤¥ë»þÅ¸³«¤ÎÍÞÀ©.
+	* Suppressed compile-time expansion of ~RE and ~STR.
 
-	* Sun¤Ø°Ü¿¢. signal()¤ÎÌá¤êÃÍ. RData¤Îbug½¤Àµ.
+	* Ported to Sun. signal() return value. Fixed RData bug.
 
-	* parse.y: nls¥ë¡¼¥ë¤òºï½ü.
+	* parse.y: Removed nls rule.
 
-	* yylex(): ²þ¹Ô¤ÈÉä¹ç¤Î²òÀÏÉôÊ¬¤òÊÑ¹¹.
+	* yylex(): Changed parsing of newline and sign.
 
-	* missing/strftime.c: °Ü¿¢ÍÑ.
+	* missing/strftime.c: For portability.
 
-	* Time:strftime: ¤½¤ÎÂ¾¤Î¥á¥½¥Ã¥É¤âstrftime¤òÍøÍÑ¤¹¤ë¤è¤¦¤Ë.
+	* Time:strftime: Other methods now use strftime.
 
-	* ¥á¥½¥Ã¥ÉºÆÄêµÁ»þ¤Ë¥á¥½¥Ã¥É¥­¥ã¥Ã¥·¥å¤ò¥¯¥ê¥¢¤¹¤ë.
+	* Clear method cache on redefinition.
 
 Fri Jan  7 15:23:20 1994  Yukihiro Matsumoto  (matz at nws119)
 
-	* Float:coerce(): Fixnum¤ÈFloat°Ê³°¤Î°ú¿ô¤òÍ¿¤¨¤é¤ì¤ë¤¿»þ¤Ë¤ÏÎã³°
-	  ¤òÈ¯À¸¤¹¤ë¤è¤¦¤Ë.
+	* Float:coerce(): Raise exception for args other than Fixnum and Float.
 
-	* Stat: stat¹½Â¤ÂÎ¤ÎÁ´¤Æ¤Î¥á¥ó¥Ð¤ËÂÐ¤¹¤ë¥¢¥¯¥»¥¹¥á¥½¥Ã¥É¤òÍÑ°Õ.
+	* Stat: Added access methods for all stat struct members.
 
-	* Ì¤ÄêµÁ¤Î¥¯¥é¥¹/¥â¥¸¥å¡¼¥ë¤Ø¤Î»²¾È¤¬unknown¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ð¤¹¤è¤¦
-	  ¤Ë¤·¤¿.
+	* Reference to undefined class/module now calls unknown method.
 
 	* baseline - version 0.06.

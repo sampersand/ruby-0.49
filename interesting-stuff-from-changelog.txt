@@ -1,0 +1,62 @@
+	* parse.y: Changed the syntax to create arrays to [..]. This breaks
+	  compatibility with older Ruby scripts, but introducing syntax for Dict and
+	  aligning with perl5 made now the only right time to change it.
+	  *BACKWARD INCOMPATIBILITY*
+
+
+Thu Jun 30 13:51:29 1994  Yukihiro Matsumoto  (matz@ix-02)
+
+	* Removed -f option. It’s a relic from before load existed; no longer needed. -- woah
+
+
+Fri Jun 24 10:01:28 1994  Yukihiro Matsumoto  (matz@ix-02)
+
+	* Added default output destination. Previously only way was assigning to
+	  $stdout. (__r49: IO.default= is this lol)
+
+
+Fri Jun 17 10:55:08 1994  Yukihiro Matsumoto  (matz@ix-02)
+
+	* Added $ENV as another way to access environment variables aside from
+	  getenv()/setenv(). $ENV behaves like a string-to-string dictionary; each
+	  returns assoc. (__r49: getenv/setenv came before!)
+
+Thu Jun 16 10:32:23 1994  Yukihiro Matsumoto  (matz@ix-02)
+
+	* Object:attr() - Do not define default accessor methods if already defined.
+	  No distinction between accessor and same-named method in Ruby, but oh well.
+
+
+Tue Jun  7 09:45:31 1994  Yukihiro Matsumoto  (matz@ix-02)
+
+	* Removed "new" which is a C++ keyword. But "class" is also reserved and has
+	  no replacement, so left unchanged.
+
+Mon May 30 10:07:42 1994  Yukihiro Matsumoto  (matz@ix-02)
+
+	* Treat right-hand side of operator `!' as conditional expression. This may
+	  confuse re-definers but helps most users avoid confusion. (__r49: ???)
+
+Thu Feb 24 16:23:28 1994  Yukihiro Matsumoto  (matz at nws119)
+
+	* Changed toint, tofloat, print_string to to_i, to_f, to_s.
+
+Mon Mar  7 17:46:15 1994  Yukihiro Matsumoto  (matz at nws119)
+
+	* “&string” form. Removed “expr.string” message-send form.
+
+Wed Feb 16 12:29:12 1994  Yukihiro Matsumoto  (matz at nws119)
+
+	* Added "::" operator. a::b is same as {a, b}. a::b::c is {a, {b, c}}
+	  (right-associative). Though equivalent, "::" is slightly more memory-
+	  efficient.
+
+Wed May 18 01:06:25 1994  Yukihiro Matsumoto  (matz@dyna)
+
+	* until/unless: from operators to control statements. Exception-catching
+	  remains.
+(AND)
+
+Mon Feb 14 18:24:13 1994  Yukihiro Matsumoto  (matz at nws119)
+
+	* unless, until now treat exceptions as false.
