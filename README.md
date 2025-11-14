@@ -1,6 +1,6 @@
 # Ruby v0.49
 
-Ruby 0.49 is the [oldest extant version](https://git.ruby-lang.org/ruby.git/refs/tags) of Ruby. While it's fascinating to see where Ruby came from, actually running Ruby 0.49 is difficult nowadays: It was written exclusively for 32 bit computers, was write in an (even for the time) old version of C, and has multiple bugs that can lead to segmentation faults.
+Ruby 0.49 is the [oldest extant version](https://git.ruby-lang.org/ruby.git/refs/tags) of Ruby. It's absolutely fascinating to see where Ruby came from, but trying to run it is difficult: It was written exclusively for 32 bit computers, in an (even for the time) old version of C, and has multiple severe bugs that can lead to segmentation faults.
 
 Until now.
 
@@ -9,16 +9,25 @@ After spending copious amounts of time fiddling with it, I proudly present a ful
 > [!NOTE]
 > While I've fixed quite a few bugs, I haven't exhaustively tested this. There's probably many lurking bugs and segfaults!
 
+## Compiling, TL;DR
+1. Clone this repo
+2. `cd` into `fixed`
+3. Run `./configure`
+4. Run `make`. The resulting `./ruby` executable is ruby 0.49!
+
 ## Sample Program
 
+Here's a sample program that showcases (a very minor) subset of differences! Checkout [my examples](./examples) for other ones!
+
 ```ruby
-# Constants use `%`. ARGV was a global!
+# Constants use `%`. `$ARGV` was a global, not a constant!!
 %MAX = ($ARGV[0] || 100).to_i
 
-# Set the output character that `print` uses by default
+# Perlism variables were commonly used. This one (still present as of Ruby 3.5,
+# but deprecated)
 $\ = "\n"
 
-# You had to use `for` loops---no `.each`
+# You had to use `for` loops. No `.each!`
 for num in 1..%MAX
   if a = 0 == num % 3 then
     "Fizz".print # You could `.print` instead of `print()`!
@@ -29,17 +38,11 @@ for num in 1..%MAX
   end if # You could add end tags!
 
   # Unless existed!
-  unless (a || b) then
+  unless a || b then
   	num.print
   end unless
 end
 ```
-
-## Compiling, tl;dr
-1. Clone this repo
-2. `cd` into `fixed`
-3. Run `./configure`.
-4. Run `make`. The resulting `./ruby` executable is ruby 0.49!
 
 ## Repo structure
 This repo's structured as follows:
