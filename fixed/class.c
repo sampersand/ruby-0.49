@@ -176,7 +176,7 @@ rb_add_method(class, mid, node, scope)
 	if (verbose) {
 	    Warning("redefine %s", rb_id2name(mid));
 	}
-	unliteralize(__r49_cast_to_RBasic(RMethod, body));
+	unliteralize(__r49_cast(struct RBasic *, struct RMethod *, body));
 	rb_clear_cache(body);
     }
     mth->node = node;
@@ -186,7 +186,7 @@ rb_add_method(class, mid, node, scope)
 	mth->origin = class;
     mth->id = mid;
     mth->scope = scope;
-    literalize(__r49_cast_to_RBasic(RMethod, mth));
+    literalize(__r49_cast(struct RBasic *, struct RMethod *, mth));
     st_insert(class->m_tbl, mid, __r49_cast_to_charp(struct RMethod, mth));
 }
 

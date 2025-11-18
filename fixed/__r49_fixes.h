@@ -205,7 +205,9 @@
  **                                                                                              **
  **************************************************************************************************/
 
-/* Define the `__r49_noreturn` attribute */
+/**
+ * Define the `__r49_noreturn` macro depending on the standard version, or the compiler.
+ */
 #if 202000L <= __R49_C_VERSION
 # define __r49_noreturn [[noreturn]] void
 #elif 201112L <= __R49_C_VERSION
@@ -216,20 +218,23 @@
 # define __r49_noreturn void __attribute__((noreturn))
 #else
 # define __r49_noreturn void
-#endif
+#endif /* __r49_noreturn */
 
+/**
+ * Define `__r49_cast`, which converts values to another type. As a safeguard, if both __r49_dev
+ * is defined, and we're at least C11, we use `_Generic` as a check to make sure the cast is valid
+ */
 #ifndef __r49_required_change
 # define __r49_cast(to, from, val) (val)
-#elif defined(__r49_dev) && 201112L <= __R49_C_VERSION /* Use _Generic to make sure my casts are correct */
+#elif defined(__r49_dev) && 201112L <= __R49_C_VERSION
 # define __r49_cast(to, from, val) (_Generic(val, from: (void) 0), (to) (val))
 #else
 # define __r49_cast(to, from, val) ((to) (val))
-#endif
+#endif /*  __r49_cast */
 
-#define __r49_implicit(what) what // TODO: fix __r49_required_change_q(what)
+#define __r49_implicit(what) __r49_required_change_q(what)
 #define __r49_implicit_arg(type, arg) __r49_implicit(type arg;)
 #define __r49_void_return __r49_implicit(void)
-#define __r49_cast_to_RBasic(from, ptr) (__r49_cast(struct RBasic *, struct from *, ptr))
 #define __r49_cast_to_charp(from, ptr) (__r49_cast(char *, from *, ptr))
 #define __r49_cast_to_charpp(from, ptr) (__r49_cast(char **, from *, ptr))
 

@@ -105,7 +105,7 @@ rb_alias(class, name, def)
 	if (verbose) {
 	    Warning("redefine %s", rb_id2name(name));
 	}
-	unliteralize(__r49_cast_to_RBasic(RMethod, body));
+	unliteralize(__r49_cast(struct RBasic *, struct RMethod *, body));
     }
     /* __r49: The cast from RMethod to RClass is unsound if we read from body. However, since the
      * return value of `search_method` is immediately assigned to `body`, the erroneous value is

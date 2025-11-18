@@ -336,7 +336,7 @@ Fstr_next(orig)
 	GC_PRO3(str2, (struct RString*)str_new(0, str->len+1));
 	str2->ptr[0] = c;
 	memmove(str2->ptr+1, str->ptr, str->len);
-	obj_free(__r49_cast_to_RBasic(RString, str));
+	obj_free(__r49_cast(struct RBasic *, struct RString *, str));
 	str = str2;
     }
     GC_UNLINK;

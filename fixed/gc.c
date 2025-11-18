@@ -340,12 +340,12 @@ mark(obj)
 	mark(obj->class);
 	break;
       case T_ICLASS:
-	mark(__r49_cast_to_RBasic(RClass, RCLASS(obj)->super));
+	mark(__r49_cast(struct RBasic *, struct RClass *, RCLASS(obj)->super));
 	if (RCLASS(obj)->c_tbl) mark_tbl(RCLASS(obj)->c_tbl);
 	mark_tbl(RCLASS(obj)->m_tbl);
 	break;
       case T_CLASS:
-	mark(__r49_cast_to_RBasic(RClass, RCLASS(obj)->super));
+	mark(__r49_cast(struct RBasic *, struct RClass *, RCLASS(obj)->super));
       case T_MODULE:
 	if (RCLASS(obj)->c_tbl) mark_tbl(RCLASS(obj)->c_tbl);
 	mark_tbl(RCLASS(obj)->m_tbl);
@@ -364,7 +364,7 @@ mark(obj)
 	mark_dict(RDICT(obj)->tbl);
 	break;
       case T_STRING:
-	if (RSTRING(obj)->orig) mark(__r49_cast_to_RBasic(RString, RSTRING(obj)->orig));
+	if (RSTRING(obj)->orig) mark(__r49_cast(struct RBasic *, struct RString *, RSTRING(obj)->orig));
 	break;
       case T_DATA:
 	if (RDATA(obj)->dmark) (*RDATA(obj)->dmark)(DATA_PTR(obj));
