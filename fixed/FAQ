@@ -1,64 +1,50 @@
 .\" FAQ -  -*- Indented-Text -*- created at: Tue Jan  4 12:48:12 JST 1994
-¤³¤ì¤ÏRuby¤Ë´Ø¤¹¤ëFAQ(Frequently Asked Question)¤ò¤Þ¤È¤á¤¿¤â¤Î¤Ç¤¹.
-Emacs¤Ç¤³¤Î¥Õ¥¡¥¤¥ë¤ò¸«¤Æ¤¤¤ë¾ì¹ç¤Ë¤ÏM-2 C-x $¤Ç¼ÁÌä¤ÎÉôÊ¬¤À¤±¤òÆÉ¤à¤³
-¤È¤¬¤Ç¤­¤Þ¤¹. C-x $¤ÇÁ´¤Æ¤òÆÉ¤à¾õÂÖ¤ËÌá¤»¤Þ¤¹.
+This is a collection of Frequently Asked Questions (FAQ) regarding Ruby.
+If you're viewing this file in Emacs, you can read only the questions by pressing M-2 C-x $. You can return to reading the entire document by pressing C-x $.
 ------------------------------
-1) Ruby¤ÎÌ¾¾Î¤ÎÍ³Íè¤Ï
-    
-    Ruby¤Ï²¿¤«¤ÎÎ¬¾Î¤Ç¤Ï¤Ê¤¯, ÀÖ¤¤ÊõÀÐ¤ÎÌ¾Á°¤ò¤È¤Ã¤ÆÌ¾ÉÕ¤±¤é¤ì¤Þ¤·¤¿. 
-    perl(pearl¤Ï6·î¤ÎÃÂÀ¸ÀÐ)¤Î¼¡¤òÌÜ»Ø¤¹(Ruby¤Ï7·î¤ÎÃÂÀ¸ÀÐ)¤È¤¤¤¦°ÕÌ£
-    ¤¬¤¢¤ê¤Þ¤¹. ¹¹¤ËÈþ¤·¤¯²ÁÃÍ¤¢¤ë¤â¤Î¤Ç¤¢¤Ã¤ÆÍß¤·¤¤¤È¤¤¤¦´ê¤¤¤â´Þ¤Þ¤ì
-    ¤Æ¤¤¤Þ¤¹.
+1) What is the origin of the name "Ruby"?
+
+    Ruby is not an abbreviation of anything; it was named after the red gemstone.
+    It was named with the idea of succeeding Perl (pearl, which is the birthstone of June) — Ruby is the birthstone of July. It also expresses a desire for Ruby to be something beautiful and valuable.
 ------------------------------
-2) Ruby¤¬±Æ¶Á¤ò¼õ¤±¤¿¸À¸ì¤Ï?
-   
-    Ruby¤Î¸À¸ì»ÅÍÍ¤ÏC, Perl, Eiffel¤Î³Æ¸À¸ì¤Ë¤³¤Î½ç¤Ë±Æ¶Á¤ò¼õ¤±¤Æ¤¤¤Þ
-    ¤¹. ¤½¤ÎÂ¾¤Ë±Æ¶Á¤ò¼õ¤±¤¿¸À¸ì¤È¤·¤Æ¤Ïtcl, AWK, bourne shell, CLU,
-    Icon, Sather, Smalltalk, Emacs Lisp¤Ê¤É¤¬¤¢¤ê¤Þ¤¹.
+2) What languages influenced Ruby?
+
+    The design of Ruby was influenced, in this order, by C, Perl, and Eiffel. Other languages that influenced Ruby include Tcl, AWK, Bourne shell, CLU, Icon, Sather, Smalltalk, and Emacs Lisp.
 ------------------------------
-3) Ruby¤ÎÆÃÄ§¤Ï?
-    
-    °Ê²¼¤Ë²Õ¾ò½ñ¤Ë¤·¤Þ¤¹.
-    
-      + ¥¤¥ó¥¿¥×¥ê¥¿¤Ç¤¢¤ê, ¼ê·Ú¤Ë¥×¥í¥°¥é¥à¤Ç¤­¤ë.
-      + ÊÑ¿ôÀë¸À¤¬Í×¤é¤Ê¤¤.
-      + ¥Õ¥¡¥¤¥ë¤ä¥¹¥È¥ê¡¼¥à¤Ê¤É¤Ø¤ÎUNIXÅª¤ÊÁàºî¤¬´ÊÃ±¤Ë¤Ç¤­¤ë.
-      + ¥Ð¥¤¥Ê¥ê¥Õ¥¡¥¤¥ë¤â°·¤¨¤ë.
-      + ¤­¤Á¤ó¤È¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È»Ø¸þ¸À¸ì¤Ç¤¢¤ë.
-      + ÆÃ°Û¥á¥½¥Ã¥É¤Îµ¡Ç½¤¬Äó¶¡¤µ¤ì¤Æ¤¤¤ë.
-      + ¥â¥¸¥å¡¼¥ë¤Ë¤è¤ëµ¡Ç½¤Î¶¦Í­¤¬¤Ç¤­¤ë.
-      + Îã³°½èÍýµ¡Ç½¤¬¤¢¤ë.
-      + GC¤¬¤¢¤ë¤Î¤Ç¥á¥â¥ê´ÉÍý¤òµ¤¤Ë¤·¤Ê¤¯¤ÆºÑ¤à.
-      + °ì´ÓÀ­¤Î¤¢¤ë¸À¸ì»ÅÍÍ.
-      + Ê£»¨¤Ê¥Ç¡¼¥¿¹½Â¤¤â°·¤¨¤ë.
-      + ¥À¥¤¥Ê¥ß¥Ã¥¯¥í¡¼¥É¤ò¥µ¥Ý¡¼¥È¤¹¤ë(¥·¥¹¥Æ¥à¤Ë¤è¤ë).
-    
-    µÕ¤Ë·çÅÀ¤Ï
-    
-      - È¯Å¸ÅÓ¾å¤Çµ¡Ç½¤¬¾¯¤Ê¤¤.
-      - ¥Ç¥Ð¥Ã¥¬¤¬(¤Þ¤À)¤Ê¤¤.
-      - ÃÙ¤¤.
-      
-    ¤³¤È¤Ç¤·¤ç¤¦¤«.
+3) What are the features of Ruby?
+
+    The following is a list of key features:
+
+      + It is an interpreter, and you can easily write programs.
+      + No need for variable declarations.
+      + Easy UNIX-like operations for files and streams.
+      + Can handle binary files.
+      + It is a proper object-oriented language.
+      + Provides support for singleton methods.
+      + Allows functionality sharing via modules.
+      + Has exception handling.
+      + With garbage collection (GC), you don’t need to worry about memory management.
+      + Consistent language specifications.
+      + Can handle complex data structures.
+      + Supports dynamic loading (system-dependent).
+
+    On the flip side, its drawbacks are:
+
+      - It is still in development with fewer features.
+      - Lacks a debugger (for now).
+      - It's slow.
+
+    These are the main concerns.
 ------------------------------
-4) Ruby¤ËÊÑ¿ôÀë¸À¤¬¤Ê¤¤¤³¤È¤Î¥á¥ê¥Ã¥È¤Ï?
-    
-    ¤¢¤ëÊÑ¿ô¤¬¤É¤Î¥¹¥³¡¼¥×¤ËÂ°¤¹¤ë¤«¤¬°ìÌÜ¤ÇÊ¬¤«¤ë¤Î¤Ç, ¥×¥í¥°¥é¥à¤ÎÆÉ¤ß
-    °×¤µ, Íý²ò¤·°×¤µ¤¬Áý¤¹¤³¤È¤¬ºÇÂç¤Î¥á¥ê¥Ã¥È¤Ç¤¹. ¤Þ¤¿¥È¡¼¥¿¥ë¤Î¥¿¥¤¥×
-    ÎÌ¤¬¸º¤ë¤Î¤Ç½ñ¤­°×¤µ, ¼ê·Ú¤µ¤Ë¤â¹×¸¥¤·¤Þ¤¹.
+4) What are the benefits of Ruby not requiring variable declarations?
+
+    The greatest benefit is that the scope of a variable can be immediately understood, which increases readability and understandability of the program. Additionally, the reduction in the total number of types makes the language easier to write and use.
 ------------------------------
-5) Ruby¤ÈPerl¤Î°ã¤¤¤Ï?
-    
-    Ruby¤ÈPerl¤Ï¥Æ¥­¥¹¥ÈÁàºî¤ËÍ¥¤ì¤¿¥¹¥¯¥ê¥×¥È¸À¸ì¤Ç¤¢¤ë¤È¤¤¤¦ÅÀ¤Ç, ¥«
-    ¥Ð¡¼¤¹¤ëÈÏ°Ï¤¬¶á¤¯, °ì¸«¤¹¤ë¤È¥é¥¤¥Ð¥ë¤Ë¸«¤¨¤Þ¤¹. ³Î¤«¤ËRuby¤ÎÀß·×
-    ¤Ë¤ª¤¤¤Æ¡ÖPerl¤Ë¤Ç¤­¤ë¤³¤È¤Ï¤Ç¤­¤ë¤è¤¦¤Ë¡×¤È¤¤¤¦¤³¤È¤Ï, °ì¤Ä¤Î½ÅÍ×
-    ¤ÊÌÜÉ¸¤Ç¤·¤¿. ¤·¤«¤·, Ruby¤Î¿¿¤ÎÌÜÅª¤Ï¤¢¤¯¤Þ¤Ç¤â¡Ö¼ê·Ú¤Ê¥ª¥Ö¥¸¥§¥¯
-    ¥È»Ø¸þ¸À¸ì¡×¤Ç¤¢¤ê, ¤Þ¤¿, RubyÀß·×¤Î3ÂçÌÜÉ¸¤Ç¤¢¤ë, µ¡Ç½À­¡¦°ì´ÓÀ­¡¦
-    ³ÈÄ¥À­¤Î·ë²Ì¤È¤·¤Æ, Ruby¤ÏPerl¤È¤Ï°Û¤Ê¤ë¸À¸ì¤Ë¤Ê¤ê¤Þ¤·¤¿.
-    
-    Ruby¤ÏPerl¤Û¤É¡Ö²¿¤Ç¤â¤¢¤ê¡×¤Ç¤Ï¤¢¤ê¤Þ¤»¤ó¤·, ¤Û¤È¤ó¤É¤Î¾ì¹çPerl¤è
-    ¤ê½èÍýÂ®ÅÙ¤¬ÃÙ¤¤¤Ç¤¹. ¤·¤«¤·, Ruby¤Î¥ª¥Ö¥¸¥§¥¯¥È»Ø¸þµ¡Ç½¤ÏPerl¤Ç¤Ï
-    ËþÂ­¤Ç¤­¤Ê¤¤¿Í¤¿¤Á¤Ë¥¢¥Ô¡¼¥ë¤¹¤ë¤È»×¤¤¤Þ¤¹.
+5) What is the difference between Ruby and Perl?
+
+    Ruby and Perl are both excellent scripting languages for text manipulation, and their areas of overlap make them seem like rivals at first glance. Indeed, one of the goals during Ruby's design was to make sure it could do what Perl can do. However, the true purpose of Ruby is to be a "convenient object-oriented language," and as a result of Ruby's three major design goals — functionality, consistency, and extensibility — Ruby has evolved into a different language from Perl.
+
+    Ruby is not as "anything goes" as Perl, and in most cases, it is slower than Perl. However, Ruby's object-oriented features will appeal to people who are unsatisfied with Perl's approach.
 ------------------------------
 Local variables:
 fill-column: 70
