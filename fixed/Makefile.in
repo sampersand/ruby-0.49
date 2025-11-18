@@ -14,7 +14,7 @@ INSTALL_DATA = @INSTALL_DATA@
 MAKEINFO = makeinfo
 
 CFLAGS = -g
-LDFLAGS = @STATIC@ $(CFLAGS)
+LDFLAGS = @STATIC@ $(CFLAGS) $(CPPFLAGS) # __r49: also use CPPFLAGS when linking!
 LIBS = @LIBS@
 DEFS = @DEFS@
 

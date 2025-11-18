@@ -60,3 +60,22 @@ Wed May 18 01:06:25 1994  Yukihiro Matsumoto  (matz@dyna)
 Mon Feb 14 18:24:13 1994  Yukihiro Matsumoto  (matz at nws119)
 
 	* unless, until now treat exceptions as false.
+
+
+
+----
+seems wrong about the `-`:
+   open(file[, mode])                                           +
+
+        Opens file and returns a File object.
+        If filename begins with `|`, the following string is executed as a command
+        and a pipeline is created.
+
+        If the command name is "-", open() creates a Ruby child process and returns
+        a pipe to the child.
+
+Array: (huh, does this actually work?)
+   delete_if
+
+  Iterator that deletes items when the block, given [key, value], evaluates to true.
+

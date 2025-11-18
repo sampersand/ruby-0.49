@@ -20,6 +20,7 @@ protect
     "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: %d\r\n\r\n%s",
     greeting.length,
     greeting)
+
   conn.close
 ensure
   server.close
