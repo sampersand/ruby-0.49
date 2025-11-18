@@ -327,6 +327,10 @@ long strtol(const char *, char **, int);
  **                                                                                              **
  **************************************************************************************************/
 
+/**
+ * Declares struct prototypes and `typedef`s that are required for function prototype declarations.
+ **/
+
 struct RBasic;
 struct RClass;
 struct RString;
@@ -342,6 +346,7 @@ struct global_entry;
 struct node;
 enum mth_scope;
 
+/* copied from `ruby.h` */
 typedef unsigned int UINT;
 typedef __r49_64bit_r(unsigned int, uintptr_t) VALUE;
 typedef __r49_64bit_r(int, intptr_t) __r49_sVALUE;
@@ -354,7 +359,18 @@ typedef unsigned short USHORT;
  **                                                                                              **
  **************************************************************************************************/
 
-/* This is the list of prototypes that're required to be predeclared. */
+/**
+ * Ruby 0.49 was written in a version of C which did not require predeclarations of function
+ * prototypes---all functions not explicitly prototyped always return `int`, and every argument
+ * would is an `int`.
+ *
+ * This worked originally, but now is quite problematic: `int` is 32 bits, so anything that uses
+ * uses pointers will have the 64 bit pointers be truncated to 32 bits!
+ *
+ * What follows is a list of function prototypes (directly copied from their source code definition)
+ * that Ruby 0.49 implicitly referenced, but are now declared in the header (so they're always
+ * visible!).
+ **/
 
 /* array.c */
 void Init_Array(void);
