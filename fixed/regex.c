@@ -2919,9 +2919,8 @@ re_match_2 (pbufp, string1_arg, size1, string2_arg, size2, pos, regs, mstop)
 		  c = *d++;
 		  if (ismbchar (c)) {
 		    if (c != (unsigned char) *p++
-			|| !--mcnt	/* パターンが正しくコンパイルさ
-					   れている限り, このチェックは
-					   冗長だが念のため.  */
+			|| !--mcnt	/* As long as the pattern is correctly compiled,
+					   this check is redundant, but just in case.  */ /* __r49: translated from japanese! */
 			|| d == dend
 			|| (unsigned char) *d++ != (unsigned char) *p++)
 		      goto fail;
