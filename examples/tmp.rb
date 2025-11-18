@@ -7,3 +7,9 @@ end if
     unless arg =~ /\n$/
       arg.concat("\n")
     end unless
+
+if
+  true
+then
+  puts "hi"
+end

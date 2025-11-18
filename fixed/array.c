@@ -41,14 +41,14 @@ ary_new()
     return ary_new2(ARY_DEFAULT_SIZE);
 }
 
-#ifdef __r49_required_change
+#ifdef __r49_required /* __r49: <varargs.h> is no longer supported */
 # include <stdarg.h>
 #else
-# include <varargs.h>
+#include <varargs.h>
 #endif
 
 VALUE
-#ifdef __r49_required_change
+#ifdef __r49_required /* __r49: <varargs.h> is no longer supported */
 ary_new3(int n, ...)
 #else
 ary_new3(n, va_alist)
@@ -65,7 +65,7 @@ ary_new3(n, va_alist)
     }
     ary = (struct RArray*)ary_new2(n<ARY_DEFAULT_SIZE?ARY_DEFAULT_SIZE:n);
 
-#ifdef __r49_required_change
+#ifdef __r49_required /* __r49: <varargs.h> is no longer supported */
     va_start(ar, n);
 #else
     va_start(ar);

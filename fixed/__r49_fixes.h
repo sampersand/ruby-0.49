@@ -97,6 +97,12 @@
  **                                                                                              **
  **************************************************************************************************/
 
+#define __r49_required /** Changes that are required for it to even compile on modern compilers */
+#ifdef __r49_no_required
+# undef __r49_required
+# define __r49_no_required_change /* todo: remove */
+#endif
+
 /* Changes that are required to even compile it. In Ruby 0.49, things like missing parameters or
  * extra parameters sometimes appeared, so this removes things that would preclude any modern
  * compiler from accepting the code. */
@@ -220,7 +226,7 @@
 # define __r49_cast(to, from, val) ((to) (val))
 #endif
 
-#define __r49_implicit(what) __r49_required_change_q(what)
+#define __r49_implicit(what) what // TODO: fix __r49_required_change_q(what)
 #define __r49_implicit_arg(type, arg) __r49_implicit(type arg;)
 #define __r49_void_return __r49_implicit(void)
 #define __r49_cast_to_RBasic(from, ptr) (__r49_cast(struct RBasic *, struct from *, ptr))
