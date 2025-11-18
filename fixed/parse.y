@@ -1136,11 +1136,11 @@ tokadd(c)
     tokenbuf[tokidx++] = c;
 }
 
-#ifdef __r49_ubfix
+#ifdef __r49_required_change /* __r49: TODO: is this required change? it used to be "ubfix" whatever that is */
 # define LAST(v) (&v[-1 + sizeof(v)/sizeof(v[0])])
 #else
 # define LAST(v) ((v)-1 + sizeof(v)/sizeof(v[0]))
-#endif /* __r49_ubfix */
+#endif /* __r49_required_change */
 
 static struct kwtable {
     char *name;

@@ -185,20 +185,6 @@
 # define __r49_bugfix_r(old, new) old
 #endif
 
-/* UB is fixing behaviour which is now considered undefined behaviour by the C standard */
-#define __r49_ubfix
-#ifdef __r49_no_ubfix
-# undef __r49_ubfix
-#endif
-
-#ifdef __r49_ubfix
-# define __r49_ubfix_q(...) __VA_ARGS__
-# define __r49_ubfix_r(old, new) new
-#else
-# define __r49_ubfix_q(...)
-# define __r49_ubfix_r(old, new) old
-#endif
-
 /**************************************************************************************************
  **                                                                                              **
  **                                  Miscellaneous definitions                                   **

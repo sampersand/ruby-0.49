@@ -2356,9 +2356,9 @@ re_match_2 (pbufp, string1_arg, size1, string2_arg, size2, pos, regs, mstop)
       string1 = 0;
       size1 = 0;
     }
-  __r49_ubfix_q(if(size1))
+  __r49_required_change_q(if(size1)) /* __r49: TODO: is this required change? it used to be "ubfix" whatever that is */
   end1 = string1 + size1;
-  __r49_ubfix_q(if(size2))
+  __r49_required_change_q(if(size2)) /* __r49: TODO: is this required change? it used to be "ubfix" whatever that is */
   end2 = string2 + size2;
 
   /* Compute where to stop matching, within the two strings.  */
