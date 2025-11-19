@@ -1,12 +1,12 @@
 print("1 byte string", "\n")
 print("1 byte string".reverse, "\n")
 
-print("Á´³ÑÊ¸»úÎó", "\n")
-print("Á´³ÑÊ¸»úÎó".reverse, "\n")
+print("å…¨è§’æ–‡å­—åˆ—", "\n")
+print("å…¨è§’æ–‡å­—åˆ—".reverse, "\n")
 
 print("1 byte string", "\n")
 print("1 byte string".split(//).reverse.join(":"), "\n")
-print("Á´³ÑÊ¸»úÎó", "\n")
-print("Á´³ÑÊ¸»úÎó".split(//).reverse.join(":"), "\n")
-print("Á´³Ñ¤È1byte¤Îº®ºß", "\n")
-print("Á´³Ñ¤È1byte¤Îº®ºß".split(//).reverse.join(":"), "\n")
+print("å…¨è§’æ–‡å­—åˆ—", "\n")
+print("å…¨è§’æ–‡å­—åˆ—".split(//).reverse.join(":"), "\n")
+print("å…¨è§’ã¨1byteã®æ··åœ¨", "\n")
+print("å…¨è§’ã¨1byteã®æ··åœ¨".split(//).reverse.join(":"), "\n")

@@ -36,7 +36,7 @@ print("a: ", $OPT_test, "\n")
 printf("%10.5g: %*s -> 0x%x\n", 123345, -10, Print, Print.id);
 
 println("a+ matches aaa at ", "bccAAaaa" =~ /a+/)
-ttt = "this is a ´Á»ú ´Á»ú"
+ttt = "this is a æ¼¢å­— æ¼¢å­—"
 if offset = (ttt =~ /this ([^ ]*) (.*)/)
   println("0 = ", $&);
   println("1 = ", $1);
