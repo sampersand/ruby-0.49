@@ -19,7 +19,7 @@ After spending copious amounts of time fiddling with it, I proudly present a ful
 ### Troubleshooting
 You'll need `yacc`, which comes preinstalled on some computers---if you're getting errors compiling `parse.y`, you'll need to install it with your favourite package manager (homebrew, `apt-get`, `pacman`, etc.)
 
-If you're getting errors like "too many arguments", you may need to `CPPFLAGS='-std=gnu11' make` instead. This is because modern versions of C don't like implicit arguments.
+If you're getting errors like "too many arguments", you may need to `R49FLAGS='-std=gnu11' make` instead. This is because modern versions of C don't like implicit arguments.
 
 ## Sample Program
 

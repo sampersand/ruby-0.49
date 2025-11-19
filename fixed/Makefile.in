@@ -14,7 +14,8 @@ INSTALL_DATA = @INSTALL_DATA@
 MAKEINFO = makeinfo
 
 CFLAGS = -g
-LDFLAGS = @STATIC@ $(CFLAGS) $(CPPFLAGS) # __r49: also use CPPFLAGS when linking!
+R49FLAGS ?= # __r49: added, to make adding flags easier!
+LDFLAGS = @STATIC@ $(CFLAGS) $(R49FLAGS) # __r49: also use CPPFLAGS when linking!
 LIBS = @LIBS@
 DEFS = @DEFS@
 
@@ -27,7 +28,7 @@ infodir = $(prefix)/info
 #### End of system configuration section. ####
 
 .c.o:
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(DEFS) -I$(srcdir) -I$(srcdir)/lib $<
+	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(DEFS) $(R49FLAGS) -I$(srcdir) -I$(srcdir)/lib $<
 
 HDRS          = defines.h \
 		dln.h \
@@ -139,7 +140,7 @@ realclean:;	@rm -f $(OBJS)
 		@rm -f core ruby *~
 
 dbm.o:dbm.c
-	$(CC) -c $(DBM) $(CFLAGS) $(CPPFLAGS) $(DEFS) -I$(srcdir) -I$(srcdir)/lib dbm.c
+	$(CC) -c $(DBM) $(CFLAGS) $(CPPFLAGS) $(DEFS) $(R49FLAGS) -I$(srcdir) -I$(srcdir)/lib dbm.c
 
 # Prevent GNU make v3 from overflowing arg limit on SysV.
 .NOEXPORT:
