@@ -77,3 +77,4 @@ The following flags affect how the program compiles. You can disable them by add
 ## Known issues
 - You can't use `Kernel#class` --- that should be a bugfix i need to do
 - `print(nil = 34)` causes segfaults, as even though `nil = 34` raises an exception, the parser doesnt handle it well
+- `"πa".intern` segfaults

@@ -224,7 +224,6 @@
 #define __r49_cast_to_charp(from, ptr) (__r49_cast(char *, from *, ptr))
 #define __r49_cast_to_charpp(from, ptr) (__r49_cast(char **, from *, ptr))
 
-
 /**************************************************************************************************
  **                                                                                              **
  **                              Stdlib `#include`s / Declarations                               **
@@ -241,6 +240,7 @@
 # include <time.h> /* time */
 # include <math.h> /* floor */
 # include <string.h>
+// # include <strings.h>
 # ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 # else

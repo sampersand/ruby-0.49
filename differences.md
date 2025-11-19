@@ -44,7 +44,9 @@ doit(\greeting::"Hello", \place::"World")
 
 ## Other (todo: sort)
 - Converting Symbols to Strings was considered a debugging thing (C-IF says `rb_id2name` is "Return the string corresponding to an ID (for debugging).")
-- `to_a` was defined on `Kernel`, and defaulted to `[self]`
+- `to_a` was defined on `Object`, and defaulted to `[self]`
 - Instead of `===`, `case` uses `=~`
 - Weird that `!` was a method even in 0.49
 - `<` returned RHS when true, so `a < b < c` was `(a < b) < c` and worked
+- can't set `$stdout`, instead `IO.default` is used
+- instead of `String#succ` we get `STring#next`

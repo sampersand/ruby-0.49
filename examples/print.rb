@@ -4,7 +4,12 @@ def p(*a)
   for arg in a
     print(arg._inspect, "\n")
   end
-  a
+
+  if (a.length == 1)
+    a[0]
+  else
+    a
+  end
 end
 
 def puts(*args)

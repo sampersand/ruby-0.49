@@ -79,3 +79,43 @@ Array: (huh, does this actually work?)
 
   Iterator that deletes items when the block, given [key, value], evaluates to true.
 
+
+String (:LOL)
+   next
+
+        Returns the "next" string. Numbers increment as numbers, letters increment as letters, carrying over as necessary.
+
+                "aa".next == "ab"
+                "99".next == "100"
+                "a9".next == "b0"
+
+        This method is used in Range:each, so the following is possible:
+
+                for i in "a" .. "ba"
+                  print(i, "\n");
+                end
+
+        Outputs each string from a, b, c, .. aa, .. az, ba.
+
+        Note: The end condition is determined using `==`, not comparison operators. If the right-hand string does not include the next string of the left-hand side, as in the example below, it will loop infinitely:
+
+                for i in "0" .. "1a"
+                  print(i, "\n");
+                end
+
+        Some may speculate that the author wrote it this way to avoid responsibility. That speculation is correct.
+
+
+Time: (huh!)
+   times
+
+        Returns the accumulated user/system CPU time consumed by the current process
+        and its child processes as a structure (see Struct).
+
+    struct tms
+      utime # User time of the process
+      stime # System time of the process
+      cutime  # User time of child processes
+      cstime  # System time of child processes
+    end
+

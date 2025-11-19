@@ -11,7 +11,7 @@ def Directory.foreach(dir)
   diro = open(dir)
   protect
     for path in diro
-      yield sprintf('%s/%s', dir, path)
+      yield format('%s/%s', dir, path)
     end for
   ensure
     diro.close
@@ -21,9 +21,10 @@ end
 for dir in getenv('PATH').split(':') # `$ENV['PATH']` is also valid
   # Make sure it's a dir and you can look through it
   unless File.d(dir) && File.x(dir)
-    continue
+    continue # `continue` not `next`!
   end
 
+  # This is how iterators worked!
   do Dir.foreach(dir) using path
     # Make sure it's executable and nonempty
     if File.x(path) && File.f(path)

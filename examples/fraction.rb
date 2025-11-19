@@ -1,10 +1,10 @@
-class fraction
+class Fraction
   include Comparable
 
   attr('numer')
   attr('denom')
 
-  def fraction.new(numer, *args)
+  def Fraction.new(numer, *args)
     # Default second argument to `1`
     if args.length == 0
       args << 1
@@ -19,10 +19,10 @@ class fraction
   end
 
   def coerce(other)
-    if other.is_kind_of(fraction) then
+    if other.is_kind_of(Fraction) then
       other
     else
-      fraction.new(other.to_i)
+      Fraction.new(other.to_i)
     end if
   end
 
@@ -40,22 +40,22 @@ class fraction
 
   def +(other)
     other = coerce(other)
-    fraction.new(@numer*other.denom + @denom*other.numer, @denom*other.denom)
+    Fraction.new(@numer*other.denom + @denom*other.numer, @denom*other.denom)
   end
 
   def -(other)
     other = coerce(other)
-    fraction.new(@numer*other.denom - @denom*other.numer, @denom*other.denom)
+    Fraction.new(@numer*other.denom - @denom*other.numer, @denom*other.denom)
   end
 
   def *(other)
     other = coerce(other)
-    fraction.new(@numer*other.numer, @denom*other.denom)
+    Fraction.new(@numer*other.numer, @denom*other.denom)
   end
 
   def /(other)
     other = coerce(other)
-    fraction.new(@numer*other.denom, @denom*other.numer)
+    Fraction.new(@numer*other.denom, @denom*other.numer)
   end
 
   def <=>(other)
@@ -65,6 +65,6 @@ class fraction
 end
 
 $\="\n"
-print( (3 + fraction.new(2, 10)) )
-print( fraction.new(3, 4) / fraction.new(2, 5) )
-print( fraction.new(3, 4) < fraction.new(2, 5) )
+print( (3 + Fraction.new(2, 10)) )
+print( Fraction.new(3, 4) / Fraction.new(2, 5) )
+print( Fraction.new(3, 4) < Fraction.new(2, 5) )
