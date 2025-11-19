@@ -15,7 +15,7 @@ MAKEINFO = makeinfo
 
 CFLAGS = -g
 R49FLAGS ?= # __r49: added, to make adding flags easier!
-LDFLAGS = @STATIC@ $(CFLAGS) $(R49FLAGS) # __r49: also use CPPFLAGS when linking!
+LDFLAGS = @STATIC@ $(CFLAGS) $(R49FLAGS) # __r49: also use R49 when linking!
 LIBS = @LIBS@
 DEFS = @DEFS@
 

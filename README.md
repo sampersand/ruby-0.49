@@ -16,10 +16,7 @@ After spending copious amounts of time fiddling with it, I proudly present a ful
 4. Run `make`.
 5. The resulting `./ruby` executable is ruby 0.49!
 
-### Troubleshooting
-You'll need `yacc`, which comes preinstalled on some computers---if you're getting errors compiling `parse.y`, you'll need to install it with your favourite package manager (homebrew, `apt-get`, `pacman`, etc.)
-
-If you're getting errors like "too many arguments", you may need to `R49FLAGS='-std=gnu11' make` instead. This is because modern versions of C don't like implicit arguments.
+See the end of this file for troubleshooting!
 
 ## Sample Program
 
@@ -84,3 +81,12 @@ The following flags affect how the program compiles. You can disable them by add
 - You can't use `Kernel#class` --- that should be a bugfix i need to do
 - `print(nil = 34)` causes segfaults, as even though `nil = 34` raises an exception, the parser doesnt handle it well
 - `"πa".intern` segfaults
+
+## Troubleshooting
+You'll need `yacc`, which comes preinstalled on some computers---if you're getting errors compiling `parse.y`, you'll need to install it with your favourite package manager (homebrew, `apt-get`, `pacman`, etc.)
+
+If you're getting errors like "too many arguments", you may need to `R49FLAGS='-std=gnu11' make` instead. This is because modern versions of C don't like implicit arguments.
+
+If you're having issues with `ndbm` (which is not required, and is only used in the `DBM` builtin type!), you have a few options:
+1. Just disable it, by passing `R49FLAGS='-UHAVE_NDBM_H' make`
+2. Other times, you just need to link it---add `R49FLAGS='-lgdbm -lgdbm_compat' make`. Though this might not work, you might have to investigate it
