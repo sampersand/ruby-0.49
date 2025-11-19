@@ -17,9 +17,9 @@ After spending copious amounts of time fiddling with it, I proudly present a ful
 5. The resulting `./ruby` executable is ruby 0.49!
 
 ### Troubleshooting
-You'll need `yacc`, which comes preinstalled on soem computers---if you're getting errors compiling `parse.y`, you'll need to isntall it with your favourite package manager (homebrew, `apt-get`, etc.)
+You'll need `yacc`, which comes preinstalled on some computers---if you're getting errors compiling `parse.y`, you'll need to install it with your favourite package manager (homebrew, `apt-get`, `pacman`, etc.)
 
-If you're getting errors like "too many arguments", you may need to `CPPFLAGS='-std=c11' make` instead. This is because modern versions of C don't like implicit
+If you're getting errors like "too many arguments", you may need to `CPPFLAGS='-std=gnu11' make` instead. This is because modern versions of C don't like implicit arguments.
 
 ## Sample Program
 
