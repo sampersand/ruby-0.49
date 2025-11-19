@@ -13,8 +13,13 @@ After spending copious amounts of time fiddling with it, I proudly present a ful
 1. Clone this repo
 2. `cd` into `fixed`
 3. Run `./configure`
-4. Run `make`. If you're getting errors like "too many arguments", you may need to `CPPFLAGS='-std=c11' make` instead!
+4. Run `make`.
 5. The resulting `./ruby` executable is ruby 0.49!
+
+### Troubleshooting
+You'll need `yacc`, which comes preinstalled on soem computers---if you're getting errors compiling `parse.y`, you'll need to isntall it with your favourite package manager (homebrew, `apt-get`, etc.)
+
+If you're getting errors like "too many arguments", you may need to `CPPFLAGS='-std=c11' make` instead. This is because modern versions of C don't like implicit
 
 ## Sample Program
 
