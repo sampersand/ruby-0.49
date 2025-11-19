@@ -240,7 +240,7 @@
 # include <time.h> /* time */
 # include <math.h> /* floor */
 # include <string.h>
-// # include <strings.h>
+# include <strings.h>
 # ifdef HAVE_UNISTD_H
 #  include <unistd.h>
 # else

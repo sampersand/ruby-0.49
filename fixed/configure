@@ -233,7 +233,7 @@ if test $GCC -eq 1 ; then
     fi
     rm -f conftest*
   fi
-  if ! test "$__r49_doesnt_have_fpcc_struct_Return" -eq 1; then
+  if ! test "$__r49_doesnt_have_fpcc_struct_Return" = 1; then
     DBM=-fpcc-struct-return
   fi
 fi

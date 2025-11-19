@@ -13,7 +13,8 @@ After spending copious amounts of time fiddling with it, I proudly present a ful
 1. Clone this repo
 2. `cd` into `fixed`
 3. Run `./configure`
-4. Run `make`. The resulting `./ruby` executable is ruby 0.49!
+4. Run `make`. If you're getting errors like "too many arguments", you may need to `CPPFLAGS='-std=c11' make` instead!
+5. The resulting `./ruby` executable is ruby 0.49!
 
 ## Sample Program
 
