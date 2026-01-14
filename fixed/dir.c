@@ -17,6 +17,9 @@
 #include <unistd.h>
 #endif
 #include <sys/param.h>
+#ifdef __COSMOPOLITAN__ /* __r49_cosmo */
+#include <errno.h>
+#endif
 
 /* unistd.h defines _POSIX_VERSION on POSIX.1 systems.  */
 #if defined(DIRENT) || defined(_POSIX_VERSION)
@@ -176,11 +179,14 @@ static VALUE
 Fdir_getwd(dir)
     VALUE dir;
 {
+#ifdef __COSMOPOLITAN__ /* __r49_cosmo */
+    char path[MAXPATHLEN];
+    if (getcwd(path, MAXPATHLEN) == NULL) Fail(strerror(errno));
+#else
     extern char *getwd();
     char path[MAXPATHLEN];
-
     if (getwd(path) == 0) Fail(path);
-
+#endif
     return str_new2(path);
 }
 

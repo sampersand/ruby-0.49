@@ -183,5 +183,22 @@ st.o : st.c st.h
 string.o : string.c ruby.h defines.h re.h regex.h 
 struct.o : struct.c ruby.h defines.h env.h 
 time.o : time.c ruby.h defines.h 
-variable.o : variable.c ruby.h defines.h env.h node.h ident.h st.h 
-version.o : version.c ruby.h defines.h version.h 
+variable.o : variable.c ruby.h defines.h env.h node.h ident.h st.h
+version.o : version.c ruby.h defines.h version.h
+
+# __r49_cosmo: Cosmopolitan build - universal APE binary
+# Usage: make cosmo [COSMO_TOOLCHAIN=../toolchain]
+COSMO_TOOLCHAIN ?= ../toolchain
+COSMO_CC = $(COSMO_TOOLCHAIN)/bin/cosmocc
+COSMO_DEFS = -D__COSMOPOLITAN__ -UHAVE_NDBM_H -UHAVE_A_OUT_H -DHAVE_UNISTD_H=1 \
+	-DDIRENT=1 -DGETGROUPS_T=gid_t -DRETSIGTYPE=void -DHAVE_GETOPT_LONG=1 \
+	-DHAVE_MEMMOVE=1 -DHAVE_STRERROR=1 -DHAVE_STRTOUL=1 -DHAVE_STRDUP=1 \
+	-DHAVE_STRSTR=1 -DHAVE_SETENV=1 -DHAVE_FMOD=1 -DHAVE_KILLPG=1 -DHAVE_MKDIR=1 \
+	-DHAVE_STRFTIME=1 -DHAVE_SOCKET=1 -DHAVE_RANDOM=1 -DHAVE_WAIT4=1 \
+	-DHAVE_WAITPID=1 -DHAVE_ALLOCA_H=1 -DHAVE_ST_BLKSIZE=1 -DHAVE_ST_BLOCKS=1 \
+	-DHAVE_ST_RDEV=1
+.PHONY: cosmo
+cosmo:
+	$(MAKE) CC="$(COSMO_CC)" CFLAGS="-Os -g" LDFLAGS="-static" LIBS="-lm" \
+		DEFS="$(COSMO_DEFS)" OBJS="$(filter-out dbm.o,$(OBJS))" \
+		DBM="" PROGRAM="ruby.com" ruby.com 

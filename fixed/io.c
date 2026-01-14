@@ -930,7 +930,9 @@ Fsystem2(obj, str)
 
 struct timeval *time_timeval();
 
-#ifdef __linux__
+#ifdef __COSMOPOLITAN__ /* __r49_cosmo */
+#   define READ_PENDING(fp) (0)
+#elif defined(__linux__)
 #   define READ_PENDING(fp) ((fp)->_gptr < (fp)->_egptr > 0)
 #   if defined(__r49_required_change) && !defined(__R49_USE_OLD_FILE_GPTR)
 #      undef READ_PENDING

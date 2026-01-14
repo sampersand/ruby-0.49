@@ -23,7 +23,9 @@
 
 char *strdup();
 
+#ifndef __COSMOPOLITAN__ /* __r49_cosmo */
 extern int errno;
+#endif
 int dln_errno;
 
 static int dln_init_p = 0;

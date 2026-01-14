@@ -47,13 +47,34 @@ for num in 1..%MAX
 end
 ```
 
+## Cosmopolitan Build (Universal Binary)
+
+Want a single executable that runs on Linux, macOS, Windows, and FreeBSD? Use [Cosmopolitan Libc](https://github.com/jart/cosmopolitan):
+
+```sh
+# Setup toolchain (one-time)
+mkdir -p toolchain && cd toolchain
+curl -sLO https://cosmo.zip/pub/cosmocc/cosmocc.zip
+unzip cosmocc.zip
+cd ../fixed
+
+# Build
+make cosmo
+
+# Run
+./ruby.com -v
+```
+
+The resulting `ruby.com` (~1.7MB) is an Actually Portable Executable (APE) that runs on Linux, macOS, Windows, and FreeBSD.
+
 ## Repo structure
 This repo's structured as follows:
 
 - `examples` is filled with a bunch of example programs I've written
 - `syntax.ebnf` is an EBNF I wrote by hand for what the syntax Ruby 0.49 accepts
 - `original` is the exact original code
-- `fixed` contains my updated code.
+- `fixed` contains my updated code. Use `make cosmo` for Cosmopolitan builds.
+- `gem` contains the `ancient_ruby` gem for using Ruby 0.49 from modern Ruby.
 - `fixed/{ruby.1,ToDo,ChangeLog,C-IF}` have all been converted from the original `EUC-JP` encoding[^1] and then translated via AI. Not sure how correct they are!
 
 [^1]: You can convert via `iconv -f EUC-JP -t UTF-8 input.txt`
