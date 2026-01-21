@@ -668,7 +668,9 @@ Fsock_recv(sock, len, flags)
     VALUE sock, len, flags;
 {
     OpenFile *fptr;
+#ifndef __COSMOPOLITAN__ /* __r49_cosmo */
     FILE f;
+#endif
     struct RString *str;
     char buf[1024];
     int fd __r49_required_change_nq(,) __r49_required_change_q(; unsigned) alen = sizeof buf;

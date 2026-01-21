@@ -20,6 +20,36 @@
 #include "st.h"
 VALUE rb_readonly_hook();
 
+#ifdef __COSMOPOLITAN__ /* __r49_cosmo: BSD signal compat */
+#define sigmask(sig) (1 << ((sig) - 1))
+static inline int sigblock(int mask) {
+    sigset_t new_set, old_set;
+    sigemptyset(&new_set);
+    for (int i = 1; i < 32; i++) {
+        if (mask & sigmask(i)) sigaddset(&new_set, i);
+    }
+    sigprocmask(SIG_BLOCK, &new_set, &old_set);
+    int old_mask = 0;
+    for (int i = 1; i < 32; i++) {
+        if (sigismember(&old_set, i)) old_mask |= sigmask(i);
+    }
+    return old_mask;
+}
+static inline int sigsetmask(int mask) {
+    sigset_t new_set, old_set;
+    sigemptyset(&new_set);
+    for (int i = 1; i < 32; i++) {
+        if (mask & sigmask(i)) sigaddset(&new_set, i);
+    }
+    sigprocmask(SIG_SETMASK, &new_set, &old_set);
+    int old_mask = 0;
+    for (int i = 1; i < 32; i++) {
+        if (sigismember(&old_set, i)) old_mask |= sigmask(i);
+    }
+    return old_mask;
+}
+#endif
+
 #ifdef __r49_required_change
 pid_t wait(int *);
 pid_t waitpid(pid_t pid, int *wstatus, int options);
